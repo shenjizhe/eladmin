@@ -21,7 +21,6 @@
               <#else>
         <el-input v-model="query.${column.changeColumnName}" clearable placeholder="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
               </#if>
-
             </#if>
           </#list>
         </#if>
