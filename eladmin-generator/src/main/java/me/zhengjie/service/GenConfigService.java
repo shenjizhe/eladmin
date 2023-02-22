@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package me.zhengjie.service;
 import me.zhengjie.domain.GenConfig;
 
 /**
- * @author Zheng Jie
+ * @author Jason Shen
  * @date 2019-01-14
  */
 public interface GenConfigService {

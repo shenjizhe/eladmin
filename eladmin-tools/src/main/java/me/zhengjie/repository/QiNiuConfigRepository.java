@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * @author Zheng Jie
+ * @author Jason Shen
  * @date 2018-12-31
  */
 public interface QiNiuConfigRepository extends JpaRepository<QiniuConfig,Long> {

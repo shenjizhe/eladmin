@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 
 /**
  * 交易详情，按需应该存入数据库，这里存入数据库，仅供临时测试
- * @author Zheng Jie
+ * @author Jason Shen
  * @date 2018-12-31
  */
 @Data

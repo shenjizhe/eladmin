@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import lombok.Data;
 import me.zhengjie.annotation.Query;
 
 /**
- * @author Zheng Jie
+ * @author Jason Shen
  * 公共查询类
  */
 @Data

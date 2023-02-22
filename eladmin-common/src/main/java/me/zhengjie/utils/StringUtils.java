@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.Enumeration;
 
 /**
- * @author Zheng Jie
+ * @author Jason Shen
  * 字符串工具类, 继承org.apache.commons.lang3.StringUtils类
  */
 @Slf4j

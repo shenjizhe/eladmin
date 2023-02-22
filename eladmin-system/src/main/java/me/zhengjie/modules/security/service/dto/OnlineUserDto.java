@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019-2020 Zheng Jie
+ *  Copyright 2019-2020 Jason Shen
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Date;
 
 /**
  * 在线用户
- * @author Zheng Jie
+ * @author Jason Shen
  */
 @Data
 @AllArgsConstructor
