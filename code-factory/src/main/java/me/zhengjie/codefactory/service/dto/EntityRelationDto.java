@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-02-16
+* @date 2023-02-22
 **/
 @Data
 public class EntityRelationDto implements Serializable {

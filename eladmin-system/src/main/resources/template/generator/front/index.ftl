@@ -8,19 +8,9 @@
         <!-- 搜索 -->
         <#if queryColumns??>
           <#list queryColumns as column>
-            <#if column.queryType != 'BetWeen'><!--表格渲染-->
+            <#if column.queryType != 'BetWeen'>
         <label class="el-form-item-label"><#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if></label>
-              <#if (column.dictName)?? && (column.dictName)!="">
-        <el-select v-model="query.${column.changeColumnName}" clearable placeholder="请选择" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery">
-          <el-option
-                  v-for="item in dict.${column.dictName}"
-                  :key="item.id"
-                  :label="item.label"
-                  :value="item.value" />
-        </el-select>
-              <#else>
         <el-input v-model="query.${column.changeColumnName}" clearable placeholder="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-              </#if>
             </#if>
           </#list>
         </#if>
@@ -104,7 +94,6 @@
           <#if (column.dictName)?? && (column.dictName)!="">
         <el-table-column prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>">
           <template slot-scope="scope">
-<#--              <el-switch v-model="scope.row.${column.changeColumnName}">{{ dict.label.${column.dictName}[scope.row.${column.changeColumnName}] }}</el-switch>-->
             {{ dict.label.${column.dictName}[scope.row.${column.changeColumnName}] }}
           </template>
         </el-table-column>
@@ -176,6 +165,7 @@ export default {
         </#if>
       ]
       </#if>
+
     }
   },
   methods: {

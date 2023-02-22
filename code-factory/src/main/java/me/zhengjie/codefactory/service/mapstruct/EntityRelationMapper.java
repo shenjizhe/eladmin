@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-16
+* @date 2023-02-22
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EntityRelationMapper extends BaseMapper<EntityRelationDto, EntityRelation> {

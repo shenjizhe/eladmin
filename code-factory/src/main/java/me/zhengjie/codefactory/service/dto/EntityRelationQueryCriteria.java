@@ -22,7 +22,7 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-16
+* @date 2023-02-22
 **/
 @Data
 public class EntityRelationQueryCriteria{
