@@ -65,7 +65,7 @@
                 Switch类型对应的数据库类型只能是 bit ,不能是 ${column.columnType}
               </#if>
             <#elseif column.formType = 'Number'>
-              <#if column.columnType = 'int' || column.columnType = 'bigint'>
+              <#if column.columnType = 'Integer' || column.columnType = 'Long'>
                 <el-input-number v-model="form.${column.changeColumnName}" />
               <#else>
                 Number类型对应的数据库类型只能是整数类型 ,不能是 ${column.columnType}
