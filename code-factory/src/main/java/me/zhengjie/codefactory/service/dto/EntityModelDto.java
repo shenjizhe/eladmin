@@ -13,20 +13,41 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-package me.zhengjie.codefactory.service.mapstruct;
+package me.zhengjie.codefactory.service.dto;
 
-import me.zhengjie.base.BaseMapper;
-import me.zhengjie.codefactory.domain.EntityModel;
-import me.zhengjie.codefactory.service.dto.EntityDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import lombok.Data;
+import java.io.Serializable;
 
 /**
 * @website https://eladmin.vip
+* @description /
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-27
 **/
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface EntityMapper extends BaseMapper<EntityDto, EntityModel> {
+@Data
+public class EntityModelDto implements Serializable {
 
+    /** 主键 */
+    private Long id;
+
+    /** 领域id */
+    private Long domainId;
+
+    /** 名称 */
+    private String name;
+
+    /** 标题 */
+    private String title;
+
+    /** 描述 */
+    private String comment;
+
+    /** 是否显示 */
+    private Boolean show;
+
+    /** 组id */
+    private Long groupId;
+
+    /** 实体类型 */
+    private Integer type;
 }

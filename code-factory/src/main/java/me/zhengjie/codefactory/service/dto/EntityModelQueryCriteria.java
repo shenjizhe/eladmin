@@ -22,8 +22,8 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-27
 **/
 @Data
-public class EntityQueryCriteria{
+public class EntityModelQueryCriteria{
 }

@@ -27,11 +27,11 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-27
 **/
 @Entity
 @Data
-@Table(name="entity")
+@Table(name="entity_model")
 public class EntityModel implements Serializable {
 
     @Id
@@ -67,6 +67,11 @@ public class EntityModel implements Serializable {
     @Column(name = "`group_id`")
     @ApiModelProperty(value = "组id")
     private Long groupId;
+
+    @Column(name = "`type`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "实体类型")
+    private Integer type;
 
     public void copy(EntityModel source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

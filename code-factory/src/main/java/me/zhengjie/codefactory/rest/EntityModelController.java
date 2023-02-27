@@ -17,8 +17,8 @@ package me.zhengjie.codefactory.rest;
 
 import me.zhengjie.annotation.Log;
 import me.zhengjie.codefactory.domain.EntityModel;
-import me.zhengjie.codefactory.service.EntityService;
-import me.zhengjie.codefactory.service.dto.EntityQueryCriteria;
+import me.zhengjie.codefactory.service.EntityModelService;
+import me.zhengjie.codefactory.service.dto.EntityModelQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,55 +33,55 @@ import javax.servlet.http.HttpServletResponse;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-27
 **/
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "实体管理")
-@RequestMapping("/api/entity")
-public class EntityController {
+@RequestMapping("/api/entityModel")
+public class EntityModelController {
 
-    private final EntityService entityService;
+    private final EntityModelService entityModelService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('entity:list')")
-    public void exportEntity(HttpServletResponse response, EntityQueryCriteria criteria) throws IOException {
-        entityService.download(entityService.queryAll(criteria), response);
+    @PreAuthorize("@el.check('entityModel:list')")
+    public void exportEntityModel(HttpServletResponse response, EntityModelQueryCriteria criteria) throws IOException {
+        entityModelService.download(entityModelService.queryAll(criteria), response);
     }
 
     @GetMapping
     @Log("查询实体")
     @ApiOperation("查询实体")
-    @PreAuthorize("@el.check('entity:list')")
-    public ResponseEntity<Object> queryEntity(EntityQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(entityService.queryAll(criteria,pageable),HttpStatus.OK);
+    @PreAuthorize("@el.check('entityModel:list')")
+    public ResponseEntity<Object> queryEntityModel(EntityModelQueryCriteria criteria, Pageable pageable){
+        return new ResponseEntity<>(entityModelService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @PostMapping
     @Log("新增实体")
     @ApiOperation("新增实体")
-    @PreAuthorize("@el.check('entity:add')")
-    public ResponseEntity<Object> createEntity(@Validated @RequestBody EntityModel resources){
-        return new ResponseEntity<>(entityService.create(resources),HttpStatus.CREATED);
+    @PreAuthorize("@el.check('entityModel:add')")
+    public ResponseEntity<Object> createEntityModel(@Validated @RequestBody EntityModel resources){
+        return new ResponseEntity<>(entityModelService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
     @Log("修改实体")
     @ApiOperation("修改实体")
-    @PreAuthorize("@el.check('entity:edit')")
-    public ResponseEntity<Object> updateEntity(@Validated @RequestBody EntityModel resources){
-        entityService.update(resources);
+    @PreAuthorize("@el.check('entityModel:edit')")
+    public ResponseEntity<Object> updateEntityModel(@Validated @RequestBody EntityModel resources){
+        entityModelService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping
     @Log("删除实体")
     @ApiOperation("删除实体")
-    @PreAuthorize("@el.check('entity:del')")
-    public ResponseEntity<Object> deleteEntity(@RequestBody Long[] ids) {
-        entityService.deleteAll(ids);
+    @PreAuthorize("@el.check('entityModel:del')")
+    public ResponseEntity<Object> deleteEntityModel(@RequestBody Long[] ids) {
+        entityModelService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

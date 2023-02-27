@@ -16,8 +16,8 @@
 package me.zhengjie.codefactory.service;
 
 import me.zhengjie.codefactory.domain.EntityModel;
-import me.zhengjie.codefactory.service.dto.EntityDto;
-import me.zhengjie.codefactory.service.dto.EntityQueryCriteria;
+import me.zhengjie.codefactory.service.dto.EntityModelDto;
+import me.zhengjie.codefactory.service.dto.EntityModelQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
@@ -28,9 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 * @website https://eladmin.vip
 * @description 服务接口
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-27
 **/
-public interface EntityService {
+public interface EntityModelService {
 
     /**
     * 查询数据分页
@@ -38,28 +38,28 @@ public interface EntityService {
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(EntityQueryCriteria criteria, Pageable pageable);
+    Map<String,Object> queryAll(EntityModelQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
-    * @return List<EntityDto>
+    * @return List<EntityModelDto>
     */
-    List<EntityDto> queryAll(EntityQueryCriteria criteria);
+    List<EntityModelDto> queryAll(EntityModelQueryCriteria criteria);
 
     /**
      * 根据ID查询
      * @param id ID
-     * @return EntityDto
+     * @return EntityModelDto
      */
-    EntityDto findById(Long id);
+    EntityModelDto findById(Long id);
 
     /**
     * 创建
     * @param resources /
-    * @return EntityDto
+    * @return EntityModelDto
     */
-    EntityDto create(EntityModel resources);
+    EntityModelDto create(EntityModel resources);
 
     /**
     * 编辑
@@ -79,5 +79,5 @@ public interface EntityService {
     * @param response /
     * @throws IOException /
     */
-    void download(List<EntityDto> all, HttpServletResponse response) throws IOException;
+    void download(List<EntityModelDto> all, HttpServletResponse response) throws IOException;
 }
