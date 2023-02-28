@@ -16,6 +16,7 @@
 package me.zhengjie.codefactory.rest;
 
 import me.zhengjie.annotation.Log;
+import me.zhengjie.annotation.LogParam;
 import me.zhengjie.codefactory.domain.EntityField;
 import me.zhengjie.codefactory.service.EntityFieldService;
 import me.zhengjie.codefactory.service.dto.EntityFieldQueryCriteria;
@@ -55,7 +56,7 @@ public class EntityFieldController {
     @Log("查询实体属性")
     @ApiOperation("查询实体属性")
     @PreAuthorize("@el.check('entityField:list')")
-    public ResponseEntity<Object> queryEntityField(EntityFieldQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> queryEntityField(@LogParam("query") EntityFieldQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(entityFieldService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 

@@ -20,6 +20,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.annotation.LogParam;
 import me.zhengjie.domain.Log;
 import me.zhengjie.repository.LogRepository;
 import me.zhengjie.service.LogService;
@@ -124,6 +125,17 @@ public class LogServiceImpl implements LogService {
                 String key = parameters[i].getName();
                 if (!StringUtils.isEmpty(requestParam.value())) {
                     key = requestParam.value();
+                }
+                map.put(key, args[i]);
+                argList.add(map);
+            }
+
+            LogParam logParam = parameters[i].getAnnotation(LogParam.class);
+            if (logParam != null) {
+                Map<String, Object> map = new HashMap<>(2);
+                String key = parameters[i].getName();
+                if (!StringUtils.isEmpty(logParam.value())) {
+                    key = logParam.value();
                 }
                 map.put(key, args[i]);
                 argList.add(map);
