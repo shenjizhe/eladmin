@@ -22,8 +22,12 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-22
+* @date 2023-02-28
 **/
 @Data
 public class MarketEntityFieldQueryCriteria{
+
+    /** 精确 */
+    @Query
+    private Long entityId;
 }

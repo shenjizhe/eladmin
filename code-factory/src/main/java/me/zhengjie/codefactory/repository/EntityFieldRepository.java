@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-02-28
 **/
 public interface EntityFieldRepository extends JpaRepository<EntityField, Long>, JpaSpecificationExecutor<EntityField> {
 }
