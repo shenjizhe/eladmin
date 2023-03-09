@@ -78,7 +78,14 @@ public class JobServiceImpl implements JobService {
         if(job != null){
             throw new EntityExistException(Job.class,"name",resources.getName());
         }
-        jobRepository.save(resources);
+        try
+        {
+            jobRepository.save(resources);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

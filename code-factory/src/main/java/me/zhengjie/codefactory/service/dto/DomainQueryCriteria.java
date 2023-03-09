@@ -22,10 +22,14 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-02-15
+* @date 2023-03-09
 **/
 @Data
 public class DomainQueryCriteria{
+
+    /** 精确 */
+    @Query
+    private Long id;
 
     /** 模糊 */
     @Query(type = Query.Type.INNER_LIKE)
