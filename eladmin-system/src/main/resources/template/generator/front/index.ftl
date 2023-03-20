@@ -67,7 +67,8 @@
                 v-for="item in dict.${column.dictName}"
                 :key="item.id"
                 :label="item.label"
-                :value="item.value" />
+                :value="item.value"
+              />
             </el-select>
               <#else>
             未设置字典，请手动设置 Select
