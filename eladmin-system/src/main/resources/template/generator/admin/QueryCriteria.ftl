@@ -49,6 +49,11 @@ public class ${className}QueryCriteria{
     @Query(type = Query.Type.INNER_LIKE)
     private ${column.columnType} ${column.changeColumnName};
 </#if>
+<#if column.queryType = 'IN'>
+    /** IN 查询 */
+    @Query(type = Query.Type.IN)
+    private List<${column.columnType}> ${column.changeColumnName};
+</#if>
 <#if column.queryType = '!='>
     /** 不等于 */
     @Query(type = Query.Type.NOT_EQUAL)
