@@ -16,8 +16,6 @@
 package me.zhengjie.codefactory.service.dto;
 
 import lombok.Data;
-
-import java.util.ArrayList;
 import java.util.List;
 import me.zhengjie.annotation.Query;
 
@@ -33,7 +31,7 @@ public class TemplateContextQueryCriteria{
     @Query
     private Long id;
 
-    /** 精确 */
+    /** IN 查询 */
     @Query(type = Query.Type.IN)
     private List<Long> templateId;
 
