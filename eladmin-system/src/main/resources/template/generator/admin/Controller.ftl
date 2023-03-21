@@ -56,7 +56,11 @@ public class ${className}Controller {
     @ApiOperation("查询${apiAlias}")
     @PreAuthorize("@el.check('${changeClassName}:list')")
     public ResponseEntity<Object> query${className}(${className}QueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
+        if(pageable.getPageSize() == -1) {
+            return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
+        }
     }
 
     @PostMapping

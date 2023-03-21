@@ -56,7 +56,11 @@ public class TemplateContextController {
     @ApiOperation("查询上下文")
     @PreAuthorize("@el.check('templateContext:list')")
     public ResponseEntity<Object> queryTemplateContext(TemplateContextQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(templateContextService.queryAll(criteria,pageable),HttpStatus.OK);
+        if(pageable.getPageSize() == -1) {
+            return new ResponseEntity<>(templateContextService.queryAll(criteria),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(templateContextService.queryAll(criteria,pageable),HttpStatus.OK);
+        }
     }
 
     @PostMapping
