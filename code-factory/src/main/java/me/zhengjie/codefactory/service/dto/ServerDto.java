@@ -53,4 +53,7 @@ public class ServerDto implements Serializable {
 
     /** 系统版本 */
     private String version;
+
+    /** 端口 */
+    private Integer port;
 }

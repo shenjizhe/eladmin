@@ -104,6 +104,7 @@ public class ServerServiceImpl implements ServerService {
             map.put("公钥", server.getPub());
             map.put("系统", server.getSystem());
             map.put("系统版本", server.getVersion());
+            map.put("端口", server.getPort());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

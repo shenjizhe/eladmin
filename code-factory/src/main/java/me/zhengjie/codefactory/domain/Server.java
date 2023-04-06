@@ -76,6 +76,11 @@ public class Server implements Serializable {
     @ApiModelProperty(value = "系统版本")
     private String version;
 
+    @Column(name = "`port`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "端口")
+    private Integer port;
+
     public void copy(Server source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

@@ -41,8 +41,8 @@
             <#if column.formType = 'Input'>
             <el-input v-model="form.${column.changeColumnName}" style="width: 370px;" />
             <#elseif column.formType = 'Password'>
-              <el-input v-model="form.${column.changeColumnName}" type="password" style="width: 200px" />
-              <el-button :loading="loading" type="success" style="align: right;" >测试连接</el-button>
+            <el-input v-model="form.${column.changeColumnName}" type="password" style="width: 200px" />
+            <el-button :loading="loading" type="success" style="align: right;" >测试连接</el-button>
             <#elseif column.formType = 'Textarea'>
             <el-input v-model="form.${column.changeColumnName}" :rows="3" type="textarea" style="width: 370px;" />
             <#elseif column.formType = 'Radio'>
