@@ -49,7 +49,7 @@ public class ServerDto implements Serializable {
     private String pub;
 
     /** 系统 */
-    private Integer system;
+    private String system;
 
     /** 系统版本 */
     private String version;

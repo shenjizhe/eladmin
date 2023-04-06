@@ -70,7 +70,7 @@ public class Server implements Serializable {
 
     @Column(name = "`system`")
     @ApiModelProperty(value = "系统")
-    private Integer system;
+    private String system;
 
     @Column(name = "`version`")
     @ApiModelProperty(value = "系统版本")
