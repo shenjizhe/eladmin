@@ -30,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -92,4 +93,12 @@ public class ServerDeployController {
 	public ResponseEntity<Object> testConnectServerDeploy(@Validated @RequestBody ServerDeploy resources){
 		return new ResponseEntity<>(serverDeployService.testConnect(resources),HttpStatus.CREATED);
 	}
+
+    @Log("执行脚本")
+    @ApiOperation(value = "执行脚本")
+    @PostMapping("/execute/{id}")
+    @PreAuthorize("@el.check('serverDeploy:edit')")
+    public ResponseEntity<Object> execute(@PathVariable("id") Long id, @RequestBody Long scriptId){
+        return new ResponseEntity<Object>(serverDeployService.excute(id,scriptId),HttpStatus.CREATED);
+    }
 }

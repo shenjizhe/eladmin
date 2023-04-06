@@ -18,6 +18,7 @@ package me.zhengjie.modules.mnt.service;
 import me.zhengjie.modules.mnt.domain.ServerDeploy;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
+import me.zhengjie.modules.mnt.util.ExecuteResult;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +85,13 @@ public interface ServerDeployService {
 	 * @return /
 	 */
 	Boolean testConnect(ServerDeploy resources);
+
+    /**
+     * 执行脚本
+     * @param id 请求的服务ID /
+     * @return 脚本返回/
+     */
+    String excute(Long id, Long scriptId);
 
     /**
      * 导出数据
