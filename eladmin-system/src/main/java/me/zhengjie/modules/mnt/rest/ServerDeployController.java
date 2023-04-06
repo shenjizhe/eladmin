@@ -28,15 +28,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
-* @author zhanghouying
-* @date 2019-08-24
-*/
+ * @author zhanghouying
+ * @date 2019-08-24
+ */
 @RestController
 @Api(tags = "运维：服务器管理")
 @RequiredArgsConstructor
@@ -54,16 +55,16 @@ public class ServerDeployController {
 
     @ApiOperation(value = "查询服务器")
     @GetMapping
-	@PreAuthorize("@el.check('serverDeploy:list')")
-    public ResponseEntity<Object> queryServerDeploy(ServerDeployQueryCriteria criteria, Pageable pageable){
-    	return new ResponseEntity<>(serverDeployService.queryAll(criteria,pageable),HttpStatus.OK);
+    @PreAuthorize("@el.check('serverDeploy:list')")
+    public ResponseEntity<Object> queryServerDeploy(ServerDeployQueryCriteria criteria, Pageable pageable) {
+        return new ResponseEntity<>(serverDeployService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
     @Log("新增服务器")
     @ApiOperation(value = "新增服务器")
     @PostMapping
-	@PreAuthorize("@el.check('serverDeploy:add')")
-    public ResponseEntity<Object> createServerDeploy(@Validated @RequestBody ServerDeploy resources){
+    @PreAuthorize("@el.check('serverDeploy:add')")
+    public ResponseEntity<Object> createServerDeploy(@Validated @RequestBody ServerDeploy resources) {
         serverDeployService.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -71,34 +72,39 @@ public class ServerDeployController {
     @Log("修改服务器")
     @ApiOperation(value = "修改服务器")
     @PutMapping
-	@PreAuthorize("@el.check('serverDeploy:edit')")
-    public ResponseEntity<Object> updateServerDeploy(@Validated @RequestBody ServerDeploy resources){
+    @PreAuthorize("@el.check('serverDeploy:edit')")
+    public ResponseEntity<Object> updateServerDeploy(@Validated @RequestBody ServerDeploy resources) {
         serverDeployService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除服务器")
     @ApiOperation(value = "删除Server")
-	@DeleteMapping
-	@PreAuthorize("@el.check('serverDeploy:del')")
-    public ResponseEntity<Object> deleteServerDeploy(@RequestBody Set<Long> ids){
+    @DeleteMapping
+    @PreAuthorize("@el.check('serverDeploy:del')")
+    public ResponseEntity<Object> deleteServerDeploy(@RequestBody Set<Long> ids) {
         serverDeployService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-	@Log("测试连接服务器")
-	@ApiOperation(value = "测试连接服务器")
-	@PostMapping("/testConnect")
-	@PreAuthorize("@el.check('serverDeploy:add')")
-	public ResponseEntity<Object> testConnectServerDeploy(@Validated @RequestBody ServerDeploy resources){
-		return new ResponseEntity<>(serverDeployService.testConnect(resources),HttpStatus.CREATED);
-	}
+    @Log("测试连接服务器")
+    @ApiOperation(value = "测试连接服务器")
+    @PostMapping("/testConnect")
+    @PreAuthorize("@el.check('serverDeploy:add')")
+    public ResponseEntity<Object> testConnectServerDeploy(@Validated @RequestBody ServerDeploy resources) {
+        return new ResponseEntity<>(serverDeployService.testConnect(resources), HttpStatus.CREATED);
+    }
 
     @Log("执行脚本")
     @ApiOperation(value = "执行脚本")
-    @PostMapping("/execute/{id}")
+    @PostMapping("/execute")
     @PreAuthorize("@el.check('serverDeploy:edit')")
-    public ResponseEntity<Object> execute(@PathVariable("id") Long id, @RequestBody Long scriptId){
-        return new ResponseEntity<Object>(serverDeployService.excute(id,scriptId),HttpStatus.CREATED);
+    public ResponseEntity<Object> execute(@RequestBody Map<String, Long> map) {
+        if (map.containsKey("serverId") && map.containsKey("scriptId")) {
+            final Long serverId = map.get("serverId");
+            final Long scriptId = map.get("scriptId");
+            return new ResponseEntity<Object>(serverDeployService.excute(serverId, scriptId), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
     }
 }
