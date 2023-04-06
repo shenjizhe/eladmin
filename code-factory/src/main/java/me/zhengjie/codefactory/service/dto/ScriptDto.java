@@ -44,4 +44,10 @@ public class ScriptDto implements Serializable {
 
     /** 参数列表 */
     private String params;
+
+    /** 脚本名称 */
+    private String name;
+
+    /** 脚本描述 */
+    private String comment;
 }

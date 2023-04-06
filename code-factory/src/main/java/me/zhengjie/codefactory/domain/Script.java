@@ -63,6 +63,14 @@ public class Script implements Serializable {
     @ApiModelProperty(value = "参数列表")
     private String params;
 
+    @Column(name = "`name`")
+    @ApiModelProperty(value = "脚本名称")
+    private String name;
+
+    @Column(name = "`comment`")
+    @ApiModelProperty(value = "脚本描述")
+    private String comment;
+
     public void copy(Script source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

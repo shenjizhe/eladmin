@@ -101,6 +101,8 @@ public class ScriptServiceImpl implements ScriptService {
             map.put("语言", script.getLanguage());
             map.put("脚本类型", script.getType());
             map.put("参数列表", script.getParams());
+            map.put("脚本名称", script.getName());
+            map.put("脚本描述", script.getComment());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
