@@ -63,7 +63,6 @@ public class ExecuteShellUtil {
 
             InputStream in = channel.getInputStream();
             channel.connect();
-
             byte[] buffer = new byte[1024];
             StringBuilder output = new StringBuilder();
             while (true) {
