@@ -16,8 +16,7 @@
 package me.zhengjie.codefactory.service.impl;
 
 import me.zhengjie.codefactory.domain.Server;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.*;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.codefactory.repository.ServerRepository;
 import me.zhengjie.codefactory.service.ServerService;
@@ -28,8 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -72,6 +70,9 @@ public class ServerServiceImpl implements ServerService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ServerDto create(Server resources) {
+        final SshKeyPair sshKeyPair = SshUtil.keyGen();
+        resources.setPub(sshKeyPair.getPublicKey());
+        resources.setRsa(sshKeyPair.getPrivateKey());
         return serverMapper.toDto(serverRepository.save(resources));
     }
 
