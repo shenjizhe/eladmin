@@ -24,7 +24,7 @@ import me.zhengjie.modules.mnt.domain.Database;
 import me.zhengjie.modules.mnt.service.DatabaseService;
 import me.zhengjie.modules.mnt.service.dto.DatabaseDto;
 import me.zhengjie.modules.mnt.service.dto.DatabaseQueryCriteria;
-import me.zhengjie.modules.mnt.util.SqlUtils;
+import me.zhengjie.utils.SqlUtils;
 import me.zhengjie.utils.FileUtil;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

@@ -73,6 +73,13 @@ public class ServerServiceImpl implements ServerService {
         final SshKeyPair sshKeyPair = SshUtil.keyGen();
         resources.setPub(sshKeyPair.getPublicKey());
         resources.setRsa(sshKeyPair.getPrivateKey());
+        final ExecuteShellUtil util = ExecuteShellUtil.createByPassword(
+                resources.getIp(),
+                resources.getPort(),
+                resources.getAccount(),
+                resources.getPassword());
+        util.register(resources.getPub());
+
         return serverMapper.toDto(serverRepository.save(resources));
     }
 

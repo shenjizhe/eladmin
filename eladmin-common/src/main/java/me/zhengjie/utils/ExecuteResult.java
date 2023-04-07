@@ -1,4 +1,4 @@
-package me.zhengjie.modules.mnt.util;
+package me.zhengjie.utils;
 
 import lombok.Data;
 

@@ -18,7 +18,6 @@ package me.zhengjie.modules.mnt.service;
 import me.zhengjie.modules.mnt.domain.ServerDeploy;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
-import me.zhengjie.modules.mnt.util.ExecuteResult;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;

@@ -17,7 +17,7 @@
  *
  */
 
-package me.zhengjie.modules.mnt.util;
+package me.zhengjie.utils;
 import lombok.extern.slf4j.Slf4j;
 
 /**

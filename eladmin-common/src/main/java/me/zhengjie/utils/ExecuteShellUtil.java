@@ -13,19 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.zhengjie.modules.mnt.util;
+package me.zhengjie.utils;
 
 import cn.hutool.core.io.IoUtil;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.ChannelShell;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 
 /**
@@ -41,17 +36,44 @@ public class ExecuteShellUtil {
 
     Session session;
 
-    public ExecuteShellUtil(final String ipAddress, final String username, final String password, int port) {
+    public static ExecuteShellUtil createByPassword(final String ipAddress, int port, final String username, final String password){
+        return new ExecuteShellUtil(ipAddress, port, username, password, null, null);
+    }
+
+    public static ExecuteShellUtil createByPK(final String ipAddress, int port, final String username, final String privateKey){
+        return new ExecuteShellUtil(ipAddress, port, username, null, privateKey, null);
+    }
+
+    public ExecuteShellUtil(final String ipAddress, int port, final String username, final String password,final String privateKey,final String publicKey){
         try {
             JSch jsch = new JSch();
             session = jsch.getSession(username, ipAddress, port);
-            session.setPassword(password);
+
             session.setConfig("StrictHostKeyChecking", "no");
-            session.connect(3000);
+
+            if(privateKey != null && !privateKey.trim().isEmpty()){
+                try {
+                    // 禁用密码身份验证
+                    session.setConfig("PreferredAuthentications", "publickey");
+                    jsch.addIdentity("code-factory",privateKey.getBytes(),publicKey==null?null:publicKey.getBytes(),null);
+                    session.connect(3000);
+                }
+                catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }else{
+                session.setPassword(password);
+                session.connect(3000);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
 
+    public Boolean register(String publicKey) {
+        final String command = "echo '" + publicKey + "' >> ~/.ssh/authorized_keys\n";
+        final String s = executeResults(command);
+        return true;
     }
 
     public String executeResults(String command) {
@@ -151,5 +173,13 @@ public class ExecuteShellUtil {
 
     public String executeResult(String command) {
         return executeResults(command);
+    }
+
+    public static void main(String[] args) {
+        final SshKeyPair sshKeyPair = SshUtil.keyGen();
+        final ExecuteShellUtil passUtil = ExecuteShellUtil.createByPassword("192.168.2.218",15120,"root","licai0803");
+        passUtil.register(sshKeyPair.getPublicKey());
+
+        final ExecuteShellUtil util = ExecuteShellUtil.createByPK("192.168.2.218",15120,"root",sshKeyPair.getPrivateKey());
     }
 }

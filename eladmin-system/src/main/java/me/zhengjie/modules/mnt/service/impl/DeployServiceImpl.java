@@ -33,8 +33,8 @@ import me.zhengjie.modules.mnt.service.dto.DeployDto;
 import me.zhengjie.modules.mnt.service.dto.DeployQueryCriteria;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.mapstruct.DeployMapper;
-import me.zhengjie.modules.mnt.util.ExecuteShellUtil;
-import me.zhengjie.modules.mnt.util.ScpClientUtil;
+import me.zhengjie.utils.ExecuteShellUtil;
+import me.zhengjie.utils.ScpClientUtil;
 import me.zhengjie.modules.mnt.websocket.MsgType;
 import me.zhengjie.modules.mnt.websocket.SocketMsg;
 import me.zhengjie.modules.mnt.websocket.WebSocketServer;
@@ -393,7 +393,7 @@ public class DeployServiceImpl implements DeployService {
 			sendMsg("IP对应服务器信息不存在：" + ip, MsgType.ERROR);
 			throw new BadRequestException("IP对应服务器信息不存在：" + ip);
 		}
-		return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword(),serverDeployDTO.getPort());
+		return ExecuteShellUtil.createByPassword(ip,serverDeployDTO.getPort(), serverDeployDTO.getAccount(), serverDeployDTO.getPassword());
 	}
 
 	private ScpClientUtil getScpClientUtil(String ip) {

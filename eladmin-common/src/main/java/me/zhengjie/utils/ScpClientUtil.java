@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.zhengjie.modules.mnt.util;
+package me.zhengjie.utils;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;

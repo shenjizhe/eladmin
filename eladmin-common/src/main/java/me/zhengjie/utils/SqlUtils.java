@@ -13,13 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.zhengjie.modules.mnt.util;
+package me.zhengjie.utils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.utils.CloseUtil;
+
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.File;

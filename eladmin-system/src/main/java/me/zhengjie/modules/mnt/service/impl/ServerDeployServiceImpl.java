@@ -24,8 +24,7 @@ import me.zhengjie.modules.mnt.service.ServerDeployService;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
 import me.zhengjie.modules.mnt.service.mapstruct.ServerDeployMapper;
-import me.zhengjie.modules.mnt.util.ExecuteResult;
-import me.zhengjie.modules.mnt.util.ExecuteShellUtil;
+import me.zhengjie.utils.ExecuteShellUtil;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
@@ -79,7 +78,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     public Boolean testConnect(ServerDeploy resources) {
         ExecuteShellUtil executeShellUtil = null;
         try {
-            executeShellUtil = new ExecuteShellUtil(resources.getIp(), resources.getAccount(), resources.getPassword(), resources.getPort());
+            executeShellUtil = new ExecuteShellUtil(resources.getIp(), resources.getPort(), resources.getAccount(), resources.getPassword(),null,null);
             return executeShellUtil.execute("ls") == 0;
         } catch (Exception e) {
             return false;
@@ -99,7 +98,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
         if (serverOpt.isPresent() && scriptOpt.isPresent()) {
             final ServerDeploy serverDeploy = serverOpt.get();
             final Script script = scriptOpt.get();
-            ExecuteShellUtil executeShellUtil = new ExecuteShellUtil(serverDeploy.getIp(), serverDeploy.getAccount(), serverDeploy.getPassword(), serverDeploy.getPort());
+            ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(serverDeploy.getIp(), serverDeploy.getPort(), serverDeploy.getAccount(), serverDeploy.getPassword());
             return executeShellUtil.executeResult(script.getScript());
         }
         return null;
