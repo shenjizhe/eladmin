@@ -100,10 +100,19 @@ public class ServerDeployController {
     @PostMapping("/execute")
     @PreAuthorize("@el.check('serverDeploy:edit')")
     public ResponseEntity<Object> execute(@RequestBody Map<String, Long> map) {
-        if (map.containsKey("serverId") && map.containsKey("scriptId")) {
+        final boolean containsId = map.containsKey("serverId");
+        final boolean containsSid = map.containsKey("scriptId");
+        final boolean containsKey = map.containsKey("key");
+        if(containsId && (containsSid || containsKey)) {
             final Long serverId = map.get("serverId");
-            final Long scriptId = map.get("scriptId");
-            return new ResponseEntity<Object>(serverDeployService.excute(serverId, scriptId), HttpStatus.CREATED);
+
+            if(containsSid) {
+                final Long scriptId = map.get("scriptId");
+                return new ResponseEntity<Object>(serverDeployService.excute(serverId, scriptId), HttpStatus.CREATED);
+            }else{
+
+            }
+
         }
         return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
     }
