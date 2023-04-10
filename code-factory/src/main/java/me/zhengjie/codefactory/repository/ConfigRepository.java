@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-04-03
+* @date 2023-04-10
 **/
 public interface ConfigRepository extends JpaRepository<Config, Long>, JpaSpecificationExecutor<Config> {
     /**

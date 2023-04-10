@@ -22,13 +22,13 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-04-03
+* @date 2023-04-10
 **/
 @Data
 public class ConfigQueryCriteria{
 
-    /** 模糊 */
-    @Query(type = Query.Type.INNER_LIKE)
+    /** 精确 */
+    @Query
     private String key;
 
     /** 精确 */

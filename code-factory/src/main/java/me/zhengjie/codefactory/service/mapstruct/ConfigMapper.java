@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-04-03
+* @date 2023-04-10
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ConfigMapper extends BaseMapper<ConfigDto, Config> {
