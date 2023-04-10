@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-06
+* @date 2023-04-10
 **/
 @Data
 public class ServerDto implements Serializable {
@@ -56,4 +56,7 @@ public class ServerDto implements Serializable {
 
     /** 端口 */
     private Integer port;
+
+    /** 进度 */
+    private Integer step;
 }

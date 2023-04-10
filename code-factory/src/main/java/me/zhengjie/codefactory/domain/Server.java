@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-06
+* @date 2023-04-10
 **/
 @Entity
 @Data
@@ -80,6 +80,10 @@ public class Server implements Serializable {
     @NotNull
     @ApiModelProperty(value = "端口")
     private Integer port;
+
+    @Column(name = "`step`")
+    @ApiModelProperty(value = "进度")
+    private Integer step;
 
     public void copy(Server source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
