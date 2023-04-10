@@ -16,8 +16,10 @@
 package me.zhengjie.codefactory.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.zhengjie.codefactory.domain.Config;
 import me.zhengjie.codefactory.domain.Script;
 import me.zhengjie.codefactory.domain.Server;
+import me.zhengjie.codefactory.repository.ConfigRepository;
 import me.zhengjie.codefactory.repository.ScriptRepository;
 import me.zhengjie.codefactory.repository.ServerRepository;
 import me.zhengjie.codefactory.service.ServerService;
@@ -47,6 +49,7 @@ public class ServerServiceImpl implements ServerService {
     private final ServerRepository serverRepository;
     private final ServerMapper serverMapper;
     private final ScriptRepository scriptRepository;
+    private final ConfigRepository configRepository;
 
     @Override
     public Map<String, Object> queryAll(ServerQueryCriteria criteria, Pageable pageable) {
@@ -104,37 +107,32 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public String copyFile(Long id, String path, String content) {
-        return null;
+    public Boolean copyFile(Long id, String path, String content) {
+        final Optional<Server> serverOpt = serverRepository.findById(id);
+        return copy(serverOpt.get(), path, content);
     }
 
     @Override
-    public String copyFileByKey(Long id, String path, String configKey) {
-        return null;
+    public Boolean copyFileByKey(Long id, String path, String configKey) {
+        final Config config = configRepository.findByKey(configKey);
+        final Optional<Server> serverOpt = serverRepository.findById(id);
+        return copy(serverOpt.get(), path, config.getValue());
     }
 
     public String execute(Server deploy, Script script) {
         if (deploy != null && script != null) {
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
-            return executeShellUtil.executeResult(script.getScript());
+            return executeShellUtil.forceExecute(script.getScript());
         }
         return null;
     }
 
-    public String copy(Server deploy, String filePath, String content) {
+    public Boolean copy(Server deploy, String filePath, String content) {
         if (deploy != null) {
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
-            final String path = FileUtil.getAbsolutePath(filePath);
-            final StringBuilder builder = new StringBuilder();
-            builder.append("mkdir -p " + path + "\n");
-            builder.append("cat >" + filePath + " <<EOL\n");
-            builder.append(content + "\n");
-            builder.append("EOL\n");
-            builder.append("echo 复制:" + filePath + " 完成！");
-
-            return executeShellUtil.executeResult(builder.toString());
+            return executeShellUtil.forcecopyToFile(filePath, content);
         }
-        return null;
+        return false;
     }
 
     @Override

@@ -20,7 +20,6 @@ import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 
 /**
@@ -36,32 +35,31 @@ public class ExecuteShellUtil {
 
     Session session;
 
-    public static ExecuteShellUtil createByPassword(final String ipAddress, int port, final String username, final String password){
+    public static ExecuteShellUtil createByPassword(final String ipAddress, int port, final String username, final String password) {
         return new ExecuteShellUtil(ipAddress, port, username, password, null, null);
     }
 
-    public static ExecuteShellUtil createByPK(final String ipAddress, int port, final String username, final String privateKey){
+    public static ExecuteShellUtil createByPK(final String ipAddress, int port, final String username, final String privateKey) {
         return new ExecuteShellUtil(ipAddress, port, username, null, privateKey, null);
     }
 
-    public ExecuteShellUtil(final String ipAddress, int port, final String username, final String password,final String privateKey,final String publicKey){
+    public ExecuteShellUtil(final String ipAddress, int port, final String username, final String password, final String privateKey, final String publicKey) {
         try {
             JSch jsch = new JSch();
             session = jsch.getSession(username, ipAddress, port);
 
             session.setConfig("StrictHostKeyChecking", "no");
 
-            if(privateKey != null && !privateKey.trim().isEmpty()){
+            if (privateKey != null && !privateKey.trim().isEmpty()) {
                 try {
                     // 禁用密码身份验证
                     session.setConfig("PreferredAuthentications", "publickey");
-                    jsch.addIdentity("code-factory",privateKey.getBytes(),publicKey==null?null:publicKey.getBytes(),null);
+                    jsch.addIdentity("code-factory", privateKey.getBytes(), publicKey == null ? null : publicKey.getBytes(), null);
                     session.connect(3000);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 }
-            }else{
+            } else {
                 session.setPassword(password);
                 session.connect(3000);
             }
@@ -74,6 +72,43 @@ public class ExecuteShellUtil {
         final String command = "echo '" + publicKey + "' >> ~/.ssh/authorized_keys\n";
         final String s = executeResults(command);
         return true;
+    }
+
+    public Boolean forcecopyToFile(String filePath, String content) {
+        File dir = new File(filePath).getParentFile();
+        executeResults("mkdir -p " + dir.getAbsolutePath());
+        executeResults("touch " + filePath);
+        return copyToFile(filePath, content);
+    }
+
+    public Boolean copyToFile(String filePath, String content) {
+        ChannelSftp channel = null;
+        try {
+            channel = (ChannelSftp) session.openChannel("sftp");
+            channel.connect();
+
+            InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+            channel.put(inputStream, filePath);
+
+            inputStream.close();
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return false;
+        } finally {
+            if (channel != null) {
+                channel.disconnect();
+            }
+        }
+    }
+
+    public String forceExecute(String command) {
+        final String tempFile = executeResults("mktemp");
+        copyToFile(tempFile, command);
+        executeResults("chmod 777 " + tempFile);
+        final String s = executeResults(tempFile);
+        executeResults("rm -rf " + tempFile);
+        return s;
     }
 
     public String executeResults(String command) {
@@ -95,8 +130,8 @@ public class ExecuteShellUtil {
                 output.append(new String(buffer, 0, bytesRead));
             }
             String s = output.toString();
-            if(s.endsWith("\n")) {
-                s = s.substring(0,s.length()-1);
+            if (s.endsWith("\n")) {
+                s = s.substring(0, s.length() - 1);
             }
             return s;
         } catch (Exception e) {
@@ -171,15 +206,11 @@ public class ExecuteShellUtil {
         return sb.toString();
     }
 
-    public String executeResult(String command) {
-        return executeResults(command);
-    }
-
     public static void main(String[] args) {
         final SshKeyPair sshKeyPair = SshUtil.keyGen();
-        final ExecuteShellUtil passUtil = ExecuteShellUtil.createByPassword("192.168.2.218",15120,"root","licai0803");
+        final ExecuteShellUtil passUtil = ExecuteShellUtil.createByPassword("192.168.2.218", 15120, "root", "licai0803");
         passUtil.register(sshKeyPair.getPublicKey());
 
-        final ExecuteShellUtil util = ExecuteShellUtil.createByPK("192.168.2.218",15120,"root",sshKeyPair.getPrivateKey());
+        final ExecuteShellUtil util = ExecuteShellUtil.createByPK("192.168.2.218", 15120, "root", sshKeyPair.getPrivateKey());
     }
 }

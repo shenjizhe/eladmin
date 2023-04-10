@@ -94,7 +94,7 @@ public interface ServerService {
      * @param content 内容
      * @return 上传结果
      */
-    String copyFile(Long id,String path, String content);
+    Boolean copyFile(Long id,String path, String content);
 
     /**
      * 复制文件到服务器
@@ -102,7 +102,7 @@ public interface ServerService {
      * @param configKey 内容
      * @return 上传结果
      */
-    String copyFileByKey(Long id,String path, String configKey);
+    Boolean copyFileByKey(Long id,String path, String configKey);
 
     /**
     * 导出数据

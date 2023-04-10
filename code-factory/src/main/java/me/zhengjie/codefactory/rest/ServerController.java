@@ -22,6 +22,8 @@ import me.zhengjie.annotation.Log;
 import me.zhengjie.codefactory.domain.Server;
 import me.zhengjie.codefactory.service.ConfigService;
 import me.zhengjie.codefactory.service.ServerService;
+import me.zhengjie.codefactory.service.dto.ConfigDto;
+import me.zhengjie.codefactory.service.dto.ConfigQueryCriteria;
 import me.zhengjie.codefactory.service.dto.ServerQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -123,13 +126,20 @@ public class ServerController {
     public ResponseEntity<Object> copyFile(@RequestBody Map<String, Object> map) {
         final boolean containsId = map.containsKey("serverId");
         final boolean containsKey = map.containsKey("key");
-        if (containsId && containsKey) {
+        final boolean containsPath = map.containsKey("filePath");
+
+        if (containsId && containsKey && containsPath) {
             final Long serverId = Long.parseLong(map.get("serverId").toString());
             final String key = map.get("key").toString();
+            final String filePath = map.get("filePath").toString();
 
-            return new ResponseEntity<Object>(serverService.execute(serverId, key), HttpStatus.CREATED);
-
-
+            final ConfigQueryCriteria configQueryCriteria = new ConfigQueryCriteria();
+            configQueryCriteria.setKey(key);
+            final List<ConfigDto> configDtos = configService.queryAll(configQueryCriteria);
+            if (configDtos.size() > 0) {
+                final ConfigDto config = configDtos.get(0);
+                return new ResponseEntity<Object>(serverService.copyFileByKey(serverId, filePath, key), HttpStatus.CREATED);
+            }
         }
         return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
     }

@@ -102,7 +102,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     public String execute(ServerDeploy deploy,Script script){
         if(deploy != null && script != null) {
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
-            return executeShellUtil.executeResult(script.getScript());
+            return executeShellUtil.forceExecute(script.getScript());
         }
         return null;
     }
