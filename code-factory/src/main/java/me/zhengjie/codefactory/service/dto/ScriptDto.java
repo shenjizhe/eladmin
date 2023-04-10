@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-06
+* @date 2023-04-10
 **/
 @Data
 public class ScriptDto implements Serializable {
@@ -50,4 +50,7 @@ public class ScriptDto implements Serializable {
 
     /** 脚本描述 */
     private String comment;
+
+    /** 查找键 */
+    private String key;
 }

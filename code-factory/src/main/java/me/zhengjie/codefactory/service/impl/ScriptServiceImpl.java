@@ -16,6 +16,7 @@
 package me.zhengjie.codefactory.service.impl;
 
 import me.zhengjie.codefactory.domain.Script;
+import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-04-06
+* @date 2023-04-10
 **/
 @Service
 @RequiredArgsConstructor
@@ -72,6 +73,9 @@ public class ScriptServiceImpl implements ScriptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ScriptDto create(Script resources) {
+        if(scriptRepository.findByKey(resources.getKey()) != null){
+            throw new EntityExistException(Script.class,"key",resources.getKey());
+        }
         return scriptMapper.toDto(scriptRepository.save(resources));
     }
 
@@ -80,6 +84,10 @@ public class ScriptServiceImpl implements ScriptService {
     public void update(Script resources) {
         Script script = scriptRepository.findById(resources.getId()).orElseGet(Script::new);
         ValidationUtil.isNull( script.getId(),"Script","id",resources.getId());
+        Script script1 = scriptRepository.findByKey(resources.getKey());
+        if(script1 != null && !script1.getId().equals(script.getId())){
+            throw new EntityExistException(Script.class,"key",resources.getKey());
+        }
         script.copy(resources);
         scriptRepository.save(script);
     }
@@ -103,6 +111,7 @@ public class ScriptServiceImpl implements ScriptService {
             map.put("参数列表", script.getParams());
             map.put("脚本名称", script.getName());
             map.put("脚本描述", script.getComment());
+            map.put("查找键", script.getKey());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

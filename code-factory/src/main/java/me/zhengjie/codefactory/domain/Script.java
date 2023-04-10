@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-06
+* @date 2023-04-10
 **/
 @Entity
 @Data
@@ -70,6 +70,11 @@ public class Script implements Serializable {
     @Column(name = "`comment`")
     @ApiModelProperty(value = "脚本描述")
     private String comment;
+
+    @Column(name = "`key`",unique = true,nullable = false)
+    @NotBlank
+    @ApiModelProperty(value = "查找键")
+    private String key;
 
     public void copy(Script source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
