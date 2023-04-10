@@ -90,7 +90,14 @@ public interface ServerDeployService {
      * @param id 请求的服务ID /
      * @return 脚本返回/
      */
-    String excute(Long id, Long scriptId);
+    String execute(Long id, Long scriptId);
+
+    /**
+     * 执行脚本
+     * @param id 请求的服务ID /
+     * @return 脚本返回/
+     */
+    String execute(Long id, String key);
 
     /**
      * 导出数据

@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -87,5 +88,27 @@ public class ServerController {
     public ResponseEntity<Object> deleteServer(@RequestBody Long[] ids) {
         serverService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Log("执行脚本")
+    @ApiOperation(value = "执行脚本")
+    @PostMapping("/execute")
+    @PreAuthorize("@el.check('serverDeploy:edit')")
+    public ResponseEntity<Object> execute(@RequestBody Map<String, Object> map) {
+        final boolean containsId = map.containsKey("serverId");
+        final boolean containsSid = map.containsKey("scriptId");
+        final boolean containsKey = map.containsKey("key");
+        if(containsId && (containsSid || containsKey)) {
+            final Long serverId = Long.parseLong(map.get("serverId").toString());
+            if(containsSid) {
+                final Long scriptId = Long.parseLong(map.get("scriptId").toString());
+                return new ResponseEntity<Object>(serverService.execute(serverId, scriptId), HttpStatus.CREATED);
+            }else{
+                final String key = map.get("key").toString();
+                return new ResponseEntity<Object>(serverService.execute(serverId, key), HttpStatus.CREATED);
+            }
+
+        }
+        return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
     }
 }

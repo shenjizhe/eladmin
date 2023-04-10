@@ -24,11 +24,7 @@ import me.zhengjie.modules.mnt.service.ServerDeployService;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployDto;
 import me.zhengjie.modules.mnt.service.dto.ServerDeployQueryCriteria;
 import me.zhengjie.modules.mnt.service.mapstruct.ServerDeployMapper;
-import me.zhengjie.utils.ExecuteShellUtil;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -78,7 +74,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     public Boolean testConnect(ServerDeploy resources) {
         ExecuteShellUtil executeShellUtil = null;
         try {
-            executeShellUtil = new ExecuteShellUtil(resources.getIp(), resources.getPort(), resources.getAccount(), resources.getPassword(),null,null);
+            executeShellUtil = new ExecuteShellUtil(resources.getIp(), resources.getPort(), resources.getAccount(), resources.getPassword(), null, null);
             return executeShellUtil.execute("ls") == 0;
         } catch (Exception e) {
             return false;
@@ -90,15 +86,22 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     }
 
     @Override
-    public String excute(Long id, Long scriptId) {
+    public String execute(Long id, Long scriptId) {
         final Optional<ServerDeploy> serverOpt = serverDeployRepository.findById(id);
         final Optional<Script> scriptOpt = scriptRepository.findById(scriptId);
+        return execute(serverOpt.get(),scriptOpt.get());
+    }
 
+    @Override
+    public String execute(Long id, String key) {
+        final Optional<ServerDeploy> serverOpt = serverDeployRepository.findById(id);
+        final Script script = scriptRepository.findByKey(key);
+        return execute(serverOpt.get(),script);
+    }
 
-        if (serverOpt.isPresent() && scriptOpt.isPresent()) {
-            final ServerDeploy serverDeploy = serverOpt.get();
-            final Script script = scriptOpt.get();
-            ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(serverDeploy.getIp(), serverDeploy.getPort(), serverDeploy.getAccount(), serverDeploy.getPassword());
+    public String execute(ServerDeploy deploy,Script script){
+        if(deploy != null && script != null) {
+            ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
             return executeShellUtil.executeResult(script.getScript());
         }
         return null;

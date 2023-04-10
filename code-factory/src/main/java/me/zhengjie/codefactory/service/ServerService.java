@@ -74,6 +74,20 @@ public interface ServerService {
     void deleteAll(Long[] ids);
 
     /**
+     * 执行脚本
+     * @param id 请求的服务ID /
+     * @return 脚本返回/
+     */
+    String execute(Long id, Long scriptId);
+
+    /**
+     * 执行脚本
+     * @param id 请求的服务ID /
+     * @return 脚本返回/
+     */
+    String execute(Long id, String key);
+
+    /**
     * 导出数据
     * @param all 待导出的数据
     * @param response /

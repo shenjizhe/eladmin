@@ -15,9 +15,10 @@
 */
 package me.zhengjie.codefactory.service.impl;
 
+import me.zhengjie.codefactory.domain.Script;
 import me.zhengjie.codefactory.domain.Server;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.codefactory.repository.ScriptRepository;
+import me.zhengjie.utils.*;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.codefactory.repository.ServerRepository;
 import me.zhengjie.codefactory.service.ServerService;
@@ -28,14 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 /**
 * @website https://eladmin.vip
@@ -49,6 +46,7 @@ public class ServerServiceImpl implements ServerService {
 
     private final ServerRepository serverRepository;
     private final ServerMapper serverMapper;
+    private final ScriptRepository scriptRepository;
 
     @Override
     public Map<String,Object> queryAll(ServerQueryCriteria criteria, Pageable pageable){
@@ -89,6 +87,28 @@ public class ServerServiceImpl implements ServerService {
         for (Long id : ids) {
             serverRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public String execute(Long id, Long scriptId) {
+        final Optional<Server> serverOpt = serverRepository.findById(id);
+        final Optional<Script> scriptOpt = scriptRepository.findById(scriptId);
+        return execute(serverOpt.get(),scriptOpt.get());
+    }
+
+    @Override
+    public String execute(Long id, String key) {
+        final Optional<Server> serverOpt = serverRepository.findById(id);
+        final Script script = scriptRepository.findByKey(key);
+        return execute(serverOpt.get(),script);
+    }
+
+    public String execute(Server deploy,Script script){
+        if(deploy != null && script != null) {
+            ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
+            return executeShellUtil.executeResult(script.getScript());
+        }
+        return null;
     }
 
     @Override
