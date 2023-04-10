@@ -87,6 +87,23 @@ public interface ServerService {
      */
     String execute(Long id, String key);
 
+
+    /**
+     * 复制文件到服务器
+     * @param path 路径
+     * @param content 内容
+     * @return 上传结果
+     */
+    String copyFile(Long id,String path, String content);
+
+    /**
+     * 复制文件到服务器
+     * @param path 路径
+     * @param configKey 内容
+     * @return 上传结果
+     */
+    String copyFileByKey(Long id,String path, String configKey);
+
     /**
     * 导出数据
     * @param all 待导出的数据

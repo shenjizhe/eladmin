@@ -1,45 +1,45 @@
 /*
-*  Copyright 2019-2020 Jason Shen
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  Copyright 2019-2020 Jason Shen
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package me.zhengjie.codefactory.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import me.zhengjie.codefactory.domain.Script;
 import me.zhengjie.codefactory.domain.Server;
 import me.zhengjie.codefactory.repository.ScriptRepository;
-import me.zhengjie.utils.*;
-import lombok.RequiredArgsConstructor;
 import me.zhengjie.codefactory.repository.ServerRepository;
 import me.zhengjie.codefactory.service.ServerService;
 import me.zhengjie.codefactory.service.dto.ServerDto;
 import me.zhengjie.codefactory.service.dto.ServerQueryCriteria;
 import me.zhengjie.codefactory.service.mapstruct.ServerMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import me.zhengjie.utils.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
-* @website https://eladmin.vip
-* @description 服务实现
-* @author Jason Shen
-* @date 2023-04-10
-**/
+ * @author Jason Shen
+ * @website https://eladmin.vip
+ * @description 服务实现
+ * @date 2023-04-10
+ **/
 @Service
 @RequiredArgsConstructor
 public class ServerServiceImpl implements ServerService {
@@ -49,21 +49,21 @@ public class ServerServiceImpl implements ServerService {
     private final ScriptRepository scriptRepository;
 
     @Override
-    public Map<String,Object> queryAll(ServerQueryCriteria criteria, Pageable pageable){
-        Page<Server> page = serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+    public Map<String, Object> queryAll(ServerQueryCriteria criteria, Pageable pageable) {
+        Page<Server> page = serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
         return PageUtil.toPage(page.map(serverMapper::toDto));
     }
 
     @Override
-    public List<ServerDto> queryAll(ServerQueryCriteria criteria){
-        return serverMapper.toDto(serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    public List<ServerDto> queryAll(ServerQueryCriteria criteria) {
+        return serverMapper.toDto(serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder)));
     }
 
     @Override
     @Transactional
     public ServerDto findById(Long id) {
         Server server = serverRepository.findById(id).orElseGet(Server::new);
-        ValidationUtil.isNull(server.getId(),"Server","id",id);
+        ValidationUtil.isNull(server.getId(), "Server", "id", id);
         return serverMapper.toDto(server);
     }
 
@@ -77,7 +77,7 @@ public class ServerServiceImpl implements ServerService {
     @Transactional(rollbackFor = Exception.class)
     public void update(Server resources) {
         Server server = serverRepository.findById(resources.getId()).orElseGet(Server::new);
-        ValidationUtil.isNull( server.getId(),"Server","id",resources.getId());
+        ValidationUtil.isNull(server.getId(), "Server", "id", resources.getId());
         server.copy(resources);
         serverRepository.save(server);
     }
@@ -93,20 +93,46 @@ public class ServerServiceImpl implements ServerService {
     public String execute(Long id, Long scriptId) {
         final Optional<Server> serverOpt = serverRepository.findById(id);
         final Optional<Script> scriptOpt = scriptRepository.findById(scriptId);
-        return execute(serverOpt.get(),scriptOpt.get());
+        return execute(serverOpt.get(), scriptOpt.get());
     }
 
     @Override
     public String execute(Long id, String key) {
         final Optional<Server> serverOpt = serverRepository.findById(id);
         final Script script = scriptRepository.findByKey(key);
-        return execute(serverOpt.get(),script);
+        return execute(serverOpt.get(), script);
     }
 
-    public String execute(Server deploy,Script script){
-        if(deploy != null && script != null) {
+    @Override
+    public String copyFile(Long id, String path, String content) {
+        return null;
+    }
+
+    @Override
+    public String copyFileByKey(Long id, String path, String configKey) {
+        return null;
+    }
+
+    public String execute(Server deploy, Script script) {
+        if (deploy != null && script != null) {
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
             return executeShellUtil.executeResult(script.getScript());
+        }
+        return null;
+    }
+
+    public String copy(Server deploy, String filePath, String content) {
+        if (deploy != null) {
+            ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
+            final String path = FileUtil.getAbsolutePath(filePath);
+            final StringBuilder builder = new StringBuilder();
+            builder.append("mkdir -p " + path + "\n");
+            builder.append("cat >" + filePath + " <<EOL\n");
+            builder.append(content + "\n");
+            builder.append("EOL\n");
+            builder.append("echo 复制:" + filePath + " 完成！");
+
+            return executeShellUtil.executeResult(builder.toString());
         }
         return null;
     }
@@ -115,7 +141,7 @@ public class ServerServiceImpl implements ServerService {
     public void download(List<ServerDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (ServerDto server : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("账号", server.getAccount());
             map.put("IP地址", server.getIp());
             map.put("名称", server.getName());
