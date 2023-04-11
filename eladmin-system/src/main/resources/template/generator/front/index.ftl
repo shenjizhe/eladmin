@@ -32,19 +32,19 @@
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
-      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
+      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="600px">
         <el-form ref="form" :model="form" <#if isNotNullColumns??>:rules="rules"</#if> size="small" label-width="80px">
     <#if columns??>
       <#list columns as column>
         <#if column.formShow>
           <el-form-item label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>"<#if column.istNotNull> prop="${column.changeColumnName}"</#if>>
             <#if column.formType = 'Input'>
-            <el-input v-model="form.${column.changeColumnName}" style="width: 370px;" />
+            <el-input v-model="form.${column.changeColumnName}" style="width: 95%;" />
             <#elseif column.formType = 'Password'>
             <el-input v-model="form.${column.changeColumnName}" type="password" style="width: 200px" />
             <el-button :loading="loading" type="success" style="align: right;" >测试连接</el-button>
             <#elseif column.formType = 'Textarea'>
-            <el-input v-model="form.${column.changeColumnName}" :rows="3" type="textarea" style="width: 370px;" />
+            <el-input v-model="form.${column.changeColumnName}" :rows="3" type="textarea" style="width: 95%;;" />
             <#elseif column.formType = 'Radio'>
               <#if (column.dictName)?? && (column.dictName)!="">
             <el-radio v-model="form.${column.changeColumnName}" v-for="item in dict.${column.dictName}" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
