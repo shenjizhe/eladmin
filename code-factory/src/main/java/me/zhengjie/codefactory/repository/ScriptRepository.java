@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 public interface ScriptRepository extends JpaRepository<Script, Long>, JpaSpecificationExecutor<Script> {
     /**

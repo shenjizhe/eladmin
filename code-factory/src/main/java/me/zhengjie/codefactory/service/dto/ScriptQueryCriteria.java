@@ -22,7 +22,7 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 @Data
 public class ScriptQueryCriteria{
@@ -30,4 +30,8 @@ public class ScriptQueryCriteria{
     /** 精确 */
     @Query
     private String key;
+
+    /** 精确 */
+    @Query
+    private Boolean buidIn;
 }

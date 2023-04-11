@@ -44,7 +44,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 @Service
 @RequiredArgsConstructor
@@ -113,6 +113,7 @@ public class ConfigServiceImpl implements ConfigService {
             map.put("类型", config.getType());
             map.put("描述", config.getComment());
             map.put("数值", config.getValue());
+            map.put("内置参数", config.getBuidIn());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

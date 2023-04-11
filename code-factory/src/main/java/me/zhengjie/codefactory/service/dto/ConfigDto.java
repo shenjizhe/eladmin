@@ -24,7 +24,7 @@ import com.alibaba.fastjson.serializer.ToStringSerializer;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 @Data
 public class ConfigDto implements Serializable {
@@ -45,4 +45,7 @@ public class ConfigDto implements Serializable {
 
     /** 数值 */
     private String value;
+
+    /** 内置参数 */
+    private Boolean buidIn;
 }

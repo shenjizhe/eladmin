@@ -44,7 +44,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 @Service
 @RequiredArgsConstructor
@@ -115,6 +115,7 @@ public class ScriptServiceImpl implements ScriptService {
             map.put("脚本名称", script.getName());
             map.put("脚本描述", script.getComment());
             map.put("查找键", script.getKey());
+            map.put("内置参数", script.getBuidIn());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

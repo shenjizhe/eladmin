@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-04-10
+* @date 2023-04-11
 **/
 @Entity
 @Data
@@ -58,6 +58,11 @@ public class Config implements Serializable {
     @NotBlank
     @ApiModelProperty(value = "数值")
     private String value;
+
+    @Column(name = "`buid_in`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "内置参数")
+    private Boolean buidIn;
 
     public void copy(Config source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
