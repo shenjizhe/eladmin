@@ -101,7 +101,7 @@ public class ServerController {
     @ApiOperation(value = "执行脚本")
     @PostMapping("/execute")
     @PreAuthorize("@el.check('server:edit')")
-    public ResponseEntity<Object> execute(@RequestBody Map<String, Object> map) {
+    public ResponseEntity<String> execute(@RequestBody Map<String, Object> map) {
         final boolean containsId = map.containsKey("serverId");
         final boolean containsSid = map.containsKey("scriptId");
         final boolean containsKey = map.containsKey("key");
@@ -109,21 +109,21 @@ public class ServerController {
             final Long serverId = Long.parseLong(map.get("serverId").toString());
             if (containsSid) {
                 final Long scriptId = Long.parseLong(map.get("scriptId").toString());
-                return new ResponseEntity<Object>(serverService.execute(serverId, scriptId), HttpStatus.CREATED);
+                return new ResponseEntity<String>(serverService.execute(serverId, scriptId), HttpStatus.CREATED);
             } else {
                 final String key = map.get("key").toString();
-                return new ResponseEntity<Object>(serverService.execute(serverId, key), HttpStatus.CREATED);
+                return new ResponseEntity<String>(serverService.execute(serverId, key), HttpStatus.CREATED);
             }
 
         }
-        return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
     }
 
     @Log("覆盖文件")
     @ApiOperation(value = "覆盖文件")
     @PostMapping("/copy")
     @PreAuthorize("@el.check('server:edit')")
-    public ResponseEntity<Object> copyFile(@RequestBody Map<String, Object> map) {
+    public ResponseEntity<Boolean> copyFile(@RequestBody Map<String, Object> map) {
         final boolean containsId = map.containsKey("serverId");
         final boolean containsKey = map.containsKey("key");
         final boolean containsPath = map.containsKey("filePath");
@@ -138,9 +138,9 @@ public class ServerController {
             final List<ConfigDto> configDtos = configService.queryAll(configQueryCriteria);
             if (configDtos.size() > 0) {
                 final ConfigDto config = configDtos.get(0);
-                return new ResponseEntity<Object>(serverService.copyFileByKey(serverId, filePath, key), HttpStatus.CREATED);
+                return new ResponseEntity<Boolean>(serverService.copyFileByKey(serverId, filePath, key), HttpStatus.CREATED);
             }
         }
-        return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
     }
 }
