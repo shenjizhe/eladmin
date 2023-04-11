@@ -80,6 +80,9 @@ public class ConfigServiceImpl implements ConfigService {
         if(configRepository.findByKey(resources.getKey()) != null){
             throw new EntityExistException(Config.class,"key",resources.getKey());
         }
+        if (resources.getBuidIn() == null) {
+            resources.setBuidIn(false);
+        }
         return configMapper.toDto(configRepository.save(resources));
     }
 

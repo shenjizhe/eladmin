@@ -79,6 +79,9 @@ public class ScriptServiceImpl implements ScriptService {
         if(scriptRepository.findByKey(resources.getKey()) != null){
             throw new EntityExistException(Script.class,"key",resources.getKey());
         }
+        if (resources.getBuidIn() == null) {
+           resources.setBuidIn(false);
+        }
         return scriptMapper.toDto(scriptRepository.save(resources));
     }
 
