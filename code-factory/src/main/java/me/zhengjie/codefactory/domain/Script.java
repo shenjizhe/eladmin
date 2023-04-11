@@ -63,7 +63,8 @@ public class Script implements Serializable {
     @ApiModelProperty(value = "参数列表")
     private String params;
 
-    @Column(name = "`name`")
+    @Column(name = "`name`",nullable = false)
+    @NotBlank
     @ApiModelProperty(value = "脚本名称")
     private String name;
 
