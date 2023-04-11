@@ -76,6 +76,9 @@ public class ServerController {
     @ApiOperation("新增服务器")
     @PreAuthorize("@el.check('server:add')")
     public ResponseEntity<Object> createServer(@Validated @RequestBody Server resources) {
+        if(resources.getStep() == null){
+            resources.setStep(0);
+        }
         return new ResponseEntity<>(serverService.create(resources), HttpStatus.CREATED);
     }
 
