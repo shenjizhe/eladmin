@@ -22,6 +22,7 @@ import me.zhengjie.codefactory.domain.Server;
 import me.zhengjie.codefactory.repository.ConfigRepository;
 import me.zhengjie.codefactory.repository.ScriptRepository;
 import me.zhengjie.codefactory.repository.ServerRepository;
+import me.zhengjie.codefactory.service.ScriptService;
 import me.zhengjie.codefactory.service.ServerService;
 import me.zhengjie.codefactory.service.dto.ServerDto;
 import me.zhengjie.codefactory.service.dto.ServerQueryCriteria;
@@ -49,6 +50,7 @@ public class ServerServiceImpl implements ServerService {
     private final ServerRepository serverRepository;
     private final ServerMapper serverMapper;
     private final ScriptRepository scriptRepository;
+    private final ScriptService scriptService;
     private final ConfigRepository configRepository;
 
     @Override
@@ -121,8 +123,9 @@ public class ServerServiceImpl implements ServerService {
 
     public String execute(Server deploy, Script script) {
         if (deploy != null && script != null) {
+            final String scriptText = scriptService.getScriptText(script);
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());
-            return executeShellUtil.forceExecute(script.getScript());
+            return executeShellUtil.forceExecute(scriptText);
         }
         return null;
     }

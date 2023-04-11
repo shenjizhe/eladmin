@@ -15,7 +15,9 @@
 */
 package me.zhengjie.codefactory.service.impl;
 
+import me.zhengjie.codefactory.domain.Config;
 import me.zhengjie.codefactory.domain.Script;
+import me.zhengjie.codefactory.repository.ConfigRepository;
 import me.zhengjie.exception.EntityExistException;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.FileUtil;
@@ -50,6 +52,7 @@ public class ScriptServiceImpl implements ScriptService {
 
     private final ScriptRepository scriptRepository;
     private final ScriptMapper scriptMapper;
+    private final ConfigRepository configRepository;
 
     @Override
     public Map<String,Object> queryAll(ScriptQueryCriteria criteria, Pageable pageable){
@@ -115,5 +118,26 @@ public class ScriptServiceImpl implements ScriptService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public String getScriptText(Script script) {
+        if(script != null){
+            String scriptText = script.getScript();
+            final String params = script.getParams();
+            if(params != null && !params.isEmpty()){
+                final String[] split = params.split("\n");
+
+                for (String s : split) {
+                    final Config config = configRepository.findByKey(s.trim());
+                    if(config != null) {
+                        scriptText = scriptText.replace("${" + config.getKey() + "}", config.getValue());
+                    }
+                }
+            }
+            return scriptText;
+        }else{
+            return null;
+        }
     }
 }

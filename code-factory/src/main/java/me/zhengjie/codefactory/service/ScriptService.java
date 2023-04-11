@@ -74,6 +74,13 @@ public interface ScriptService {
     void deleteAll(Long[] ids);
 
     /**
+     * 取得真实的script,替换其中的配置参数 ${config_key}
+     * @param script  脚本对象
+     * @return 实际的脚本文本
+     */
+    String getScriptText(Script script);
+
+    /**
     * 导出数据
     * @param all 待导出的数据
     * @param response /
