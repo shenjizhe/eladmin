@@ -100,7 +100,10 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            configRepository.deleteById(id);
+            final Config config = configRepository.getById(id);
+            if(config!= null && !config.getBuidIn()){
+                configRepository.deleteById(id);
+            }
         }
     }
 

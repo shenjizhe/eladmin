@@ -98,7 +98,10 @@ public class ScriptServiceImpl implements ScriptService {
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            scriptRepository.deleteById(id);
+            final Script script = scriptRepository.getById(id);
+            if (script!= null && !script.getBuidIn()){
+                scriptRepository.deleteById(id);
+            }
         }
     }
 
