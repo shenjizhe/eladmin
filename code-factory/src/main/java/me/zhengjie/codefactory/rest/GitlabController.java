@@ -6,14 +6,11 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.base.Result;
 import me.zhengjie.codefactory.service.GitlabService;
-import me.zhengjie.codefactory.service.MarketDomainService;
-import me.zhengjie.codefactory.service.dto.MarketDomainQueryCriteria;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -42,8 +39,8 @@ public class GitlabController {
     @ApiOperation("上传代码")
     @GetMapping(value = "/push-code")
     @PreAuthorize("@el.check('component:add')")
-    public Result pushCode(Long componentId,String path) throws IOException {
-        return gitlabService.pushCode(componentId,path);
+    public Result pushCode(Long componentId) throws IOException {
+        return gitlabService.pushCode(componentId);
     }
 
     @Log("拉取代码")

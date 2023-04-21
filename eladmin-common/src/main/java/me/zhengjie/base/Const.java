@@ -20,6 +20,7 @@ public final class Const {
         public static final String GIT_NAMESPACE = "git-namespace";
         public static final String SSH_PUBLIC_KEY = "ssh-public-key";
         public static final String SSH_PRIVATE_KEY = "ssh-private-key";
+        public static final String CODE_FACTORY_URL = "code-factory-url";
     }
 
     /**

@@ -11,5 +11,5 @@ import org.gitlab4j.api.GitLabApiException;
 public interface GitlabService {
     Result createProject(Long componentId);
 
-    Result pushCode(Long componentId, String path);
+    Result pushCode(Long componentId);
 }
