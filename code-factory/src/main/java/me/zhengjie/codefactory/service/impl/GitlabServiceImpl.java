@@ -75,7 +75,7 @@ public class GitlabServiceImpl implements GitlabService {
         for (Project project : projects) {
             final String name = project.getName();
             final String ns = project.getNamespace().getName();
-            if( name.equals(component.getName()) && ns.equals(namespace)){
+            if (name.equals(component.getName()) && ns.equals(namespace)) {
                 return project;
             }
         }
@@ -163,11 +163,9 @@ public class GitlabServiceImpl implements GitlabService {
     @Override
     public Result pullCode(Long componentId) {
         final Component component = componentRepository.getById(componentId);
-        final ProjectApi projectApi = gitLabApi.getProjectApi();
 
         try {
             final Project project = containProject(component);
-
 
 
         } catch (GitLabApiException e) {
