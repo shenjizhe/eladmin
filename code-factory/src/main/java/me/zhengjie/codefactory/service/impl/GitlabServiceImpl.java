@@ -71,15 +71,22 @@ public class GitlabServiceImpl implements GitlabService {
     }
 
     public Project containProject(Component component) throws GitLabApiException {
-        final Project project = gitLabApi.getProjectApi().getProject(Const.ConfigKey.GIT_NAMESPACE,component.getName());
-        return project;
+        final List<Project> projects = gitLabApi.getProjectApi().getProjects();
+        for (Project project : projects) {
+            final String name = project.getName();
+            final String ns = project.getNamespace().getName();
+            if( name.equals(component.getName()) && ns.equals(namespace)){
+                return project;
+            }
+        }
+        return null;
     }
 
     @Override
     public Result createProject(Long componentId) {
         final Component component = componentRepository.getById(componentId);
         try {
-            if (containProject(component) != null) {
+            if (containProject(component) == null) {
                 Project projectSettings = new Project()
                         .withName(component.getName())
                         .withDescription(component.getComment())
@@ -107,14 +114,7 @@ public class GitlabServiceImpl implements GitlabService {
         try {
             final String name = component.getName();
             final List<Project> projects = projectApi.getProjects();
-            Project project = null;
-            for (Project pro : projects) {
-                final String pname = pro.getNamespace().getName();
-                if (namespace.equals(pname) || name.equals(pro.getName())) {
-                    project = pro;
-                    break;
-                }
-            }
+            Project project = containProject(component);
 
             final String generate = agent.generate(12L);
             final CodeOutput output = agent.output(generate);
