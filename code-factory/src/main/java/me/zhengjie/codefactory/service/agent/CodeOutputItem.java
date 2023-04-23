@@ -20,6 +20,6 @@ public class CodeOutputItem {
     private String code;
 
     public String getFullPath() {
-        return savePath + fileName;
+        return savePath + "/" + fileName;
     }
 }
