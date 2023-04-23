@@ -13,7 +13,10 @@ import me.zhengjie.codefactory.service.agent.CodeFactoryAgent;
 import me.zhengjie.codefactory.service.agent.CodeOutput;
 import me.zhengjie.codefactory.service.agent.CodeOutputItem;
 import org.gitlab4j.api.*;
-import org.gitlab4j.api.models.*;
+import org.gitlab4j.api.models.Commit;
+import org.gitlab4j.api.models.CommitAction;
+import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.models.SshKey;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -67,23 +70,30 @@ public class GitlabServiceImpl implements GitlabService {
         userApi.addSshKey(Const.Name.SSH_TITLE, content);
     }
 
+    public Project containProject(Component component) throws GitLabApiException {
+        final Project project = gitLabApi.getProjectApi().getProject(Const.ConfigKey.GIT_NAMESPACE,component.getName());
+        return project;
+    }
+
     @Override
     public Result createProject(Long componentId) {
         final Component component = componentRepository.getById(componentId);
-        Namespace namespace = new Namespace();
-//        namespace.setName(Const.ConfigKey.GIT_NAMESPACE);
-        Project projectSettings = new Project()
-                .withName(component.getName())
-//                .withNamespace(namespace)
-                .withDescription(component.getComment())
-                .withIssuesEnabled(true)
-                .withMergeRequestsEnabled(true)
-                .withWikiEnabled(true)
-                .withSnippetsEnabled(true)
-                .withPublic(false);
         try {
-            Project newProject = gitLabApi.getProjectApi().createProject(projectSettings);
-            return Result.success(newProject);
+            if (containProject(component) != null) {
+                Project projectSettings = new Project()
+                        .withName(component.getName())
+                        .withDescription(component.getComment())
+                        .withIssuesEnabled(true)
+                        .withMergeRequestsEnabled(true)
+                        .withWikiEnabled(true)
+                        .withSnippetsEnabled(true)
+                        .withPublic(false);
+
+                Project newProject = gitLabApi.getProjectApi().createProject(projectSettings);
+                return Result.success(newProject);
+            } else {
+                return Result.fail(ErrorCode.GitProjectAlreadyExist);
+            }
         } catch (GitLabApiException e) {
             return Result.exception(ErrorCode.GitlabError, e);
         }
@@ -100,12 +110,11 @@ public class GitlabServiceImpl implements GitlabService {
             Project project = null;
             for (Project pro : projects) {
                 final String pname = pro.getNamespace().getName();
-                if ("gitlab".equals(pname) || name.equals(pro.getName())) {
+                if (namespace.equals(pname) || name.equals(pro.getName())) {
                     project = pro;
                     break;
                 }
             }
-//            Project project = projectApi.getProject("gitlab", name);
 
             final String generate = agent.generate(12L);
             final CodeOutput output = agent.output(generate);
@@ -143,10 +152,10 @@ public class GitlabServiceImpl implements GitlabService {
     @Override
     public Result pushProject(Long componentId) {
         final Result project = createProject(componentId);
-        if(project.isSuccess()){
+        if (project.isSuccess()) {
             final Result result = pushCode(componentId);
             return result;
-        }else{
+        } else {
             return project;
         }
     }

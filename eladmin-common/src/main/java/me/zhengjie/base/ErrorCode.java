@@ -21,7 +21,9 @@
 
 package me.zhengjie.base;
 
-/** 2 * @Author: JasonShen 3 * @Date: 2020/8/12 14:16 4 */
+/**
+ * 2 * @Author: JasonShen 3 * @Date: 2020/8/12 14:16 4
+ */
 public enum ErrorCode {
     /*
     00????. 默认错误( 预留 )
@@ -50,8 +52,8 @@ public enum ErrorCode {
     NotExistUser(0x010302, "用户不存在"),
     DuplicateResource(0x010303, "资源重复"),
 
-    ShellNotFound(0x010401,"shell 脚本无法执行"),
-    ShellFail(0x010402,"shell 脚本执行失败"),
+    ShellNotFound(0x010401, "shell 脚本无法执行"),
+    ShellFail(0x010402, "shell 脚本执行失败"),
 
   /*
   02???? 依赖服务错误
@@ -65,7 +67,9 @@ public enum ErrorCode {
     AppSecurityError(0x030003, "App security 错误"),
     StateError(0x030004, "依赖的服务错误"),
     AlreadyUsed(0x030005, "已经被使用"),
-    /** 手机验证码服务的错误 */
+    /**
+     * 手机验证码服务的错误
+     */
     SmsCodeNotExpire(0x00110001, "原验证码未过期"),
     SmsCodeExpire(0x00110002, "校验码过期"),
     SmsCodeNotExist(0x00110003, "无此校验码"),
@@ -82,7 +86,7 @@ public enum ErrorCode {
    10???? gitlab 错误
    */
     GitlabError(0x100001, "gitlab 执行错误"),
-    ;
+    GitProjectAlreadyExist(0x100002, "项目已经存在");
 
     private int code;
     private String message;
@@ -92,22 +96,30 @@ public enum ErrorCode {
         this.message = message;
     }
 
-    /** @return the code */
+    /**
+     * @return the code
+     */
     public int getCode() {
         return code;
     }
 
-    /** @param code the code to set */
+    /**
+     * @param code the code to set
+     */
     public void setCode(int code) {
         this.code = code;
     }
 
-    /** @return the message */
+    /**
+     * @return the message
+     */
     public String getMessage() {
         return message;
     }
 
-    /** @param message the message to set */
+    /**
+     * @param message the message to set
+     */
     public void setMessage(String message) {
         this.message = message;
     }
