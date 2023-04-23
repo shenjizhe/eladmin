@@ -8,6 +8,7 @@ import me.zhengjie.base.Result;
 import me.zhengjie.codefactory.service.GitlabService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +28,17 @@ import java.io.IOException;
 public class GitlabController {
     private final GitlabService gitlabService;
 
+    @Log("上传工程")
+    @ApiOperation("上传工程")
+    @PostMapping(value = "/push-project")
+    @PreAuthorize("@el.check('component:add')")
+    public Result pushProject(Long componentId) throws IOException {
+        return gitlabService.pushProject(componentId);
+    }
+
     @Log("创建项目")
     @ApiOperation("创建项目")
-    @GetMapping(value = "/create-project")
+    @PostMapping(value = "/create-project")
     @PreAuthorize("@el.check('component:add')")
     public Result createProject(Long componentId) throws IOException {
         return gitlabService.createProject(componentId);
@@ -37,7 +46,7 @@ public class GitlabController {
 
     @Log("上传代码")
     @ApiOperation("上传代码")
-    @GetMapping(value = "/push-code")
+    @PostMapping(value = "/push-code")
     @PreAuthorize("@el.check('component:add')")
     public Result pushCode(Long componentId) throws IOException {
         return gitlabService.pushCode(componentId);

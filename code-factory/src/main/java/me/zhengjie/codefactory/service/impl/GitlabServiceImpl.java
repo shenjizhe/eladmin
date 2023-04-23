@@ -139,4 +139,15 @@ public class GitlabServiceImpl implements GitlabService {
             return Result.exception(ErrorCode.GitlabError, e);
         }
     }
+
+    @Override
+    public Result pushProject(Long componentId) {
+        final Result project = createProject(componentId);
+        if(project.isSuccess()){
+            final Result result = pushCode(componentId);
+            return result;
+        }else{
+            return project;
+        }
+    }
 }
