@@ -109,14 +109,10 @@ public class GitlabServiceImpl implements GitlabService {
     @Override
     public Result pushCode(Long componentId) {
         final Component component = componentRepository.getById(componentId);
-        final ProjectApi projectApi = gitLabApi.getProjectApi();
-        final CommitsApi commitsApi = gitLabApi.getCommitsApi();
         try {
-            final String name = component.getName();
-            final List<Project> projects = projectApi.getProjects();
             Project project = containProject(component);
 
-            final String generate = agent.generate(12L);
+            final String generate = agent.generate(componentId);
             final CodeOutput output = agent.output(generate);
 
             final List<String> items = output.getItems();
