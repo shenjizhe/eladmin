@@ -159,4 +159,20 @@ public class GitlabServiceImpl implements GitlabService {
             return project;
         }
     }
+
+    @Override
+    public Result pullCode(Long componentId) {
+        final Component component = componentRepository.getById(componentId);
+        final ProjectApi projectApi = gitLabApi.getProjectApi();
+
+        try {
+            final Project project = containProject(component);
+
+
+
+        } catch (GitLabApiException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -56,7 +56,7 @@ public class GitlabController {
     @ApiOperation("拉取代码")
     @GetMapping(value = "/pull-code")
     @PreAuthorize("@el.check('component:add')")
-    public void pullCode(Long componentId) throws IOException {
-
+    public Result pullCode(Long componentId) throws IOException {
+        return gitlabService.pullCode(componentId);
     }
 }

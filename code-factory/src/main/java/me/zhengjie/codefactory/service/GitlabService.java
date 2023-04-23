@@ -14,4 +14,6 @@ public interface GitlabService {
     Result pushCode(Long componentId);
 
     Result pushProject(Long componentId);
+
+    Result pullCode(Long componentId);
 }
