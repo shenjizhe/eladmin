@@ -15,6 +15,7 @@
 */
 package me.zhengjie.codefactory.domain;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,6 +23,8 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
 * @website https://eladmin.vip
@@ -66,5 +69,24 @@ public class Config implements Serializable {
 
     public void copy(Config source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    }
+
+    public Object getObject() {
+        switch (type.toLowerCase()) {
+            case "json":
+                return JSONObject.parse(value);
+            case "integer":
+                return Integer.parseInt(value);
+            case "Long":
+                return Long.parseLong(value);
+            case "datetime":
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDate date = LocalDate.parse(value, formatter);
+                return date;
+            case "boolean":
+                return Boolean.parseBoolean(value);
+            default:
+                return value;
+        }
     }
 }

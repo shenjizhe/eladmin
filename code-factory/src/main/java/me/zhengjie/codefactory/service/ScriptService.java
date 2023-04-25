@@ -79,6 +79,13 @@ public interface ScriptService {
      * @return 实际的脚本文本
      */
     String getScriptText(Script script);
+    /**
+     * 取得真实的script,替换其中的配置参数 map
+     * @param script  脚本对象
+     * @param map  参数替换
+     * @return 实际的脚本文本
+     */
+    String getScriptText(Script script, Map<String, String> map);
 
     /**
     * 导出数据

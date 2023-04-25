@@ -86,7 +86,8 @@ public enum ErrorCode {
    10???? gitlab 错误
    */
     GitlabError(0x100001, "gitlab 执行错误"),
-    GitProjectAlreadyExist(0x100002, "项目已经存在");
+    GitProjectAlreadyExist(0x100002, "项目已经存在"),
+    DownloadFail(0x100003,"项目部署编译" );
 
     private int code;
     private String message;

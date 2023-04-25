@@ -12,7 +12,9 @@ import me.zhengjie.codefactory.service.GitlabService;
 import me.zhengjie.codefactory.service.agent.CodeFactoryAgent;
 import me.zhengjie.codefactory.service.agent.CodeOutput;
 import me.zhengjie.codefactory.service.agent.CodeOutputItem;
-import org.gitlab4j.api.*;
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.UserApi;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.CommitAction;
 import org.gitlab4j.api.models.Project;
@@ -70,15 +72,22 @@ public class GitlabServiceImpl implements GitlabService {
         userApi.addSshKey(Const.Name.SSH_TITLE, content);
     }
 
-    public Project containProject(Component component) throws GitLabApiException {
-        final List<Project> projects = gitLabApi.getProjectApi().getProjects();
-        for (Project project : projects) {
-            final String name = project.getName();
-            final String ns = project.getNamespace().getName();
-            if (name.equals(component.getName()) && ns.equals(namespace)) {
-                return project;
+    @Override
+    public Project containProject(Component component) {
+        final List<Project> projects;
+        try {
+            projects = gitLabApi.getProjectApi().getProjects();
+            for (Project project : projects) {
+                final String name = project.getName();
+                final String ns = project.getNamespace().getName();
+                if (name.equals(component.getName()) && ns.equals(namespace)) {
+                    return project;
+                }
             }
+        } catch (GitLabApiException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 
@@ -156,17 +165,13 @@ public class GitlabServiceImpl implements GitlabService {
         }
     }
 
-    @Override
-    public Result pullCode(Long componentId) {
-        final Component component = componentRepository.getById(componentId);
-
-        try {
-            final Project project = containProject(component);
-
-
-        } catch (GitLabApiException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    @Override
+//    public Result pullCode(Long componentId) {
+//        final Component component = componentRepository.getById(componentId);
+//
+//        final Project project = containProject(component);
+//
+//
+//        return null;
+//    }
 }

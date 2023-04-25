@@ -130,6 +130,12 @@ public class ServerServiceImpl implements ServerService {
         return null;
     }
 
+    @Override
+    public String execute(String ip, Integer port, String username, String password, String command) {
+        ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(ip, port, username, password);
+        return executeShellUtil.forceExecute(command);
+    }
+
     public Boolean copy(Server deploy, String filePath, String content) {
         if (deploy != null) {
             ExecuteShellUtil executeShellUtil = ExecuteShellUtil.createByPassword(deploy.getIp(), deploy.getPort(), deploy.getAccount(), deploy.getPassword());

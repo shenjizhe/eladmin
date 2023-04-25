@@ -1,80 +1,88 @@
 /*
-*  Copyright 2019-2020 Jason Shen
-*
-*  Licensed under the Apache License, Version 2.0 (the "License");
-*  you may not use this file except in compliance with the License.
-*  You may obtain a copy of the License at
-*
-*  http://www.apache.org/licenses/LICENSE-2.0
-*
-*  Unless required by applicable law or agreed to in writing, software
-*  distributed under the License is distributed on an "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*  See the License for the specific language governing permissions and
-*  limitations under the License.
-*/
+ *  Copyright 2019-2020 Jason Shen
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package me.zhengjie.codefactory.service;
 
 import me.zhengjie.codefactory.domain.Server;
 import me.zhengjie.codefactory.service.dto.ServerDto;
 import me.zhengjie.codefactory.service.dto.ServerQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import java.util.Map;
-import java.util.List;
-import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
-* @website https://eladmin.vip
-* @description 服务接口
-* @author Jason Shen
-* @date 2023-04-10
-**/
+ * @author Jason Shen
+ * @website https://eladmin.vip
+ * @description 服务接口
+ * @date 2023-04-10
+ **/
 public interface ServerService {
 
     /**
-    * 查询数据分页
-    * @param criteria 条件
-    * @param pageable 分页参数
-    * @return Map<String,Object>
-    */
-    Map<String,Object> queryAll(ServerQueryCriteria criteria, Pageable pageable);
+     * 查询数据分页
+     *
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return Map<String, Object>
+     */
+    Map<String, Object> queryAll(ServerQueryCriteria criteria, Pageable pageable);
 
     /**
-    * 查询所有数据不分页
-    * @param criteria 条件参数
-    * @return List<ServerDto>
-    */
+     * 查询所有数据不分页
+     *
+     * @param criteria 条件参数
+     * @return List<ServerDto>
+     */
     List<ServerDto> queryAll(ServerQueryCriteria criteria);
 
     /**
      * 根据ID查询
+     *
      * @param id ID
      * @return ServerDto
      */
     ServerDto findById(Long id);
 
     /**
-    * 创建
-    * @param resources /
-    * @return ServerDto
-    */
+     * 创建
+     *
+     * @param resources /
+     * @return ServerDto
+     */
     ServerDto create(Server resources);
 
     /**
-    * 编辑
-    * @param resources /
-    */
+     * 编辑
+     *
+     * @param resources /
+     */
     void update(Server resources);
 
     /**
-    * 多选删除
-    * @param ids /
-    */
+     * 多选删除
+     *
+     * @param ids /
+     */
     void deleteAll(Long[] ids);
 
     /**
      * 执行脚本
+     *
      * @param id 请求的服务ID /
      * @return 脚本返回/
      */
@@ -82,33 +90,49 @@ public interface ServerService {
 
     /**
      * 执行脚本
+     *
      * @param id 请求的服务ID /
      * @return 脚本返回/
      */
     String execute(Long id, String key);
 
+    /**
+     * 远程执行命令
+     *
+     * @param ip       地址
+     * @param port     端口
+     * @param username 用户名
+     * @param password 密码
+     * @param command  命令脚本字符串
+     * @return 执行结果
+     */
+    String execute(String ip, Integer port, String username, String password, String command);
+
 
     /**
      * 复制文件到服务器
-     * @param path 路径
+     *
+     * @param path    路径
      * @param content 内容
      * @return 上传结果
      */
-    Boolean copyFile(Long id,String path, String content);
+    Boolean copyFile(Long id, String path, String content);
 
     /**
      * 复制文件到服务器
-     * @param path 路径
+     *
+     * @param path      路径
      * @param configKey 内容
      * @return 上传结果
      */
-    Boolean copyFileByKey(Long id,String path, String configKey);
+    Boolean copyFileByKey(Long id, String path, String configKey);
 
     /**
-    * 导出数据
-    * @param all 待导出的数据
-    * @param response /
-    * @throws IOException /
-    */
+     * 导出数据
+     *
+     * @param all      待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
     void download(List<ServerDto> all, HttpServletResponse response) throws IOException;
 }

@@ -1,7 +1,8 @@
 package me.zhengjie.codefactory.service;
 
 import me.zhengjie.base.Result;
-import org.gitlab4j.api.GitLabApiException;
+import me.zhengjie.codefactory.domain.Component;
+import org.gitlab4j.api.models.Project;
 
 /**
  * @author Jason Shen
@@ -15,5 +16,5 @@ public interface GitlabService {
 
     Result pushProject(Long componentId);
 
-    Result pullCode(Long componentId);
+    Project containProject(Component component);
 }

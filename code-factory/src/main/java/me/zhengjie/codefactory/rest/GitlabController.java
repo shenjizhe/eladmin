@@ -48,12 +48,4 @@ public class GitlabController {
     public Result pushCode(@PathVariable("component-id") Long componentId) throws IOException {
         return gitlabService.pushCode(componentId);
     }
-
-    @Log("拉取代码")
-    @ApiOperation("拉取代码")
-    @GetMapping(value = "/pull-code/{component-id}")
-    @PreAuthorize("@el.check('component:add')")
-    public Result pullCode(@PathVariable("component-id") Long componentId) throws IOException {
-        return gitlabService.pullCode(componentId);
-    }
 }
