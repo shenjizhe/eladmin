@@ -39,13 +39,33 @@ public class CICDController {
     public Result download(@PathVariable("component-id") Long componentId) throws IOException {
         return cicdService.downloadComponent(componentId);
     }
+
+    @Log("查询进度")
+    @ApiOperation("查询进度")
+    @PreAuthorize("@el.check('component:add')")
     @GetMapping(value = "/progress", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<Flux<String>> getProgress() {
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_EVENT_STREAM)
                 .body(Flux.interval(Duration.ofSeconds(5))
-                        .map(sec -> String.format("Progress: %s%%", calculateProgress()))
+                        .map(sec -> String.format("data: %s:%s",sec, calculateProgress()))
                 );
+    }
+
+    @GetMapping(value = "/progress1", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> getProgress1() {
+        return Flux.create(sink -> {
+            // 获取处理进度，并将数据推送到消费者
+            for(int i = 0; i < 10; i++){
+                sink.next("Processing: " + i + "%");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            sink.complete(); // 处理完成后，关闭事件流
+        });
     }
 
     private String calculateProgress(){
