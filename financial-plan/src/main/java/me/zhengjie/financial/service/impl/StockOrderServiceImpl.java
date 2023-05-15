@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Service
 @RequiredArgsConstructor
@@ -101,6 +101,7 @@ public class StockOrderServiceImpl implements StockOrderService {
             map.put("交易价格", stockOrder.getTradePrice());
             map.put("交易股票数量", stockOrder.getTradeCount());
             map.put("交易时间", stockOrder.getTradeTime());
+            map.put("用户id", stockOrder.getUserId());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

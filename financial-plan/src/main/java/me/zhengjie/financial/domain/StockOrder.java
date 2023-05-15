@@ -29,7 +29,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Entity
 @Data
@@ -66,6 +66,11 @@ public class StockOrder implements Serializable {
     @NotNull
     @ApiModelProperty(value = "交易时间")
     private Timestamp tradeTime;
+
+    @Column(name = "`user_id`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
 
     public void copy(StockOrder source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

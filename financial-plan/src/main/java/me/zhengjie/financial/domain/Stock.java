@@ -21,13 +21,14 @@ import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.sql.Timestamp;
 import java.io.Serializable;
 
 /**
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Entity
 @Data
@@ -49,6 +50,36 @@ public class Stock implements Serializable {
     @NotBlank
     @ApiModelProperty(value = "股票名称")
     private String name;
+
+    @Column(name = "`stage`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "股票阶段")
+    private Integer stage;
+
+    @Column(name = "`role`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "股票角色")
+    private Integer role;
+
+    @Column(name = "`cycle_big`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "大周期")
+    private Integer cycleBig;
+
+    @Column(name = "`cycle_small`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "小周期")
+    private Integer cycleSmall;
+
+    @Column(name = "`industry`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "股票行业")
+    private Integer industry;
+
+    @Column(name = "`list_date`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "上市日期")
+    private Timestamp listDate;
 
     public void copy(Stock source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

@@ -16,13 +16,14 @@
 package me.zhengjie.financial.service.dto;
 
 import lombok.Data;
+import java.sql.Timestamp;
 import java.io.Serializable;
 
 /**
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Data
 public class StockDto implements Serializable {
@@ -35,4 +36,22 @@ public class StockDto implements Serializable {
 
     /** 股票名称 */
     private String name;
+
+    /** 股票阶段 */
+    private Integer stage;
+
+    /** 股票角色 */
+    private Integer role;
+
+    /** 大周期 */
+    private Integer cycleBig;
+
+    /** 小周期 */
+    private Integer cycleSmall;
+
+    /** 股票行业 */
+    private Integer industry;
+
+    /** 上市日期 */
+    private Timestamp listDate;
 }

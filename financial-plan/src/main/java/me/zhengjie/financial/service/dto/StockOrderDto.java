@@ -24,7 +24,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Data
 public class StockOrderDto implements Serializable {
@@ -46,4 +46,7 @@ public class StockOrderDto implements Serializable {
 
     /** 交易时间 */
     private Timestamp tradeTime;
+
+    /** 用户id */
+    private Long userId;
 }

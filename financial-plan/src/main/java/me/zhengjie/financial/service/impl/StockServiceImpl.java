@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-15
 **/
 @Service
 @RequiredArgsConstructor
@@ -98,6 +98,12 @@ public class StockServiceImpl implements StockService {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("股票代码", stock.getCode());
             map.put("股票名称", stock.getName());
+            map.put("股票阶段", stock.getStage());
+            map.put("股票角色", stock.getRole());
+            map.put("大周期", stock.getCycleBig());
+            map.put("小周期", stock.getCycleSmall());
+            map.put("股票行业", stock.getIndustry());
+            map.put("上市日期", stock.getListDate());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
