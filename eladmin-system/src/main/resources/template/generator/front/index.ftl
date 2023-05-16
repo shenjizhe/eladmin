@@ -70,7 +70,7 @@
                 v-for="item in dict.${column.dictName}"
                 :key="item.id"
                 :label="item.label"
-                :value="item.value"
+                :value="item.value*1"
               />
             </el-select>
               <#else>
