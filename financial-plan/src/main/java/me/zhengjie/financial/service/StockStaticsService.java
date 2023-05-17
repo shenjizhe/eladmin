@@ -13,16 +13,26 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-package me.zhengjie.financial.repository;
+package me.zhengjie.financial.service;
 
 import me.zhengjie.financial.domain.StockAnalysis;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import me.zhengjie.financial.domain.StockStatics;
+import me.zhengjie.financial.service.dto.StockAnalysisDto;
+import me.zhengjie.financial.service.dto.StockAnalysisQueryCriteria;
+import org.springframework.data.domain.Pageable;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://eladmin.vip
+* @description 服务接口
 * @author Jason Shen
-* @date 2023-05-16
+* @date 2023-05-09
 **/
-public interface StockAnalysisRepository extends JpaRepository<StockAnalysis, Integer>, JpaSpecificationExecutor<StockAnalysis> {
+public interface StockStaticsService {
+
+    StockStatics getStockInfos(Integer id);
 }

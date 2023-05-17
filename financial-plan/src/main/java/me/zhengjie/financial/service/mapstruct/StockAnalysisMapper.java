@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-16
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StockAnalysisMapper extends BaseMapper<StockAnalysisDto, StockAnalysis> {

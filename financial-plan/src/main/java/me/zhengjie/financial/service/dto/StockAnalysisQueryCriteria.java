@@ -22,8 +22,12 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-16
 **/
 @Data
 public class StockAnalysisQueryCriteria{
+
+    /** 精确 */
+    @Query
+    private Integer stockId;
 }

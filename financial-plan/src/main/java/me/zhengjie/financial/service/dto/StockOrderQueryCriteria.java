@@ -27,6 +27,10 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class StockOrderQueryCriteria{
+
+    /** 精确 */
+    @Query
+    private Long userId;
     /** BETWEEN */
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> tradeTime;

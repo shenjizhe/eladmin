@@ -23,7 +23,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-16
 **/
 @Data
 public class StockAnalysisDto implements Serializable {
@@ -37,15 +37,30 @@ public class StockAnalysisDto implements Serializable {
     /** 平均价格 */
     private BigDecimal priceAvg;
 
-    /** 高位价格 */
-    private BigDecimal priceHign;
-
     /** 低位价格 */
     private BigDecimal priceLow;
 
-    /** 评估类型 */
-    private Integer estimateType;
+    /** 低位价格90 */
+    private BigDecimal priceLow90;
 
-    /** 波动周期 */
-    private Integer fluctuationCycle;
+    /** 低位价格70 */
+    private BigDecimal priceLow70;
+
+    /** 集中度90 */
+    private BigDecimal concentration90;
+
+    /** 集中度70 */
+    private BigDecimal concentration70;
+
+    /** 主力持仓成本 */
+    private BigDecimal mainHoldCost;
+
+    /** 高位价格 */
+    private BigDecimal priceHigh;
+
+    /** 高位价格90 */
+    private BigDecimal priceHigh90;
+
+    /** 高位价格70 */
+    private BigDecimal priceHigh70;
 }

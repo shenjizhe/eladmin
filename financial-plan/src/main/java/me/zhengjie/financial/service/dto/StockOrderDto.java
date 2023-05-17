@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @date 2023-05-15
 **/
 @Data
-public class StockOrderDto implements Serializable {
+public class StockOrderDto implements Serializable ,Comparable<StockOrderDto>{
 
     /** 订单ID */
     private Long id;
@@ -49,4 +49,9 @@ public class StockOrderDto implements Serializable {
 
     /** 用户id */
     private Long userId;
+
+    @Override
+    public int compareTo(StockOrderDto o) {
+        return this.getTradeTime().compareTo(o.getTradeTime());
+    }
 }

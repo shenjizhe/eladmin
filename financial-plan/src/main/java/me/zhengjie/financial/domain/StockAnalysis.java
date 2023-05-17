@@ -28,7 +28,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-16
 **/
 @Entity
 @Data
@@ -51,25 +51,50 @@ public class StockAnalysis implements Serializable {
     @ApiModelProperty(value = "平均价格")
     private BigDecimal priceAvg;
 
-    @Column(name = "`price_hign`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "高位价格")
-    private BigDecimal priceHign;
-
     @Column(name = "`price_low`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "低位价格")
     private BigDecimal priceLow;
 
-    @Column(name = "`estimate_type`",nullable = false)
+    @Column(name = "`price_low_90`",nullable = false)
     @NotNull
-    @ApiModelProperty(value = "评估类型")
-    private Integer estimateType;
+    @ApiModelProperty(value = "低位价格90")
+    private BigDecimal priceLow90;
 
-    @Column(name = "`fluctuation_cycle`",nullable = false)
+    @Column(name = "`price_low_70`",nullable = false)
     @NotNull
-    @ApiModelProperty(value = "波动周期")
-    private Integer fluctuationCycle;
+    @ApiModelProperty(value = "低位价格70")
+    private BigDecimal priceLow70;
+
+    @Column(name = "`concentration_90`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "集中度90")
+    private BigDecimal concentration90;
+
+    @Column(name = "`concentration_70`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "集中度70")
+    private BigDecimal concentration70;
+
+    @Column(name = "`main_hold_cost`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "主力持仓成本")
+    private BigDecimal mainHoldCost;
+
+    @Column(name = "`price_high`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "高位价格")
+    private BigDecimal priceHigh;
+
+    @Column(name = "`price_high_90`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "高位价格90")
+    private BigDecimal priceHigh90;
+
+    @Column(name = "`price_high_70`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "高位价格70")
+    private BigDecimal priceHigh70;
 
     public void copy(StockAnalysis source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

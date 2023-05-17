@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-16
 **/
 @Service
 @RequiredArgsConstructor
@@ -98,10 +98,15 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("股票ID", stockAnalysis.getStockId());
             map.put("平均价格", stockAnalysis.getPriceAvg());
-            map.put("高位价格", stockAnalysis.getPriceHign());
             map.put("低位价格", stockAnalysis.getPriceLow());
-            map.put("评估类型", stockAnalysis.getEstimateType());
-            map.put("波动周期", stockAnalysis.getFluctuationCycle());
+            map.put("低位价格90", stockAnalysis.getPriceLow90());
+            map.put("低位价格70", stockAnalysis.getPriceLow70());
+            map.put("集中度90", stockAnalysis.getConcentration90());
+            map.put("集中度70", stockAnalysis.getConcentration70());
+            map.put("主力持仓成本", stockAnalysis.getMainHoldCost());
+            map.put("高位价格", stockAnalysis.getPriceHigh());
+            map.put("高位价格90", stockAnalysis.getPriceHigh90());
+            map.put("高位价格70", stockAnalysis.getPriceHigh70());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
