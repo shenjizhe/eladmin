@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-17
 **/
 @Data
 public class SystemFactorDto implements Serializable {

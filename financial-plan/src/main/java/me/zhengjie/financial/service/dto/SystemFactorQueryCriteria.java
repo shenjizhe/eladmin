@@ -22,12 +22,12 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-17
 **/
 @Data
 public class SystemFactorQueryCriteria{
 
-    /** 模糊 */
-    @Query(type = Query.Type.INNER_LIKE)
+    /** 精确 */
+    @Query
     private String key;
 }

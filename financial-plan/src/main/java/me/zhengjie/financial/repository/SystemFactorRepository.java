@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-09
+* @date 2023-05-17
 **/
 public interface SystemFactorRepository extends JpaRepository<SystemFactor, Integer>, JpaSpecificationExecutor<SystemFactor> {
 }

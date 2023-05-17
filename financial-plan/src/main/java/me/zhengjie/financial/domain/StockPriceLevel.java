@@ -1,13 +1,13 @@
 package me.zhengjie.financial.domain;
 
-import cn.hutool.core.date.DateUnit;
-import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 
+/**
+ *  价格级别
+ */
 @Data
 public class StockPriceLevel {
     private BigDecimal levelBuy;
@@ -33,14 +33,5 @@ public class StockPriceLevel {
         levelSell1 = levelSell.multiply(new BigDecimal(1.05)).setScale(4, RoundingMode.HALF_UP);
         levelSell2 = levelSell1.multiply(new BigDecimal(1.05)).setScale(4, RoundingMode.HALF_UP);
         levelSell3 = levelSell2.multiply(new BigDecimal(1.05)).setScale(4, RoundingMode.HALF_UP);
-    }
-
-    private int holdDays;
-    private Date beginDate;
-    private BigDecimal priceRefer;
-    private BigDecimal priceWorth;
-    public void setDate(BigDecimal cost, Date date){
-        long between = DateUtil.between(date,new Date(), DateUnit.DAY);
-
     }
 }
