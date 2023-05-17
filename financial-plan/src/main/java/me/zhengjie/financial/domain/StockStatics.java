@@ -1,7 +1,5 @@
 package me.zhengjie.financial.domain;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import lombok.Data;
@@ -12,22 +10,17 @@ import me.zhengjie.financial.service.dto.StockOrderDto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class StockStatics implements Serializable {
-    private Integer id;
-    private String code;
-    private String name;
-
-    public StockStatics(Integer id, String code, String name) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-    }
+    private StockDto stock;
 
     public StockStatics(StockDto stock) {
-        this(stock.getId(), stock.getCode(), stock.getName());
+        this.stock = stock;
     }
 
     private List<StockOrderDto> buyOrders = new ArrayList<>();
@@ -123,5 +116,12 @@ public class StockStatics implements Serializable {
 
     public void calcLevel() {
         level = new StockPriceLevel(this.priceLow, this.priceHigh);
+    }
+
+    private StockPriceReference priceReference;
+
+    public void calcReference(Map<String, Object> map) {
+        priceReference = new StockPriceReference(map);
+        priceReference.setDate(this);
     }
 }

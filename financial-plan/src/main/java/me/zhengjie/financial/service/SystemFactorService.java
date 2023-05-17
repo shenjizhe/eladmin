@@ -32,6 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 **/
 public interface SystemFactorService {
 
+    Map<String,Object> queryAll();
+
     /**
     * 查询数据分页
     * @param criteria 条件

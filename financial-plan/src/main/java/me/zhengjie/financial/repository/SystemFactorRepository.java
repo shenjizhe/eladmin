@@ -18,6 +18,9 @@ package me.zhengjie.financial.repository;
 import me.zhengjie.financial.domain.SystemFactor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
 * @website https://eladmin.vip
