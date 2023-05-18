@@ -87,7 +87,10 @@ public class StockStatics implements Serializable {
 
         holdPriceAvg = holdPriceTotal.divide(new BigDecimal(holdCount), 4, RoundingMode.HALF_UP);
         int days = (int) sumTotal / holdCount;
-        holdDateAvg = DateUtil.offsetDay(beginDate, days);
+
+        Date _avg = DateUtil.offsetDay(beginDate, days);
+        int _hours = _avg.getHours();
+        holdDateAvg = DateUtil.offsetHour(_avg, -_hours);
     }
 
     private StockAnalysisDto analysis;

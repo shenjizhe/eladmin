@@ -2,6 +2,7 @@ package me.zhengjie.financial.domain;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import lombok.Data;
 import me.zhengjie.financial.define.StockFactors;
 
 import java.math.BigDecimal;
@@ -12,14 +13,15 @@ import java.util.Map;
 /**
  * 价格参考
  */
+@Data
 public class StockPriceReference {
     private int holdDays;
     private Date beginDate;
-    private BigDecimal priceRefer;
-    private BigDecimal priceWorth;
-    private BigDecimal priceGoal;
+    private BigDecimal priceRefer;      // 按照日期平均参考值
+    private BigDecimal priceWorth;      // 按照参考率
+    private BigDecimal priceGoal;       // 按照短期倍数
 
-    private BigDecimal pricePerDay;
+    private BigDecimal pricePerDay;     // 最大最小值和循环周期，每天参考增加值
     private Map<String, Object> factors;
 
     public StockPriceReference(Map<String, Object> factors) {
@@ -27,27 +29,30 @@ public class StockPriceReference {
     }
 
     public void setDate(StockStatics statics) {
-        long between = DateUtil.between(statics.getHoldDateAvg(), new Date(), DateUnit.DAY);
-        calcWorth(statics, between);
-        calcRefer(statics, between);
+        holdDays = (int)DateUtil.between(statics.getHoldDateAvg(), new Date(), DateUnit.DAY);
+        calcWorth(statics, holdDays);
+        calcRefer(statics, holdDays);
 
         BigDecimal rate = new BigDecimal(1.0);
-        if (between <= 7) {
+        if (holdDays <= 7) {
             rate = new BigDecimal(factors.get(StockFactors.MultipleKeys.DAY).toString());
-        } else if (between <= 30) {
+        } else if (holdDays <= 30) {
             rate = new BigDecimal(factors.get(StockFactors.MultipleKeys.WEEK).toString());
         } else {
             rate = new BigDecimal(factors.get(StockFactors.MultipleKeys.MONTH).toString());
         }
-        priceGoal = pricePerDay.multiply(rate).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal up = pricePerDay.multiply(rate).setScale(4, RoundingMode.HALF_UP);
+        priceGoal = statics.getPriceCost().add(up);
     }
 
     private void calcRefer(StockStatics statics, long between) {
         BigDecimal priceHigh = statics.getPriceHigh();
         BigDecimal priceLow = statics.getPriceLow();
         BigDecimal distance = priceHigh.subtract(priceLow);
-        pricePerDay = distance.divide(new BigDecimal(statics.getStock().getCycleSmall()));
-        priceRefer = pricePerDay.multiply(new BigDecimal(between)).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal cycleSmallDays = new BigDecimal(statics.getStock().getCycleSmall());
+        pricePerDay = distance.divide(cycleSmallDays,10,RoundingMode.HALF_UP);
+        BigDecimal up = pricePerDay.multiply(new BigDecimal(between)).setScale(4, RoundingMode.HALF_UP);
+        priceRefer = statics.getPriceCost().add(up);
     }
 
     private void calcWorth(StockStatics statics, long between) {
