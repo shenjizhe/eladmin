@@ -58,7 +58,7 @@ public class StockStatics implements Serializable {
         int leftCount = buyCount - saleCount;
 
         Date beginDate = null;
-        for (int i = buyOrders.size() - 1; i > 0; i--) {
+        for (int i = buyOrders.size() - 1; i >= 0; i--) {
             StockOrderDto order = buyOrders.get(i);
             if (leftCount > order.getTradeCount()) {
                 holdOrders.add(order);

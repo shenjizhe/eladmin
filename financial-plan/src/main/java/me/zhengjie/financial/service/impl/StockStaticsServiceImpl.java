@@ -75,6 +75,7 @@ public class StockStaticsServiceImpl implements StockStaticsService {
     private void calcCost(StockStatics stockStatics, Integer id) {
         Long userId = SecurityUtils.getCurrentUserId();
         StockOrderQueryCriteria criteria = new StockOrderQueryCriteria();
+        criteria.setStockId(id);
         criteria.setUserId(userId);
         List<StockOrderDto> stockOrders = stockOrderService.queryAll(criteria);
         stockStatics.calcOrders(stockOrders);
