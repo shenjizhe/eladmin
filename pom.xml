@@ -17,6 +17,7 @@
         <module>eladmin-generator</module>
         <module>code-factory</module>
         <module>financial-plan</module>
+        <module>morpheme</module>
     </modules>
 
     <name>ELADMIN 后台管理</name>

@@ -1,7 +1,5 @@
 package me.zhengjie.financial.domain;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import javafx.util.Pair;
 import lombok.Data;
 
 import java.math.BigDecimal;

@@ -29,6 +29,11 @@
             <artifactId>financial-plan</artifactId>
             <version>2.6</version>
         </dependency>
+        <dependency>
+            <groupId>me.zhengjie</groupId>
+            <artifactId>morpheme</artifactId>
+            <version>2.6</version>
+        </dependency>
 
         <!-- 代码生成模块 -->
         <dependency>
