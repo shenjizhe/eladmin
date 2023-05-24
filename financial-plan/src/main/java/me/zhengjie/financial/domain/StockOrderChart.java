@@ -15,7 +15,7 @@ public class StockOrderChart {
     }
 
     public void setOrders(List<StockOrderDto> orders) {
-
+        //TODO: 暂停，相关数据报表折线图逻辑，需要整理请逻辑再继续
         for (StockOrderDto order : orders) {
             if (order.getTradeType() == 1) {
 
