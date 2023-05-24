@@ -23,6 +23,7 @@ public class StockStatics implements Serializable {
         this.stock = stock;
     }
 
+    private List<StockOrderDto> orders = new ArrayList<>();
     private List<StockOrderDto> buyOrders = new ArrayList<>();
     private List<StockOrderDto> saleOrders = new ArrayList<>();
     private List<StockOrderDto> holdOrders = new ArrayList<>();

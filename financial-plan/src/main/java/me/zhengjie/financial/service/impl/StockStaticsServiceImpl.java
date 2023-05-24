@@ -78,6 +78,7 @@ public class StockStaticsServiceImpl implements StockStaticsService {
         criteria.setStockId(id);
         criteria.setUserId(userId);
         List<StockOrderDto> stockOrders = stockOrderService.queryAll(criteria);
+        stockStatics.setOrders(stockOrders);
         stockStatics.calcOrders(stockOrders);
     }
 

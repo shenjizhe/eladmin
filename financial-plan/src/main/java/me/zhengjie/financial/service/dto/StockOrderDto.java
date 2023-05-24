@@ -69,4 +69,8 @@ public class StockOrderDto implements Serializable, Comparable<StockOrderDto> {
     public int compareTo(StockOrderDto o) {
         return tradeTime.compareTo(o.tradeTime);
     }
+
+    public BigDecimal getTradeTotal(){
+        return tradePrice.multiply(new BigDecimal(tradeCount));
+    }
 }
