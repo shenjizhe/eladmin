@@ -17,6 +17,7 @@ package me.zhengjie.morpheme.service;
 
 import me.zhengjie.morpheme.domain.Morpheme;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
+import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.dto.MorphemeDto;
 import me.zhengjie.morpheme.service.dto.MorphemeQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +34,15 @@ import java.util.Map;
 * @date 2023-05-24
 **/
 public interface MorphemeStudyService {
+    Morpheme currentMorpheme();
 
+    Morpheme previousMorpheme();
 
-    MorphemeStudy current();
+    Morpheme nextMorpheme();
 
-    MorphemeStudy previous();
+    Word currentWord();
 
-    MorphemeStudy next();
+    Word nextWord();
+
+    Word previousWord();
 }

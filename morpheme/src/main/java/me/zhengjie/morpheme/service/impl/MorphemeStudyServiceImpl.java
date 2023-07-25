@@ -55,9 +55,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final UserStatusRepository userStatusRepository;
     private List<Morpheme> all;
     private UserStatus currentUser;
-    private List<DifferentMorpheme> differs;
-    private List<Word> words;
-    private int index;
+    private Map<Long, List<DifferentMorpheme>> differsMap = new LinkedHashMap<>();
+    private Map<Long, List<Word>> wordsMap = new LinkedHashMap<>();
+
+    private int morphemeIndex = -1;
+    private int wordIndex = -1;
 
     @PostConstruct
     private void init() {
@@ -71,37 +73,83 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
             Morpheme first = all.get(0);
             currentUser.setMorphemeId(first.getId());
+            List<Word> words = wordsMap.get(first.getId());
+            currentUser.setWordId(words.get(0).getId());
+
+            userStatusRepository.save(currentUser);
         } else {
             currentUser = userStatus;
         }
+
+
     }
 
-    private void getCurrent(Long morphemeId) {
-        differs = differentMorphemeRepository.getByMorphemeId(morphemeId);
-        words = wordRepository.getByMorphemeId(morphemeId);
+    private void setMorpheme(Long morphemeId) {
+        List<DifferentMorpheme> differs = differentMorphemeRepository.getByMorphemeId(morphemeId);
+        List<Word> words = wordRepository.getByMorphemeId(morphemeId);
 
-
+        differsMap.put(morphemeId, differs);
+        wordsMap.put(morphemeId, words);
     }
 
     public void loadMorpheme() {
+        differsMap.clear();
+        wordsMap.clear();
+
         all = morphemeRepository.findAll();
+        for (int i = 0; i < all.size(); i++) {
+            Morpheme morpheme = all.get(i);
+            setMorpheme(morpheme.getId());
+        }
+    }
 
+    private int indexOfMorpheme(Long morphemeId) {
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).getId().equals(morphemeId)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
+    private int indexOfWord(Long morphemeId,Long wordId){
+        List<Word> words = wordsMap.get(morphemeId);
+
+        for (int i = 0; i < words.size(); i++) {
+            if(words.get(i).getId().equals(wordId)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
-    public MorphemeStudy current() {
-
+    public Morpheme currentMorpheme() {
         return null;
     }
 
     @Override
-    public MorphemeStudy previous() {
+    public Morpheme previousMorpheme() {
         return null;
     }
 
     @Override
-    public MorphemeStudy next() {
+    public Morpheme nextMorpheme() {
+        return null;
+    }
+
+    @Override
+    public Word currentWord() {
+        return null;
+    }
+
+    @Override
+    public Word nextWord() {
+        return null;
+    }
+
+    @Override
+    public Word previousWord() {
         return null;
     }
 }
