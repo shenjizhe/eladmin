@@ -13,22 +13,31 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-package me.zhengjie.morpheme.repository;
+package me.zhengjie.morpheme.service;
 
-import me.zhengjie.morpheme.domain.DifferentMorpheme;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import me.zhengjie.morpheme.domain.Morpheme;
+import me.zhengjie.morpheme.domain.MorphemeStudy;
+import me.zhengjie.morpheme.service.dto.MorphemeDto;
+import me.zhengjie.morpheme.service.dto.MorphemeQueryCriteria;
+import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @website https://eladmin.vip
+* @description 服务接口
 * @author Jason Shen
 * @date 2023-05-24
 **/
-public interface DifferentMorphemeRepository extends JpaRepository<DifferentMorpheme, Long>, JpaSpecificationExecutor<DifferentMorpheme> {
-    @Query("SELECT d FROM DifferentMorpheme d WHERE d.morphemeId = :morphemeId")
-    List<DifferentMorpheme> getByMorphemeId(@Param("morphemeId")Long morphemeId);
+public interface MorphemeStudyService {
+
+
+    MorphemeStudy current();
+
+    MorphemeStudy previous();
+
+    MorphemeStudy next();
 }
