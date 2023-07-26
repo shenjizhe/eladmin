@@ -65,12 +65,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @PostConstruct
     private void init() {
         loadMorpheme();
+    }
 
-        Long currentUserId = SecurityUtils.getCurrentUserId();
-        UserStatus userStatus = userStatusRepository.findOneByUserId(currentUserId);
+    private void getUserStatus(Long uid){
+        UserStatus userStatus = userStatusRepository.findOneByUserId(uid);
         if (userStatus == null) {
             currentUser = new UserStatus();
-            currentUser.setUserId(currentUserId);
+            currentUser.setUserId(uid);
 
             Morpheme first = all.get(0);
             currentUser.setMorphemeId(first.getId());
@@ -125,11 +126,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return -1;
     }
 
-    private Boolean isFirstWord(){
+    private Boolean isFirstWord() {
         return wordIndex == 0;
     }
 
-    private Boolean isFirstMorpheme(){
+    private Boolean isFirstMorpheme() {
         return morphemeIndex == 0;
     }
 
@@ -137,11 +138,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         Morpheme morpheme = all.get(morphemeIndex);
         List<Word> words = wordsMap.get(morpheme.getId());
 
-        return wordIndex == words.size()-1;
+        return wordIndex == words.size() - 1;
     }
 
     private Boolean isLastMorpheme() {
-        return morphemeIndex == all.size() -1;
+        return morphemeIndex == all.size() - 1;
     }
 
     @Override
@@ -213,43 +214,43 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public Pair<MorphemeStudy, Word> current() {
+    public MorphemePair current(Long uid) {
+        getUserStatus(uid);
         MorphemeStudy morphemeStudy = currentMorpheme();
         Word word = currentWord();
-        Pair<MorphemeStudy, Word> pair = new Pair<>(morphemeStudy, word);
-        return pair;
+        return new MorphemePair(morphemeStudy, word);
     }
 
     @Override
-    public Pair<MorphemeStudy, Word> next() {
+    public MorphemePair next() {
         MorphemeStudy morpheme;
         Word word;
 
-        if(isLastWord()){
+        if (isLastWord()) {
             morpheme = nextMorpheme();
             wordIndex = 0;
             word = currentWord();
-        }else{
+        } else {
             morpheme = currentMorpheme();
             word = nextWord();
         }
-        return new Pair<>(morpheme,word);
+        return new MorphemePair(morpheme, word);
     }
 
     @Override
-    public Pair<MorphemeStudy, Word> previous() {
+    public MorphemePair previous() {
         MorphemeStudy morpheme;
         Word word;
 
-        if(isFirstWord()){
+        if (isFirstWord()) {
             morpheme = previousMorpheme();
             List<Word> words = wordsMap.get(morpheme.getId());
-            wordIndex = words.size()-1;
+            wordIndex = words.size() - 1;
             word = currentWord();
-        }else{
+        } else {
             morpheme = currentMorpheme();
             word = previousWord();
         }
-        return new Pair<>(morpheme,word);
+        return new MorphemePair(morpheme, word);
     }
 }

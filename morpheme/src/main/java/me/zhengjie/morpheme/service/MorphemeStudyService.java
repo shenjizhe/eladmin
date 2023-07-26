@@ -17,6 +17,7 @@ package me.zhengjie.morpheme.service;
 
 import javafx.util.Pair;
 import me.zhengjie.morpheme.domain.Morpheme;
+import me.zhengjie.morpheme.domain.MorphemePair;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
 import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.dto.MorphemeDto;
@@ -47,9 +48,9 @@ public interface MorphemeStudyService {
 
     Word previousWord();
 
-    Pair<MorphemeStudy,Word> current();
+    MorphemePair current(Long uid);
 
-    Pair<MorphemeStudy,Word> next();
+    MorphemePair next();
 
-    Pair<MorphemeStudy,Word> previous();
+    MorphemePair previous();
 }

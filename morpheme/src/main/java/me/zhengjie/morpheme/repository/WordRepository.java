@@ -30,13 +30,23 @@ import java.util.List;
  **/
 public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificationExecutor<Word> {
     @Query(value = "SELECT\n" +
-            "\tw.*\n" +
+            "\tw.id, \n" +
+            "\tw.text, \n" +
+            "\tw.deduction, \n" +
+            "\tw.nature, \n" +
+            "\tw.is_derive\n" +
             "FROM\n" +
-            "\tword_morpheme_relation r\n" +
-            "\tINNER JOIN morpheme m ON r.morpheme_id = m.id\n" +
-            "\tINNER JOIN word w ON r.word_id = w.id \n" +
+            "\tword_morpheme_relation AS r\n" +
+            "\tINNER JOIN\n" +
+            "\tmorpheme AS m\n" +
+            "\tON \n" +
+            "\t\tr.morpheme_id = m.id\n" +
+            "\tINNER JOIN\n" +
+            "\tword AS w\n" +
+            "\tON \n" +
+            "\t\tr.word_id = w.id\n" +
             "WHERE\n" +
-            "\tm.id = :morphememId",
+            "\tm.id = :morphemeId",
             nativeQuery = true
     )
     List<Word> getByMorphemeId(@Param("morphemeId") Long morphemeId);
