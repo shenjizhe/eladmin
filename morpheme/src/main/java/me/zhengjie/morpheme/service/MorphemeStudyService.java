@@ -15,19 +15,9 @@
 */
 package me.zhengjie.morpheme.service;
 
-import javafx.util.Pair;
-import me.zhengjie.morpheme.domain.Morpheme;
 import me.zhengjie.morpheme.domain.MorphemePair;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
 import me.zhengjie.morpheme.domain.Word;
-import me.zhengjie.morpheme.service.dto.MorphemeDto;
-import me.zhengjie.morpheme.service.dto.MorphemeQueryCriteria;
-import org.springframework.data.domain.Pageable;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
 * @website https://eladmin.vip
@@ -50,7 +40,7 @@ public interface MorphemeStudyService {
 
     MorphemePair current(Long uid);
 
-    MorphemePair next();
+    MorphemePair next(Long uid);
 
-    MorphemePair previous();
+    MorphemePair previous(Long uid);
 }

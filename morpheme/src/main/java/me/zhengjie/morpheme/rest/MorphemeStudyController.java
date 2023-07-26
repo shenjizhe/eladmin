@@ -38,7 +38,8 @@ public class MorphemeStudyController {
     @GetMapping(value = "/morpheme-next")
     @PreAuthorize("@el.check('morpheme:list')")
     public MorphemePair nextnMorphemeStudy() {
-        return morphemeStudyService.next();
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.next(uid);
     }
 
     @Log("上一条")
@@ -46,6 +47,7 @@ public class MorphemeStudyController {
     @GetMapping(value = "/morpheme-previous")
     @PreAuthorize("@el.check('morpheme:list')")
     public MorphemePair lastnMorphemeStudy() {
-        return morphemeStudyService.previous();
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.previous(uid);
     }
 }

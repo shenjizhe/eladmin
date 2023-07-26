@@ -15,28 +15,16 @@
  */
 package me.zhengjie.morpheme.service.impl;
 
-import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.DifferentMorphemeRepository;
 import me.zhengjie.morpheme.repository.MorphemeRepository;
 import me.zhengjie.morpheme.repository.UserStatusRepository;
 import me.zhengjie.morpheme.repository.WordRepository;
-import me.zhengjie.morpheme.service.MorphemeService;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
-import me.zhengjie.morpheme.service.dto.MorphemeDto;
-import me.zhengjie.morpheme.service.dto.MorphemeQueryCriteria;
-import me.zhengjie.morpheme.service.mapstruct.MorphemeMapper;
-import me.zhengjie.utils.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,7 +210,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public MorphemePair next() {
+    public MorphemePair next(Long uid) {
         MorphemeStudy morpheme;
         Word word;
 
@@ -238,7 +226,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public MorphemePair previous() {
+    public MorphemePair previous(Long uid) {
         MorphemeStudy morpheme;
         Word word;
 
