@@ -46,7 +46,6 @@ public class MorphemeStudyController {
     @GetMapping(value = "/morpheme-previous")
     @PreAuthorize("@el.check('morpheme:list')")
     public MorphemePair lastnMorphemeStudy() {
-
         return morphemeStudyService.previous();
     }
 }
