@@ -42,8 +42,6 @@ public class MorphemeStudy {
     @ApiModelProperty(value = "相关子项目")
     private List<DifferentMorpheme> items;
 
-    @ApiModelProperty(value = "相关单词")
-    private List<Word> words;
     public void copy(Morpheme source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

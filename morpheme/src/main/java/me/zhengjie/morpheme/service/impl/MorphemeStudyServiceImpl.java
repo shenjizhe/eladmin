@@ -15,6 +15,7 @@
  */
 package me.zhengjie.morpheme.service.impl;
 
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.DifferentMorphemeRepository;
@@ -75,13 +76,14 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             currentUser.setMorphemeId(first.getId());
             List<Word> words = wordsMap.get(first.getId());
             currentUser.setWordId(words.get(0).getId());
-
             userStatusRepository.save(currentUser);
+            morphemeIndex = 0;
+            wordIndex = 0;
         } else {
             currentUser = userStatus;
+            morphemeIndex = indexOfMorpheme(currentUser.getMorphemeId());
+            wordIndex = indexOfWord(currentUser.getMorphemeId(), currentUser.getWordId());
         }
-
-
     }
 
     private void setMorpheme(Long morphemeId) {
@@ -112,44 +114,142 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return -1;
     }
 
-    private int indexOfWord(Long morphemeId,Long wordId){
+    private int indexOfWord(Long morphemeId, Long wordId) {
         List<Word> words = wordsMap.get(morphemeId);
 
         for (int i = 0; i < words.size(); i++) {
-            if(words.get(i).getId().equals(wordId)){
+            if (words.get(i).getId().equals(wordId)) {
                 return i;
             }
         }
         return -1;
     }
 
+    private Boolean isFirstWord(){
+        return wordIndex == 0;
+    }
+
+    private Boolean isFirstMorpheme(){
+        return morphemeIndex == 0;
+    }
+
+    private Boolean isLastWord() {
+        Morpheme morpheme = all.get(morphemeIndex);
+        List<Word> words = wordsMap.get(morpheme.getId());
+
+        return wordIndex == words.size()-1;
+    }
+
+    private Boolean isLastMorpheme() {
+        return morphemeIndex == all.size() -1;
+    }
+
     @Override
-    public Morpheme currentMorpheme() {
+    public MorphemeStudy currentMorpheme() {
+        Morpheme morpheme = all.get(morphemeIndex);
+        MorphemeStudy morphemeStudy = new MorphemeStudy();
+        morphemeStudy.copy(morpheme);
+        List<DifferentMorpheme> differentMorphemes = differsMap.get(morphemeIndex);
+        morphemeStudy.setItems(differentMorphemes);
+        return morphemeStudy;
+    }
+
+    private void saveUserStatus() {
+        Morpheme morpheme = all.get(morphemeIndex);
+        Word word = wordsMap.get(morphemeIndex).get(wordIndex);
+        currentUser.setWordId(word.getId());
+        currentUser.setMorphemeId(morpheme.getId());
+
+        userStatusRepository.save(currentUser);
+    }
+
+    @Override
+    public MorphemeStudy previousMorpheme() {
+        if (morphemeIndex > 0) {
+            morphemeIndex--;
+            saveUserStatus();
+            return currentMorpheme();
+        }
         return null;
     }
 
     @Override
-    public Morpheme previousMorpheme() {
-        return null;
-    }
-
-    @Override
-    public Morpheme nextMorpheme() {
+    public MorphemeStudy nextMorpheme() {
+        if (morphemeIndex < all.size() - 1) {
+            morphemeIndex++;
+            saveUserStatus();
+            return currentMorpheme();
+        }
         return null;
     }
 
     @Override
     public Word currentWord() {
-        return null;
+        Morpheme morpheme = all.get(morphemeIndex);
+        List<Word> words = wordsMap.get(morpheme.getId());
+        return words.get(wordIndex);
     }
 
     @Override
     public Word nextWord() {
+        Morpheme morpheme = all.get(morphemeIndex);
+        List<Word> words = wordsMap.get(morpheme.getId());
+        if (wordIndex < words.size() - 1) {
+            wordIndex++;
+            saveUserStatus();
+            return currentWord();
+        }
         return null;
     }
 
     @Override
     public Word previousWord() {
+        if (wordIndex > 0) {
+            wordIndex--;
+            saveUserStatus();
+            return currentWord();
+        }
         return null;
+    }
+
+    @Override
+    public Pair<MorphemeStudy, Word> current() {
+        MorphemeStudy morphemeStudy = currentMorpheme();
+        Word word = currentWord();
+        Pair<MorphemeStudy, Word> pair = new Pair<>(morphemeStudy, word);
+        return pair;
+    }
+
+    @Override
+    public Pair<MorphemeStudy, Word> next() {
+        MorphemeStudy morpheme;
+        Word word;
+
+        if(isLastWord()){
+            morpheme = nextMorpheme();
+            wordIndex = 0;
+            word = currentWord();
+        }else{
+            morpheme = currentMorpheme();
+            word = nextWord();
+        }
+        return new Pair<>(morpheme,word);
+    }
+
+    @Override
+    public Pair<MorphemeStudy, Word> previous() {
+        MorphemeStudy morpheme;
+        Word word;
+
+        if(isFirstWord()){
+            morpheme = previousMorpheme();
+            List<Word> words = wordsMap.get(morpheme.getId());
+            wordIndex = words.size()-1;
+            word = currentWord();
+        }else{
+            morpheme = currentMorpheme();
+            word = previousWord();
+        }
+        return new Pair<>(morpheme,word);
     }
 }

@@ -2,10 +2,11 @@ package me.zhengjie.morpheme.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
-import me.zhengjie.morpheme.service.MorphemeService;
+import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class MorphemeStudyController {
     @ApiOperation("当前词根")
     @GetMapping(value = "/morpheme-current")
     @PreAuthorize("@el.check('morpheme:list')")
-    public MorphemeStudy curretnMorphemeStudy() {
+    public Pair<MorphemeStudy, Word> curretnMorphemeStudy() {
         return morphemeStudyService.current();
     }
 
@@ -30,7 +31,7 @@ public class MorphemeStudyController {
     @ApiOperation("当前词根")
     @GetMapping(value = "/morpheme-next")
     @PreAuthorize("@el.check('morpheme:list')")
-    public MorphemeStudy nextnMorphemeStudy() {
+    public Pair<MorphemeStudy, Word> nextnMorphemeStudy() {
         return morphemeStudyService.next();
     }
 
@@ -38,7 +39,8 @@ public class MorphemeStudyController {
     @ApiOperation("当前词根")
     @GetMapping(value = "/morpheme-previous")
     @PreAuthorize("@el.check('morpheme:list')")
-    public MorphemeStudy lastnMorphemeStudy() {
+    public Pair<MorphemeStudy, Word> lastnMorphemeStudy() {
+
         return morphemeStudyService.previous();
     }
 }

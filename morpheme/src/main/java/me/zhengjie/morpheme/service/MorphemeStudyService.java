@@ -15,6 +15,7 @@
 */
 package me.zhengjie.morpheme.service;
 
+import javafx.util.Pair;
 import me.zhengjie.morpheme.domain.Morpheme;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
 import me.zhengjie.morpheme.domain.Word;
@@ -34,15 +35,21 @@ import java.util.Map;
 * @date 2023-05-24
 **/
 public interface MorphemeStudyService {
-    Morpheme currentMorpheme();
+    MorphemeStudy currentMorpheme();
 
-    Morpheme previousMorpheme();
+    MorphemeStudy previousMorpheme();
 
-    Morpheme nextMorpheme();
+    MorphemeStudy nextMorpheme();
 
     Word currentWord();
 
     Word nextWord();
 
     Word previousWord();
+
+    Pair<MorphemeStudy,Word> current();
+
+    Pair<MorphemeStudy,Word> next();
+
+    Pair<MorphemeStudy,Word> previous();
 }
