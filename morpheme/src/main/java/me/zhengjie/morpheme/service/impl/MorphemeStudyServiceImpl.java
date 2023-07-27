@@ -145,7 +145,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     private void saveUserStatus() {
         Morpheme morpheme = all.get(morphemeIndex);
-        Word word = wordsMap.get(morphemeIndex).get(wordIndex);
+        Word word = wordsMap.get(morpheme.getId()).get(wordIndex);
         currentUser.setWordId(word.getId());
         currentUser.setMorphemeId(morpheme.getId());
 
@@ -156,7 +156,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public MorphemeStudy previousMorpheme() {
         if (morphemeIndex > 0) {
             morphemeIndex--;
-            saveUserStatus();
             return currentMorpheme();
         }
         return null;
@@ -166,7 +165,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public MorphemeStudy nextMorpheme() {
         if (morphemeIndex < all.size() - 1) {
             morphemeIndex++;
-            saveUserStatus();
             return currentMorpheme();
         }
         return null;
@@ -185,7 +183,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<Word> words = wordsMap.get(morpheme.getId());
         if (wordIndex < words.size() - 1) {
             wordIndex++;
-            saveUserStatus();
             return currentWord();
         }
         return null;
@@ -195,7 +192,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public Word previousWord() {
         if (wordIndex > 0) {
             wordIndex--;
-            saveUserStatus();
             return currentWord();
         }
         return null;
@@ -213,7 +209,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public MorphemePair next(Long uid) {
         MorphemeStudy morpheme;
         Word word;
-
+        getUserStatus(uid);
         if (isLastWord()) {
             morpheme = nextMorpheme();
             wordIndex = 0;
@@ -222,6 +218,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             morpheme = currentMorpheme();
             word = nextWord();
         }
+
+        saveUserStatus();
         return new MorphemePair(morpheme, word);
     }
 
@@ -229,7 +227,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public MorphemePair previous(Long uid) {
         MorphemeStudy morpheme;
         Word word;
-
+        getUserStatus(uid);
         if (isFirstWord()) {
             morpheme = previousMorpheme();
             List<Word> words = wordsMap.get(morpheme.getId());
@@ -239,6 +237,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             morpheme = currentMorpheme();
             word = previousWord();
         }
+
+        saveUserStatus();
         return new MorphemePair(morpheme, word);
     }
 }
