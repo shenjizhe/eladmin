@@ -138,7 +138,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         Morpheme morpheme = all.get(morphemeIndex);
         MorphemeStudy morphemeStudy = new MorphemeStudy();
         morphemeStudy.copy(morpheme);
-        List<DifferentMorpheme> differentMorphemes = differsMap.get(morphemeIndex);
+        List<DifferentMorpheme> differentMorphemes = differsMap.get(morpheme.getId());
         morphemeStudy.setItems(differentMorphemes);
         return morphemeStudy;
     }
