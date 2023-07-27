@@ -1,6 +1,7 @@
 package me.zhengjie.codefactory.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import me.zhengjie.base.Const;
 import me.zhengjie.base.ErrorCode;
 import me.zhengjie.base.Result;
@@ -24,12 +25,15 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author Jason Shen
  * @version 1.0
  * @date 2023/4/11 17:28
  */
+
+@Log
 @Service
 @RequiredArgsConstructor
 public class GitlabServiceImpl implements GitlabService {
@@ -40,6 +44,7 @@ public class GitlabServiceImpl implements GitlabService {
 
     private GitLabApi gitLabApi;
     private String namespace;
+
 
     @PostConstruct
     void init() {
@@ -55,7 +60,7 @@ public class GitlabServiceImpl implements GitlabService {
                 setSshkey(userApi, Const.Name.SSH_TITLE, byKey.getValue());
             }
         } catch (GitLabApiException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "git lab  令牌错误");
         }
     }
 

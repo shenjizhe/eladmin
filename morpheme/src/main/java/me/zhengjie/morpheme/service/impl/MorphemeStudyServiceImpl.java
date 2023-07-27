@@ -16,9 +16,12 @@
 package me.zhengjie.morpheme.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -35,12 +38,14 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class MorphemeStudyServiceImpl implements MorphemeStudyService {
+    private static final Logger logger = LoggerFactory.getLogger(MorphemeStudyServiceImpl.class);
     private final MorphemeRepository morphemeRepository;
     private final DifferentMorphemeRepository differentMorphemeRepository;
     private final WordRepository wordRepository;
     private final UserStatusRepository userStatusRepository;
     private final WordDeductionRepository wordDeductionRepository;
     private final WordMeaningRepository wordMeaningRepository;
+
 
     private List<Morpheme> all;
     private UserStatus currentUser;
@@ -91,6 +96,19 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         }
     }
 
+    public void printProgressBar(int current, int total) {
+        StringBuilder progressBar = new StringBuilder();
+        int progress = (int) (current * 100.0 / total);
+        int filledBlocks = progress / 2;
+        for (int i = 0; i < filledBlocks; i++) {
+            progressBar.append("█");
+        }
+        for (int i = filledBlocks; i < 50; i++) {
+            progressBar.append(" ");
+        }
+        logger.info("[{}%] [{}]", progress, progressBar);
+    }
+
     private void setWord(Long wordId) {
         List<WordDeduction> deductions = wordDeductionRepository.getByWordId(wordId);
         List<WordMeaning> meanings = wordMeaningRepository.getByWordId(wordId);
@@ -107,6 +125,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         for (int i = 0; i < all.size(); i++) {
             Morpheme morpheme = all.get(i);
             setMorpheme(morpheme.getId());
+
+            printProgressBar(i+1, all.size());
         }
     }
 
@@ -156,6 +176,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         morphemeStudy.copy(morpheme);
         List<DifferentMorpheme> differentMorphemes = differsMap.get(morpheme.getId());
         morphemeStudy.setItems(differentMorphemes);
+        morphemeStudy.setIndex(morphemeIndex);
+
         return morphemeStudy;
     }
 
@@ -198,6 +220,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<WordMeaning> wordMeanings = meaningsMap.get(word.getId());
         wordDetail.setDeductions(wordDeductions);
         wordDetail.setMeanings(wordMeanings);
+        wordDetail.setIndex(wordIndex);
 
         return wordDetail;
     }

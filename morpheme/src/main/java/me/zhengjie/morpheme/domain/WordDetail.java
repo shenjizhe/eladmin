@@ -55,6 +55,9 @@ public class WordDetail implements Serializable {
     @ApiModelProperty(value = "相关含义")
     private List<WordMeaning> meanings;
 
+    @ApiModelProperty(value = "索引")
+    private int index;
+
     public void copy(Word source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
