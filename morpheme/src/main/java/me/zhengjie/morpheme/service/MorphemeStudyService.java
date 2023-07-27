@@ -18,6 +18,7 @@ package me.zhengjie.morpheme.service;
 import me.zhengjie.morpheme.domain.MorphemePair;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
 import me.zhengjie.morpheme.domain.Word;
+import me.zhengjie.morpheme.domain.WordDetail;
 
 /**
 * @website https://eladmin.vip
@@ -32,11 +33,11 @@ public interface MorphemeStudyService {
 
     MorphemeStudy nextMorpheme();
 
-    Word currentWord();
+    WordDetail currentWord();
 
-    Word nextWord();
+    WordDetail nextWord();
 
-    Word previousWord();
+    WordDetail previousWord();
 
     MorphemePair current(Long uid);
 

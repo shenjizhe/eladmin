@@ -15,9 +15,14 @@
 */
 package me.zhengjie.morpheme.repository;
 
+import me.zhengjie.morpheme.domain.DifferentMorpheme;
 import me.zhengjie.morpheme.domain.WordDeduction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
 * @website https://eladmin.vip
@@ -25,4 +30,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @date 2023-05-24
 **/
 public interface WordDeductionRepository extends JpaRepository<WordDeduction, Long>, JpaSpecificationExecutor<WordDeduction> {
+    @Query("SELECT d FROM WordDeduction d WHERE d.wordId = :wordId")
+    List<WordDeduction> getByWordId(@Param("wordId")Long wrodId);
 }

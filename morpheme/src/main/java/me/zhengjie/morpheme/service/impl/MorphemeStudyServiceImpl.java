@@ -17,10 +17,7 @@ package me.zhengjie.morpheme.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
-import me.zhengjie.morpheme.repository.DifferentMorphemeRepository;
-import me.zhengjie.morpheme.repository.MorphemeRepository;
-import me.zhengjie.morpheme.repository.UserStatusRepository;
-import me.zhengjie.morpheme.repository.WordRepository;
+import me.zhengjie.morpheme.repository.*;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +39,16 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final DifferentMorphemeRepository differentMorphemeRepository;
     private final WordRepository wordRepository;
     private final UserStatusRepository userStatusRepository;
+    private final WordDeductionRepository wordDeductionRepository;
+    private final WordMeaningRepository wordMeaningRepository;
+
     private List<Morpheme> all;
     private UserStatus currentUser;
     private Map<Long, List<DifferentMorpheme>> differsMap = new LinkedHashMap<>();
     private Map<Long, List<Word>> wordsMap = new LinkedHashMap<>();
+
+    private Map<Long, List<WordDeduction>> deductionMap = new LinkedHashMap<>();
+    private Map<Long, List<WordMeaning>> meaningsMap = new LinkedHashMap<>();
 
     private int morphemeIndex = -1;
     private int wordIndex = -1;
@@ -55,7 +58,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         loadMorpheme();
     }
 
-    private void getUserStatus(Long uid){
+    private void getUserStatus(Long uid) {
         UserStatus userStatus = userStatusRepository.findOneByUserId(uid);
         if (userStatus == null) {
             currentUser = new UserStatus();
@@ -81,6 +84,19 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
         differsMap.put(morphemeId, differs);
         wordsMap.put(morphemeId, words);
+
+        for (int i = 0; i < words.size(); i++) {
+            Word word = words.get(i);
+            setWord(word.getId());
+        }
+    }
+
+    private void setWord(Long wordId) {
+        List<WordDeduction> deductions = wordDeductionRepository.getByWordId(wordId);
+        List<WordMeaning> meanings = wordMeaningRepository.getByWordId(wordId);
+
+        deductionMap.put(wordId, deductions);
+        meaningsMap.put(wordId, meanings);
     }
 
     public void loadMorpheme() {
@@ -171,14 +187,23 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public Word currentWord() {
+    public WordDetail currentWord() {
         Morpheme morpheme = all.get(morphemeIndex);
         List<Word> words = wordsMap.get(morpheme.getId());
-        return words.get(wordIndex);
+        Word word = words.get(wordIndex);
+        WordDetail wordDetail = new WordDetail();
+        wordDetail.copy(word);
+
+        List<WordDeduction> wordDeductions = deductionMap.get(word.getId());
+        List<WordMeaning> wordMeanings = meaningsMap.get(word.getId());
+        wordDetail.setDeductions(wordDeductions);
+        wordDetail.setMeanings(wordMeanings);
+
+        return wordDetail;
     }
 
     @Override
-    public Word nextWord() {
+    public WordDetail nextWord() {
         Morpheme morpheme = all.get(morphemeIndex);
         List<Word> words = wordsMap.get(morpheme.getId());
         if (wordIndex < words.size() - 1) {
@@ -189,7 +214,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public Word previousWord() {
+    public WordDetail previousWord() {
         if (wordIndex > 0) {
             wordIndex--;
             return currentWord();
@@ -201,14 +226,14 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public MorphemePair current(Long uid) {
         getUserStatus(uid);
         MorphemeStudy morphemeStudy = currentMorpheme();
-        Word word = currentWord();
+        WordDetail word = currentWord();
         return new MorphemePair(morphemeStudy, word);
     }
 
     @Override
     public MorphemePair next(Long uid) {
         MorphemeStudy morpheme;
-        Word word;
+        WordDetail word;
         getUserStatus(uid);
         if (isLastWord()) {
             morpheme = nextMorpheme();
@@ -226,7 +251,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public MorphemePair previous(Long uid) {
         MorphemeStudy morpheme;
-        Word word;
+        WordDetail word;
         getUserStatus(uid);
         if (isFirstWord()) {
             morpheme = previousMorpheme();

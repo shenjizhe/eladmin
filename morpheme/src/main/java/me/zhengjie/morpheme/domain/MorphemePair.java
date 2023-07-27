@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class MorphemePair {
     private MorphemeStudy morphemeStudy;
-    private Word word;
+    private WordDetail word;
 
-    public MorphemePair(MorphemeStudy morphemeStudy, Word word) {
+    public MorphemePair(MorphemeStudy morphemeStudy, WordDetail word) {
         this.morphemeStudy = morphemeStudy;
         this.word = word;
     }
