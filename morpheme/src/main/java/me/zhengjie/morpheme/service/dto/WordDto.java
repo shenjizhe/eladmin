@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-01
 **/
 @Data
 public class WordDto implements Serializable {
@@ -41,4 +41,10 @@ public class WordDto implements Serializable {
 
     /** 是否是派生词素(0-不是派生词 1-是派生词) */
     private Boolean isDerive;
+
+    /** 英语的解释 */
+    private String description;
+
+    /** 音标 */
+    private String phonetic;
 }

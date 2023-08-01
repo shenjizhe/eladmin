@@ -16,7 +16,6 @@
 package me.zhengjie.morpheme.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
@@ -288,5 +287,23 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
         saveUserStatus();
         return new MorphemePair(morpheme, word);
+    }
+
+    @Override
+    public Boolean isFirst(Long uid) {
+        getUserStatus(uid);
+        Boolean firstWord = isFirstWord();
+        Boolean firstMorpheme = isFirstMorpheme();
+
+        return firstWord && firstMorpheme;
+    }
+
+    @Override
+    public Boolean isLast(Long uid) {
+        getUserStatus(uid);
+        Boolean lastWord = isLastWord();
+        Boolean lastMorpheme = isLastMorpheme();
+
+        return lastWord && lastMorpheme;
     }
 }

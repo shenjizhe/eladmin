@@ -16,6 +16,7 @@
 package me.zhengjie.morpheme.service.impl;
 
 import me.zhengjie.morpheme.domain.Word;
+import me.zhengjie.morpheme.rest.Agent;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-01
 **/
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,38 @@ public class WordServiceImpl implements WordService {
 
     private final WordRepository wordRepository;
     private final WordMapper wordMapper;
+    private final Agent agent;
+
+    private String getPonetic(String description){
+        int start = description.indexOf("[");
+        int end = description.indexOf("]");
+
+        if(start == -1 || end == -1){
+            return "";
+        }
+
+        return description.substring(start +1, end);
+    }
+
+    @Override
+    public void setAllDescription() {
+        List<Word> words = wordRepository.findAll();
+        for (int i = 0; i < words.size(); i++) {
+            Word word = words.get(i);
+            String description = getDescription(word.getText());
+            word.setDescription(description);
+
+            String ponetic = getPonetic(description);
+            word.setPhonetic(ponetic);
+
+            wordRepository.save(word);
+        }
+    }
+
+    @Override
+    public String getDescription(String word) {
+        return agent.transfer(word);
+    }
 
     @Override
     public Map<String,Object> queryAll(WordQueryCriteria criteria, Pageable pageable){
@@ -100,6 +133,8 @@ public class WordServiceImpl implements WordService {
             map.put("推导过程", word.getDeduction());
             map.put("词性", word.getNature());
             map.put("是否是派生词素(0-不是派生词 1-是派生词)", word.getIsDerive());
+            map.put("英语的解释", word.getDescription());
+            map.put("音标", word.getPhonetic());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

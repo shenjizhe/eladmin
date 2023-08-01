@@ -28,10 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 * @website https://eladmin.vip
 * @description 服务接口
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-01
 **/
 public interface WordService {
 
+    void setAllDescription();
+
+    String getDescription(String word);
     /**
     * 查询数据分页
     * @param criteria 条件

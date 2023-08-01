@@ -34,7 +34,9 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "\tw.text, \n" +
             "\tw.deduction, \n" +
             "\tw.nature, \n" +
-            "\tw.is_derive\n" +
+            "\tw.is_derive, \n" +
+            "\tw.description, \n" +
+            "\tw.phonetic\n" +
             "FROM\n" +
             "\tword_morpheme_relation AS r\n" +
             "\tINNER JOIN\n" +

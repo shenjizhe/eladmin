@@ -17,7 +17,6 @@ package me.zhengjie.morpheme.service;
 
 import me.zhengjie.morpheme.domain.MorphemePair;
 import me.zhengjie.morpheme.domain.MorphemeStudy;
-import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.domain.WordDetail;
 
 /**
@@ -44,4 +43,8 @@ public interface MorphemeStudyService {
     MorphemePair next(Long uid);
 
     MorphemePair previous(Long uid);
+
+    Boolean isFirst(Long uid);
+
+    Boolean isLast(Long uid);
 }

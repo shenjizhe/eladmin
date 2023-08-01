@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-01
 **/
 @Entity
 @Data
@@ -58,6 +58,14 @@ public class Word implements Serializable {
     @Column(name = "`is_derive`")
     @ApiModelProperty(value = "是否是派生词素(0-不是派生词 1-是派生词)")
     private Boolean isDerive;
+
+    @Column(name = "`description`")
+    @ApiModelProperty(value = "英语的解释")
+    private String description;
+
+    @Column(name = "`phonetic`")
+    @ApiModelProperty(value = "音标")
+    private String phonetic;
 
     public void copy(Word source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

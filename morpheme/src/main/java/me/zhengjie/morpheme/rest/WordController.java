@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-01
 **/
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +42,14 @@ import javax.servlet.http.HttpServletResponse;
 public class WordController {
 
     private final WordService wordService;
+
+    @Log("翻译所有的单词，并取得其中的音标")
+    @ApiOperation("翻译并取得音标")
+    @GetMapping(value = "/transfer-words")
+    @PreAuthorize("@el.check('word:list')")
+    public void transferWords() throws IOException {
+        wordService.setAllDescription();
+    }
 
     @Log("导出数据")
     @ApiOperation("导出数据")

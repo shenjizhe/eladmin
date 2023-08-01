@@ -50,4 +50,21 @@ public class MorphemeStudyController {
         Long uid = SecurityUtils.getCurrentUserId();
         return morphemeStudyService.previous(uid);
     }
+
+    @Log("是否是第一条")
+    @ApiOperation("是否是第一条")
+    @GetMapping(value = "/is-first")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public Boolean isFirst() {
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.isFirst(uid);
+    }
+    @Log("是否是最后一条")
+    @ApiOperation("是否是最后一条")
+    @GetMapping(value = "/is-last")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public Boolean isLast() {
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.isLast(uid);
+    }
 }
