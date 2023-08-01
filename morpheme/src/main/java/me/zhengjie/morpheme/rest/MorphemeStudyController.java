@@ -24,6 +24,14 @@ import javax.annotation.PostConstruct;
 public class MorphemeStudyController {
     private final MorphemeStudyService morphemeStudyService;
 
+    @Log("当前版本")
+    @ApiOperation("当前版本")
+    @GetMapping(value = "/version")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public String version() {
+        //TODO: 每次改变需要更新版本
+        return "v1.0.0";
+    }
     @Log("当前")
     @ApiOperation("当前")
     @GetMapping(value = "/morpheme-current")
