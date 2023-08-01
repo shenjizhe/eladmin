@@ -55,6 +55,14 @@ public class WordDetail implements Serializable {
     @ApiModelProperty(value = "相关含义")
     private List<WordMeaning> meanings;
 
+    @Column(name = "`description`")
+    @ApiModelProperty(value = "英语的解释")
+    private String description;
+
+    @Column(name = "`phonetic`")
+    @ApiModelProperty(value = "音标")
+    private String phonetic;
+
     @ApiModelProperty(value = "索引")
     private int index;
 
