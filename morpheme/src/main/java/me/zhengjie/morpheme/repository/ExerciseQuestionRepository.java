@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 public interface ExerciseQuestionRepository extends JpaRepository<ExerciseQuestion, Long>, JpaSpecificationExecutor<ExerciseQuestion> {
 }

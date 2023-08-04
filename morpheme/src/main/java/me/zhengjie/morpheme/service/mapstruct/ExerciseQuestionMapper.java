@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ExerciseQuestionMapper extends BaseMapper<ExerciseQuestionDto, ExerciseQuestion> {

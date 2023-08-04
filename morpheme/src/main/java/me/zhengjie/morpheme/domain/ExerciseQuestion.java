@@ -27,7 +27,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 @Entity
 @Data
@@ -69,6 +69,10 @@ public class ExerciseQuestion implements Serializable {
     @NotBlank
     @ApiModelProperty(value = "选项")
     private String options;
+
+    @Column(name = "`answer`")
+    @ApiModelProperty(value = "答案")
+    private String answer;
 
     public void copy(ExerciseQuestion source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

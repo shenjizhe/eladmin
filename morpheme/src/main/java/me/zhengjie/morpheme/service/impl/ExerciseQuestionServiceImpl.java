@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 @Service
 @RequiredArgsConstructor
@@ -102,6 +102,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
             map.put("题干", exerciseQuestion.getQuestionStem());
             map.put("题目内容", exerciseQuestion.getContent());
             map.put("选项", exerciseQuestion.getOptions());
+            map.put("答案", exerciseQuestion.getAnswer());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

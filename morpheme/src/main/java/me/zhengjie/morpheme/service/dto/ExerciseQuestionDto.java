@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 @Data
 public class ExerciseQuestionDto implements Serializable {
@@ -47,4 +47,7 @@ public class ExerciseQuestionDto implements Serializable {
 
     /** 选项 */
     private String options;
+
+    /** 答案 */
+    private String answer;
 }

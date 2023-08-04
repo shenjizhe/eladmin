@@ -22,7 +22,7 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-05-24
+* @date 2023-08-04
 **/
 @Data
 public class ExerciseQuestionQueryCriteria{
@@ -38,4 +38,8 @@ public class ExerciseQuestionQueryCriteria{
     /** 模糊 */
     @Query(type = Query.Type.INNER_LIKE)
     private String options;
+
+    /** 模糊 */
+    @Query(type = Query.Type.INNER_LIKE)
+    private String answer;
 }
