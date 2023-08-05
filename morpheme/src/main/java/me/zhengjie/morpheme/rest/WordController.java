@@ -56,7 +56,7 @@ public class WordController {
     @ApiOperation("翻译指定的单词")
     @GetMapping(value = "/transfer-words/{word}")
     @PreAuthorize("@el.check('word:list')")
-    public String transferWord(@Param("word") String word) throws IOException {
+    public String transferWord(@PathVariable("word") String word) throws IOException {
         return wordService.getDescription(word);
     }
 
