@@ -15,6 +15,7 @@
 */
 package me.zhengjie.morpheme.rest;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.WordService;
@@ -49,6 +50,14 @@ public class WordController {
     @PreAuthorize("@el.check('word:list')")
     public void transferWords() throws IOException {
         wordService.setAllDescription();
+    }
+
+    @Log("翻译指定的单词，并取得其中的音标")
+    @ApiOperation("翻译指定的单词")
+    @GetMapping(value = "/transfer-words/{word}")
+    @PreAuthorize("@el.check('word:list')")
+    public String transferWord(@Param("word") String word) throws IOException {
+        return wordService.getDescription(word);
     }
 
     @Log("导出数据")
