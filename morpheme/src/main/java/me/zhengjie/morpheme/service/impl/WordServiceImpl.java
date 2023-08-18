@@ -15,7 +15,10 @@
 */
 package me.zhengjie.morpheme.service.impl;
 
+import me.zhengjie.morpheme.domain.UserStatus;
 import me.zhengjie.morpheme.domain.Word;
+import me.zhengjie.morpheme.domain.WordDict;
+import me.zhengjie.morpheme.repository.WordDictRepository;
 import me.zhengjie.morpheme.rest.Agent;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.utils.FileUtil;
@@ -48,6 +51,7 @@ import java.util.LinkedHashMap;
 @RequiredArgsConstructor
 public class WordServiceImpl implements WordService {
 
+    private final WordDictRepository wordDictRepository;
     private final WordRepository wordRepository;
     private final WordMapper wordMapper;
     private final Agent agent;
@@ -68,19 +72,26 @@ public class WordServiceImpl implements WordService {
         List<Word> words = wordRepository.findAll();
         for (int i = 0; i < words.size(); i++) {
             Word word = words.get(i);
-            String description = getDescription(word.getText());
-            word.setDescription(description);
-
-            String ponetic = getPonetic(description);
-            word.setPhonetic(ponetic);
-
-            wordRepository.save(word);
+            getDescription(word.getText());
         }
     }
 
     @Override
     public String getDescription(String word) {
-        return agent.transfer(word);
+        WordDict wordDict =  wordDictRepository.findOneByWord(word);
+        if(wordDict == null){
+            String transfer = agent.transfer(word);
+            WordDict newWord = new WordDict();
+            newWord.setText(word);
+            newWord.setDescription(transfer);
+            String ponetic = getPonetic(transfer);
+            newWord.setPhonetic(ponetic);
+            wordDictRepository.save(newWord);
+
+            return transfer;
+        }else{
+            return wordDict.getDescription();
+        }
     }
 
     @Override
