@@ -18,21 +18,17 @@ package me.zhengjie.morpheme.service.dto;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.io.Serializable;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.ToStringSerializer;
 
 /**
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-07-21
+* @date 2023-08-22
 **/
 @Data
 public class StudyEventDto implements Serializable {
 
     /** 主键 */
-    /** 防止精度丢失 */
-    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long id;
 
     /** 操作时间 */
@@ -43,4 +39,13 @@ public class StudyEventDto implements Serializable {
 
     /** 内容 */
     private String content;
+
+    /** 词根ID */
+    private Long morphememId;
+
+    /** 单词ID */
+    private Long wordId;
+
+    /** 用户ID */
+    private Long uid;
 }

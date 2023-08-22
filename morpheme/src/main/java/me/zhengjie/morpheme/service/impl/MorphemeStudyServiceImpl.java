@@ -19,11 +19,15 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
+import me.zhengjie.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +48,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final UserStatusRepository userStatusRepository;
     private final WordDeductionRepository wordDeductionRepository;
     private final WordMeaningRepository wordMeaningRepository;
-
+    private final StudyEventRepository studyEventRepository;
 
     private List<Morpheme> all;
     private UserStatus currentUser;
@@ -125,7 +129,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             Morpheme morpheme = all.get(i);
             setMorpheme(morpheme.getId());
 
-            printProgressBar(i+1, all.size());
+            printProgressBar(i + 1, all.size());
         }
     }
 
@@ -187,6 +191,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         currentUser.setMorphemeId(morpheme.getId());
 
         userStatusRepository.save(currentUser);
+
+        StudyEvent studyEvent = new StudyEvent();
+        studyEvent.setTime(DateUtil.getTimestamp(DateUtil.now()));
+
+        studyEventRepository.save(studyEvent);
     }
 
     @Override
@@ -249,6 +258,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         getUserStatus(uid);
         MorphemeStudy morphemeStudy = currentMorpheme();
         WordDetail word = currentWord();
+
+        saveUserStatus();
         return new MorphemePair(morphemeStudy, word);
     }
 

@@ -16,6 +16,7 @@
 
 package me.zhengjie.utils;
 
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -38,6 +39,11 @@ public class DateUtil {
      */
     public static Long getTimeStamp(LocalDateTime localDateTime) {
         return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond();
+    }
+
+    public static Timestamp getTimestamp(LocalDateTime localDateTime) {
+        Long timeStamp = getTimeStamp(localDateTime);
+        return new Timestamp(timeStamp);
     }
 
     /**
@@ -82,6 +88,14 @@ public class DateUtil {
      */
     public static LocalDateTime toLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+
+    /**
+     * 返回当前时间
+     * @return 当前时间
+     */
+    public static LocalDateTime now(){
+        return LocalDateTime.now(ZoneId.systemDefault());
     }
 
     /**

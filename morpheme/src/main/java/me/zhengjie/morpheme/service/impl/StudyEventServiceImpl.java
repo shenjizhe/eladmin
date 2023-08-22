@@ -26,8 +26,6 @@ import me.zhengjie.morpheme.service.dto.StudyEventQueryCriteria;
 import me.zhengjie.morpheme.service.mapstruct.StudyEventMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;
@@ -43,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-07-21
+* @date 2023-08-22
 **/
 @Service
 @RequiredArgsConstructor
@@ -74,8 +72,6 @@ public class StudyEventServiceImpl implements StudyEventService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StudyEventDto create(StudyEvent resources) {
-        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId()); 
         return studyEventMapper.toDto(studyEventRepository.save(resources));
     }
 
@@ -103,6 +99,9 @@ public class StudyEventServiceImpl implements StudyEventService {
             map.put("操作时间", studyEvent.getTime());
             map.put("事件", studyEvent.getEvent());
             map.put("内容", studyEvent.getContent());
+            map.put("词根ID", studyEvent.getMorphememId());
+            map.put("单词ID", studyEvent.getWordId());
+            map.put("用户ID", studyEvent.getUid());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

@@ -28,7 +28,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-07-21
+* @date 2023-08-22
 **/
 @Entity
 @Data
@@ -36,6 +36,7 @@ import java.io.Serializable;
 public class StudyEvent implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "`id`")
     @ApiModelProperty(value = "主键")
     private Long id;
@@ -54,6 +55,21 @@ public class StudyEvent implements Serializable {
     @NotBlank
     @ApiModelProperty(value = "内容")
     private String content;
+
+    @Column(name = "`morphemem_id`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "词根ID")
+    private Long morphememId;
+
+    @Column(name = "`word_id`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "单词ID")
+    private Long wordId;
+
+    @Column(name = "`uid`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "用户ID")
+    private Long uid;
 
     public void copy(StudyEvent source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
