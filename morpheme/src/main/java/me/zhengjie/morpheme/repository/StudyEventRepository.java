@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-08-22
+* @date 2023-08-23
 **/
 public interface StudyEventRepository extends JpaRepository<StudyEvent, Long>, JpaSpecificationExecutor<StudyEvent> {
 }

@@ -192,9 +192,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
         userStatusRepository.save(currentUser);
 
-        StudyEvent studyEvent = new StudyEvent();
+        StudyEvent studyEvent = new StudyEvent(StudyEvent.EventType.StudyFirst);
         studyEvent.setTime(DateUtil.getTimestamp(DateUtil.now()));
-
+        studyEvent.setUid(currentUser.getUserId());
+        studyEvent.setWordId(word.getId());
+        studyEvent.setMorphememId(morpheme.getId());
         studyEventRepository.save(studyEvent);
     }
 

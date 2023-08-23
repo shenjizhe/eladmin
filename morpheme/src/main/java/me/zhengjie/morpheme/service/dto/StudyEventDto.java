@@ -23,7 +23,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-08-22
+* @date 2023-08-23
 **/
 @Data
 public class StudyEventDto implements Serializable {
