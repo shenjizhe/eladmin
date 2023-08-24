@@ -16,12 +16,9 @@
 
 package me.zhengjie.utils;
 
-import cn.hutool.core.date.DateTime;
-
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -44,8 +41,8 @@ public class DateUtil {
         return localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond();
     }
 
-    public static Timestamp getTimestamp(long timestamp) {
-        return new Timestamp(timestamp);
+    public static Timestamp getTimestamp(LocalDate date) {
+        return Timestamp.valueOf(date.atTime(LocalTime.MIDNIGHT));
     }
 
     /**
@@ -96,8 +93,9 @@ public class DateUtil {
      * 返回当前时间
      * @return 当前时间
      */
-    public static Long now(){
-        return System.currentTimeMillis();
+
+    public static Date now(){
+        return new Date();
     }
 
     /**
@@ -131,6 +129,16 @@ public class DateUtil {
      */
     public static String localDateTimeFormatyMdHms(LocalDateTime localDateTime) {
         return DFY_MD_HMS.format(localDateTime);
+    }
+
+    /**
+     * 取得日期部分
+     *
+     * @param date
+     * @return
+     */
+    public static LocalDate trimDate(LocalDate date) {
+        return LocalDate.of(date.getYear(),date.getMonth(),date.getDayOfYear());
     }
 
     /**

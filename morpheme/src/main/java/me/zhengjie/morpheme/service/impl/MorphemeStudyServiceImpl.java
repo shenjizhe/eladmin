@@ -22,15 +22,12 @@ import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.sql.Timestamp;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @author Jason Shen
@@ -49,6 +46,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final WordDeductionRepository wordDeductionRepository;
     private final WordMeaningRepository wordMeaningRepository;
     private final StudyEventRepository studyEventRepository;
+    private final StudyRecordDayRepository studyRecordDayRepository;
 
     private List<Morpheme> all;
     private UserStatus currentUser;
@@ -184,16 +182,46 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return morphemeStudy;
     }
 
-    private void saveUserStatus() {
+    private void saveAll() {
         Morpheme morpheme = all.get(morphemeIndex);
         Word word = wordsMap.get(morpheme.getId()).get(wordIndex);
+        LocalDate now = LocalDate.now();
+        saveUserStatus(morpheme, word);
+        saveStudyEvent(morpheme, word, now);
+        saveStudyDay(morpheme, word, now);
+    }
+
+    private void saveUserStatus(Morpheme morpheme, Word word) {
         currentUser.setWordId(word.getId());
         currentUser.setMorphemeId(morpheme.getId());
-
         userStatusRepository.save(currentUser);
+    }
 
+    private void saveStudyDay(Morpheme morpheme, Word word, LocalDate date) {
+        saveDataDay(date, 0, morpheme, word);
+        saveDataDay(date, 1, morpheme, word);
+    }
+
+    private void saveDataDay(LocalDate today, int objectType, Morpheme morpheme, Word word) {
+        StudyRecordDay example = new StudyRecordDay();
+        example.setUid(currentUser.getUserId());
+        example.setObjectType(objectType);
+        example.setDate(DateUtil.getTimestamp(today));
+        example.setObjectId(objectType == 0 ? morpheme.getId() : word.getId());
+        Optional<StudyRecordDay> one = studyRecordDayRepository.findOne(Example.of(example));
+        if (!one.isPresent()) {
+            StudyRecordDay search = new StudyRecordDay();
+            search.copy(example);
+            search.setDate(null);
+            long count = studyRecordDayRepository.count(Example.of(search));
+            example.setType(count > 0 ? 1 : 0);
+            studyRecordDayRepository.save(example);
+        }
+    }
+
+    private void saveStudyEvent(Morpheme morpheme, Word word, LocalDate date) {
         StudyEvent studyEvent = new StudyEvent(StudyEvent.EventType.StudyFirst);
-        studyEvent.setTime(DateUtil.getTimestamp(DateUtil.now()));
+        studyEvent.setTime(DateUtil.getTimestamp(date));
         studyEvent.setUid(currentUser.getUserId());
         studyEvent.setWordId(word.getId());
         studyEvent.setMorphememId(morpheme.getId());
@@ -261,7 +289,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         MorphemeStudy morphemeStudy = currentMorpheme();
         WordDetail word = currentWord();
 
-        saveUserStatus();
+        saveAll();
         return new MorphemePair(morphemeStudy, word);
     }
 
@@ -279,7 +307,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             word = nextWord();
         }
 
-        saveUserStatus();
+        saveAll();
         return new MorphemePair(morpheme, word);
     }
 
@@ -298,7 +326,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             word = previousWord();
         }
 
-        saveUserStatus();
+        saveAll();
         return new MorphemePair(morpheme, word);
     }
 
