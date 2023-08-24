@@ -347,4 +347,18 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
         return lastWord && lastMorpheme;
     }
+
+    @Override
+    public List<Morpheme> getNewMorphemes(Long uid) {
+        LocalDate now = LocalDate.now();
+        List<Morpheme> all = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(now));
+        return all;
+    }
+
+    @Override
+    public List<Word> getNewWords(Long uid) {
+        LocalDate now = LocalDate.now();
+        List<Word> all = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(now));
+        return all;
+    }
 }

@@ -4,13 +4,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
+import me.zhengjie.morpheme.domain.Morpheme;
 import me.zhengjie.morpheme.domain.MorphemePair;
+import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,5 +73,22 @@ public class MorphemeStudyController {
     public Boolean isLast() {
         Long uid = SecurityUtils.getCurrentUserId();
         return morphemeStudyService.isLast(uid);
+    }
+    @Log("取得今天学习的词根")
+    @ApiOperation("取得今天学习的词根")
+    @GetMapping(value = "/morpheme-today")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<Morpheme> getNewMorphemes() {
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.getNewMorphemes(uid);
+    }
+
+    @Log("取得今天学习的单词")
+    @ApiOperation("取得今天学习的单词")
+    @GetMapping(value = "/word-today")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<Word> getNewWords() {
+        Long uid = SecurityUtils.getCurrentUserId();
+        return morphemeStudyService.getNewWords(uid);
     }
 }

@@ -15,9 +15,9 @@
 */
 package me.zhengjie.morpheme.service;
 
-import me.zhengjie.morpheme.domain.MorphemePair;
-import me.zhengjie.morpheme.domain.MorphemeStudy;
-import me.zhengjie.morpheme.domain.WordDetail;
+import me.zhengjie.morpheme.domain.*;
+
+import java.util.List;
 
 /**
 * @website https://eladmin.vip
@@ -47,4 +47,8 @@ public interface MorphemeStudyService {
     Boolean isFirst(Long uid);
 
     Boolean isLast(Long uid);
+
+    List<Morpheme> getNewMorphemes(Long uid);
+
+    List<Word> getNewWords(Long uid);
 }
