@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/system")
+@RequestMapping("/api/system")
 @Api(tags = "系统基本信息")
 public class SystemController {
     @Log("当前版本")
