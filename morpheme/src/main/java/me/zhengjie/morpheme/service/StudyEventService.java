@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 * @website https://eladmin.vip
 * @description 服务接口
 * @author Jason Shen
-* @date 2023-08-23
+* @date 2023-08-25
 **/
 public interface StudyEventService {
 

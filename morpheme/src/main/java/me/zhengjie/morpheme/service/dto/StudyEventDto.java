@@ -23,7 +23,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-08-23
+* @date 2023-08-25
 **/
 @Data
 public class StudyEventDto implements Serializable {
@@ -40,12 +40,12 @@ public class StudyEventDto implements Serializable {
     /** 内容 */
     private String content;
 
-    /** 词根ID */
-    private Long morphememId;
-
     /** 单词ID */
     private Long wordId;
 
     /** 用户ID */
     private Long uid;
+
+    /** 词根ID */
+    private Long morphemeId;
 }

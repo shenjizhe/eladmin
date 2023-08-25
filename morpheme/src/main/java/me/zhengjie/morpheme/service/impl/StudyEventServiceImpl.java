@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-08-23
+* @date 2023-08-25
 **/
 @Service
 @RequiredArgsConstructor
@@ -99,9 +99,9 @@ public class StudyEventServiceImpl implements StudyEventService {
             map.put("操作时间", studyEvent.getTime());
             map.put("事件", studyEvent.getEvent());
             map.put("内容", studyEvent.getContent());
-            map.put("词根ID", studyEvent.getMorphememId());
             map.put("单词ID", studyEvent.getWordId());
             map.put("用户ID", studyEvent.getUid());
+            map.put("词根ID", studyEvent.getMorphemeId());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

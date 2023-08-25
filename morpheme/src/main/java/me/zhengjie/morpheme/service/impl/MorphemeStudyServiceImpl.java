@@ -224,7 +224,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         studyEvent.setTime(DateUtil.getTimestamp(date));
         studyEvent.setUid(currentUser.getUserId());
         studyEvent.setWordId(word.getId());
-        studyEvent.setMorphememId(morpheme.getId());
+        studyEvent.setMorphemeId(morpheme.getId());
         studyEventRepository.save(studyEvent);
     }
 
