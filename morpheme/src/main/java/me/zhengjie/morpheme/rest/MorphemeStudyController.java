@@ -12,6 +12,7 @@ import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,14 +28,6 @@ import java.util.List;
 public class MorphemeStudyController {
     private final MorphemeStudyService morphemeStudyService;
 
-    @Log("当前版本")
-    @ApiOperation("当前版本")
-    @GetMapping(value = "/version")
-    @PreAuthorize("@el.check('morpheme:list')")
-    public String version() {
-        //TODO: 每次改变需要更新版本
-        return "v1.0.0";
-    }
     @Log("当前")
     @ApiOperation("当前")
     @GetMapping(value = "/morpheme-current")
