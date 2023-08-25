@@ -251,6 +251,12 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         Morpheme morpheme = all.get(morphemeIndex);
         List<Word> words = wordsMap.get(morpheme.getId());
         Word word = words.get(wordIndex);
+        WordDetail wordDetail = getWordDetail(word);
+        wordDetail.setIndex(wordIndex);
+        return wordDetail;
+    }
+
+    private WordDetail getWordDetail(Word word) {
         WordDetail wordDetail = new WordDetail();
         wordDetail.copy(word);
 
@@ -258,8 +264,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<WordMeaning> wordMeanings = meaningsMap.get(word.getId());
         wordDetail.setDeductions(wordDeductions);
         wordDetail.setMeanings(wordMeanings);
-        wordDetail.setIndex(wordIndex);
-
         return wordDetail;
     }
 
@@ -349,16 +353,33 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public List<Morpheme> getNewMorphemes(Long uid) {
-        LocalDate now = LocalDate.now();
-        List<Morpheme> all = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(now));
+    public List<Morpheme> getNewMorphemes(Long uid, LocalDate date) {
+        List<Morpheme> all = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(date));
         return all;
     }
 
     @Override
-    public List<Word> getNewWords(Long uid) {
-        LocalDate now = LocalDate.now();
-        List<Word> all = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(now));
+    public List<Word> getNewWords(Long uid, LocalDate date) {
+        List<Word> all = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(date));
         return all;
+    }
+
+    @Override
+    public StudyRecord getNewDatas(Long uid, LocalDate date) {
+        StudyRecord studyRecord = new StudyRecord();
+        studyRecord.setDate(date);
+
+        List<Morpheme> morphemes = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(date));
+        studyRecord.setMorphemes(morphemes);
+
+        List<Word> words = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(date));
+        List<WordDetail> details = new ArrayList<>();
+        for (int i = 0; i < words.size(); i++) {
+            WordDetail detail = getWordDetail(words.get(i));
+            details.add(detail);
+        }
+        studyRecord.setWords(details);
+
+        return studyRecord;
     }
 }

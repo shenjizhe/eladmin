@@ -17,6 +17,7 @@ package me.zhengjie.morpheme.service;
 
 import me.zhengjie.morpheme.domain.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -48,7 +49,9 @@ public interface MorphemeStudyService {
 
     Boolean isLast(Long uid);
 
-    List<Morpheme> getNewMorphemes(Long uid);
+    List<Morpheme> getNewMorphemes(Long uid, LocalDate date);
 
-    List<Word> getNewWords(Long uid);
+    List<Word> getNewWords(Long uid, LocalDate date);
+
+    StudyRecord getNewDatas(Long uid, LocalDate date);
 }

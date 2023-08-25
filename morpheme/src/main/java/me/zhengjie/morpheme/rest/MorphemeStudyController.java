@@ -6,14 +6,18 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.morpheme.domain.Morpheme;
 import me.zhengjie.morpheme.domain.MorphemePair;
+import me.zhengjie.morpheme.domain.StudyRecord;
 import me.zhengjie.morpheme.domain.Word;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.SecurityUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -78,17 +82,41 @@ public class MorphemeStudyController {
     @ApiOperation("取得今天学习的词根")
     @GetMapping(value = "/morpheme-today")
     @PreAuthorize("@el.check('morpheme:list')")
-    public List<Morpheme> getNewMorphemes() {
+    public List<Morpheme> getNewMorphemes(@RequestParam(value = "date",required = false)
+                                  @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                  LocalDate date) {
         Long uid = SecurityUtils.getCurrentUserId();
-        return morphemeStudyService.getNewMorphemes(uid);
+        if(date == null){
+            date = LocalDate.now();
+        }
+        return morphemeStudyService.getNewMorphemes(uid, date);
     }
 
     @Log("取得今天学习的单词")
     @ApiOperation("取得今天学习的单词")
     @GetMapping(value = "/word-today")
     @PreAuthorize("@el.check('morpheme:list')")
-    public List<Word> getNewWords() {
+    public List<Word> getNewWords(@RequestParam(value = "date",required = false)
+                                      @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                      LocalDate date) {
         Long uid = SecurityUtils.getCurrentUserId();
-        return morphemeStudyService.getNewWords(uid);
+        if(date == null){
+            date = LocalDate.now();
+        }
+        return morphemeStudyService.getNewWords(uid,date);
+    }
+
+    @Log("取得今天所学知识")
+    @ApiOperation("取得今天所学知识")
+    @GetMapping(value = "/study-today")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public StudyRecord getNewDatas(@RequestParam(value = "date",required = false)
+                                  @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                  LocalDate date) {
+        Long uid = SecurityUtils.getCurrentUserId();
+        if(date == null){
+            date = LocalDate.now();
+        }
+        return morphemeStudyService.getNewDatas(uid,date);
     }
 }
