@@ -19,20 +19,21 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
 /**
-* @website https://eladmin.vip
-* @description /
-* @author Jason Shen
-* @date 2023-08-25
-**/
+ * @author Jason Shen
+ * @website https://eladmin.vip
+ * @description /
+ * @date 2023-08-22
+ **/
 @Entity
 @Data
-@Table(name="study_event")
+@Table(name = "study_event")
 public class StudyEvent implements Serializable {
 
     public StudyEvent(EventType type){
@@ -48,37 +49,35 @@ public class StudyEvent implements Serializable {
     @ApiModelProperty(value = "主键")
     private Long id;
 
-    @Column(name = "`time`",nullable = false)
+    @Column(name = "`time`", nullable = false)
     @NotNull
     @ApiModelProperty(value = "操作时间")
     private Timestamp time;
 
-    @Column(name = "`event`",nullable = false)
+    @Column(name = "`event`", nullable = false)
     @NotBlank
     @ApiModelProperty(value = "事件")
     private String event;
 
-    @Column(name = "`content`",nullable = false)
-    @NotBlank
+    @Column(name = "`content`", nullable = true)
     @ApiModelProperty(value = "内容")
     private String content;
 
-    @Column(name = "`word_id`",nullable = false)
-    @NotNull
+    @Column(name = "`morpheme_id`", nullable = true)
+    @ApiModelProperty(value = "词根ID")
+    private Long morphemeId;
+
+    @Column(name = "`word_id`", nullable = true)
     @ApiModelProperty(value = "单词ID")
     private Long wordId;
 
-    @Column(name = "`uid`",nullable = false)
+    @Column(name = "`uid`", nullable = false)
     @NotNull
     @ApiModelProperty(value = "用户ID")
     private Long uid;
 
-    @Column(name = "`morpheme_id`")
-    @ApiModelProperty(value = "词根ID")
-    private Long morphemeId;
-
-    public void copy(StudyEvent source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    public void copy(StudyEvent source) {
+        BeanUtil.copyProperties(source, this, CopyOptions.create().setIgnoreNullValue(true));
     }
 
     public enum EventType {
