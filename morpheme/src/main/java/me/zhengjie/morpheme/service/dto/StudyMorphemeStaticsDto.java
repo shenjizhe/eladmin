@@ -40,27 +40,27 @@ public class StudyMorphemeStaticsDto implements Serializable {
     /** 状态 */
     private Integer status;
 
-    /** 学习次数 */
-    private Integer studyTims;
-
-    /** 记得次数 */
-    private Integer rememberTimes;
-
-    /** 模糊次数 */
-    private Integer obscureTimes;
-
     /** 忘记次数 */
     private Integer forgetTimes;
-
-    /** 最后学习日期 */
-    private Timestamp lastStudyTime;
 
     /** 记忆等级 */
     private Integer memeryLevel;
 
-    /** 学习比例 */
-    private Integer studyRate;
+    /** 学习次数 */
+    private Integer studyTimes;
 
-    /** 今天是否需要学 */
-    private Boolean needStudyTotday;
+    /** 记得次数 */
+    private Integer simpleTimes;
+
+    /** 模糊次数 */
+    private Integer confuseTimes;
+
+    /** 最后学习日期 */
+    private Timestamp lastReviewTime;
+
+    /** 最后一次复习结果 */
+    private Integer lastReviewResult;
+
+    /** 学习比例 */
+    private Integer reviewRate;
 }

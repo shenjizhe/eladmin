@@ -99,14 +99,14 @@ public class StudyWordStaticsServiceImpl implements StudyWordStaticsService {
             map.put("用户ID", studyWordStatics.getUid());
             map.put("学习知识ID", studyWordStatics.getObjectId());
             map.put("状态", studyWordStatics.getStatus());
-            map.put("学习次数", studyWordStatics.getStudyTims());
-            map.put("记得次数", studyWordStatics.getRememberTimes());
-            map.put("模糊次数", studyWordStatics.getObscureTimes());
             map.put("忘记次数", studyWordStatics.getForgetTimes());
-            map.put("最后学习日期", studyWordStatics.getLastStudyTime());
             map.put("记忆等级", studyWordStatics.getMemeryLevel());
-            map.put("学习比例", studyWordStatics.getStudyRate());
-            map.put("今天是否需要学", studyWordStatics.getNeedStudyTotday());
+            map.put("学习次数", studyWordStatics.getStudyTimes());
+            map.put("记得次数", studyWordStatics.getSimpleTimes());
+            map.put("模糊次数", studyWordStatics.getConfuseTimes());
+            map.put("最后学习日期", studyWordStatics.getLastReviewTime());
+            map.put("最后一次学习结果", studyWordStatics.getLastReviewResult());
+            map.put("学习比例", studyWordStatics.getReviewRate());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

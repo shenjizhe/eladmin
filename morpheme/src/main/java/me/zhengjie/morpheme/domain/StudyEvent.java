@@ -81,12 +81,10 @@ public class StudyEvent implements Serializable {
     }
 
     public enum EventType {
-        StudyFirst("study-first"),
-        ReStudy("re-study"),
-        Memory("memory"),
-        ExeciseWrong("execise-wrong"),
-        ExeciseEmpty("execise-empty"),
-        ExeciseOk("execise-ok"),
+        Study("study"),
+        ReviewSimple("review-simple"),
+        ReviewConfuse("review-confuse"),
+        ReviewForget("review-forget")
         ;
         private String message;
 

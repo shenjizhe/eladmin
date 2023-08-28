@@ -99,14 +99,14 @@ public class StudyMorphemeStaticsServiceImpl implements StudyMorphemeStaticsServ
             map.put("用户ID", studyMorphemeStatics.getUid());
             map.put("学习知识ID", studyMorphemeStatics.getObjectId());
             map.put("状态", studyMorphemeStatics.getStatus());
-            map.put("学习次数", studyMorphemeStatics.getStudyTims());
-            map.put("记得次数", studyMorphemeStatics.getRememberTimes());
-            map.put("模糊次数", studyMorphemeStatics.getObscureTimes());
             map.put("忘记次数", studyMorphemeStatics.getForgetTimes());
-            map.put("最后学习日期", studyMorphemeStatics.getLastStudyTime());
             map.put("记忆等级", studyMorphemeStatics.getMemeryLevel());
-            map.put("学习比例", studyMorphemeStatics.getStudyRate());
-            map.put("今天是否需要学", studyMorphemeStatics.getNeedStudyTotday());
+            map.put("学习次数", studyMorphemeStatics.getStudyTimes());
+            map.put("记得次数", studyMorphemeStatics.getSimpleTimes());
+            map.put("模糊次数", studyMorphemeStatics.getConfuseTimes());
+            map.put("最后学习日期", studyMorphemeStatics.getLastReviewTime());
+            map.put("最后一次复习结果", studyMorphemeStatics.getLastReviewResult());
+            map.put("学习比例", studyMorphemeStatics.getReviewRate());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

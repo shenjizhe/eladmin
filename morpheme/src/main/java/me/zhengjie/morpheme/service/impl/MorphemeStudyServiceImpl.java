@@ -220,7 +220,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     private void saveStudyEvent(Morpheme morpheme, Word word, LocalDate date) {
-        StudyEvent studyEvent = new StudyEvent(StudyEvent.EventType.StudyFirst);
+        StudyEvent studyEvent = new StudyEvent(StudyEvent.EventType.Study);
         studyEvent.setTime(DateUtil.getTimestamp(date));
         studyEvent.setUid(currentUser.getUserId());
         studyEvent.setWordId(word.getId());

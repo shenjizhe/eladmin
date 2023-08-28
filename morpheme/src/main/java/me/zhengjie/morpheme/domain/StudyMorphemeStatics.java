@@ -56,45 +56,45 @@ public class StudyMorphemeStatics implements Serializable {
     @ApiModelProperty(value = "状态")
     private Integer status;
 
-    @Column(name = "`study_tims`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "学习次数")
-    private Integer studyTims;
-
-    @Column(name = "`remember_times`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "记得次数")
-    private Integer rememberTimes;
-
-    @Column(name = "`obscure_times`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "模糊次数")
-    private Integer obscureTimes;
-
     @Column(name = "`forget_times`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "忘记次数")
     private Integer forgetTimes;
-
-    @Column(name = "`last_study_time`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "最后学习日期")
-    private Timestamp lastStudyTime;
 
     @Column(name = "`memery_level`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "记忆等级")
     private Integer memeryLevel;
 
-    @Column(name = "`study_rate`",nullable = false)
+    @Column(name = "`study_times`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "学习次数")
+    private Integer studyTimes;
+
+    @Column(name = "`simple_times`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "记得次数")
+    private Integer simpleTimes;
+
+    @Column(name = "`confuse_times`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "模糊次数")
+    private Integer confuseTimes;
+
+    @Column(name = "`last_review_time`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "最后学习日期")
+    private Timestamp lastReviewTime;
+
+    @Column(name = "`last_review_result`",nullable = false)
+    @NotNull
+    @ApiModelProperty(value = "最后一次复习结果")
+    private Integer lastReviewResult;
+
+    @Column(name = "`review_rate`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "学习比例")
-    private Integer studyRate;
-
-    @Column(name = "`need_study_totday`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "今天是否需要学")
-    private Boolean needStudyTotday;
+    private Integer reviewRate;
 
     public void copy(StudyMorphemeStatics source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
