@@ -54,4 +54,12 @@ public interface MorphemeStudyService {
     List<Word> getNewWords(Long uid, LocalDate date);
 
     StudyRecord getNewDatas(Long uid, LocalDate date);
+
+    List<Morpheme> getReviewMorphemes(Long uid, LocalDate today);
+
+    StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType);
+
+    List<WordDetail> getReviewWords(Long uid, LocalDate today);
+
+    StudyWordStatics reviewWord(Long uid, LocalDate today, int eventType, int eventType1);
 }

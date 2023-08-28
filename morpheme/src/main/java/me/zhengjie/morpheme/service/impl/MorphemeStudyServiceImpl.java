@@ -49,6 +49,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyRecordDayRepository studyRecordDayRepository;
 
     private List<Morpheme> all;
+    private Map<Long, Morpheme> morphemeMap = new LinkedHashMap<>();
+    private Map<Long,WordDetail> wordDetailMap = new LinkedHashMap<>();
     private UserStatus currentUser;
     private Map<Long, List<DifferentMorpheme>> differsMap = new LinkedHashMap<>();
     private Map<Long, List<Word>> wordsMap = new LinkedHashMap<>();
@@ -94,6 +96,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         for (int i = 0; i < words.size(); i++) {
             Word word = words.get(i);
             setWord(word.getId());
+            WordDetail wordDetail = getWordDetail(word);
+            wordDetailMap.put(word.getId(), wordDetail);
         }
     }
 
@@ -121,11 +125,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public void loadMorpheme() {
         differsMap.clear();
         wordsMap.clear();
+        morphemeMap.clear();
 
         all = morphemeRepository.findAll();
         for (int i = 0; i < all.size(); i++) {
             Morpheme morpheme = all.get(i);
             setMorpheme(morpheme.getId());
+            morphemeMap.put(morpheme.getId(), morpheme);
 
             printProgressBar(i + 1, all.size());
         }
@@ -251,7 +257,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         Morpheme morpheme = all.get(morphemeIndex);
         List<Word> words = wordsMap.get(morpheme.getId());
         Word word = words.get(wordIndex);
-        WordDetail wordDetail = getWordDetail(word);
+        WordDetail wordDetail = wordDetailMap.get(word.getId());
         wordDetail.setIndex(wordIndex);
         return wordDetail;
     }
@@ -375,11 +381,51 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<Word> words = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(date));
         List<WordDetail> details = new ArrayList<>();
         for (int i = 0; i < words.size(); i++) {
-            WordDetail detail = getWordDetail(words.get(i));
+            WordDetail detail = wordDetailMap.get(words.get(i));
             details.add(detail);
         }
         studyRecord.setWords(details);
 
         return studyRecord;
+    }
+
+    @Override
+    public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today) {
+        List<Morpheme> morphemes = new ArrayList<>();
+// 计算正常日期（今天 - 上次日期 >= level , level != 999）
+
+        List<Long> list = studyRecordDayRepository.morphemeNeedToReview(uid, today);
+        for (int i = 0; i < list.size(); i++) {
+            morphemes.add(morphemeMap.get(list.get(i)));
+        }
+// 概率计算
+        return morphemes;
+    }
+
+    @Override
+    public StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType) {
+//        TODO: 记录 study event
+
+//        计算等级和概率
+//        记录统计数据
+        return null;
+    }
+
+    @Override
+    public List<WordDetail> getReviewWords(Long uid, LocalDate today) {
+        List<WordDetail> words = new ArrayList<>();
+// 计算正常日期（今天 - 上次日期 >= level , level != 999）
+
+        List<Long> list = studyRecordDayRepository.wordNeedToReview(uid, today);
+        for (int i = 0; i < list.size(); i++) {
+            words.add(wordDetailMap.get(list.get(i)));
+        }
+// 概率计算
+        return words;
+    }
+
+    @Override
+    public StudyWordStatics reviewWord(Long uid, LocalDate today, int eventType, int eventType1) {
+        return null;
     }
 }

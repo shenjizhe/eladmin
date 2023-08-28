@@ -15,10 +15,13 @@
 */
 package me.zhengjie.morpheme.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -32,6 +35,8 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name="morpheme")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Morpheme implements Serializable {
 
     @Id
