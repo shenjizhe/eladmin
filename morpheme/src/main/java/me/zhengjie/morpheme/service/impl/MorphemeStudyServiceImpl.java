@@ -205,7 +205,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         saveStudyWordStatics(uid, now, word.getId());
     }
 
-    private void saveStudyWordStatics(Long uid, LocalDate now, Long id) {
+    private void saveStudyMorphemeStatics(Long uid, LocalDate now, Long id) {
         StudyMorphemeStatics statics = new StudyMorphemeStatics();
         statics.setUid(uid);
         statics.setObjectId(id);
@@ -216,7 +216,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         }
     }
 
-    private void saveStudyMorphemeStatics(Long uid, LocalDate now, Long id) {
+    private void saveStudyWordStatics(Long uid, LocalDate now, Long id) {
         StudyWordStatics statics = new StudyWordStatics();
         statics.setUid(uid);
         statics.setObjectId(id);
