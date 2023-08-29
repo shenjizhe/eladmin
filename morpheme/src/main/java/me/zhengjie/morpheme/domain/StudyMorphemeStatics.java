@@ -28,7 +28,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-08-28
+* @date 2023-08-29
 **/
 @Entity
 @Data
@@ -50,11 +50,6 @@ public class StudyMorphemeStatics implements Serializable {
     @NotNull
     @ApiModelProperty(value = "学习知识ID")
     private Long objectId;
-
-    @Column(name = "`status`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "状态")
-    private Integer status;
 
     @Column(name = "`forget_times`",nullable = false)
     @NotNull

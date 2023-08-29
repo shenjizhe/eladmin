@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-08-28
+* @date 2023-08-29
 **/
 public interface StudyWordStaticsRepository extends JpaRepository<StudyWordStatics, Long>, JpaSpecificationExecutor<StudyWordStatics> {
 }

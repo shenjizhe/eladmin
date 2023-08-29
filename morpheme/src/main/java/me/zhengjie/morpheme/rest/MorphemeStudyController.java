@@ -140,8 +140,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getReviewWords(uid,today);
     }
 
-    @Log("复习词根")
-    @ApiOperation("复习词根")
+    @Log("复习单词")
+    @ApiOperation("复习单词")
     @PostMapping(value = "/review-words/{word-id}/{event-type}")
     @PreAuthorize("@el.check('morpheme:list')")
     public StudyWordStatics reviewWord(

@@ -23,7 +23,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-08-28
+* @date 2023-08-29
 **/
 @Data
 public class StudyWordStaticsDto implements Serializable {
@@ -36,9 +36,6 @@ public class StudyWordStaticsDto implements Serializable {
 
     /** 学习知识ID */
     private Long objectId;
-
-    /** 状态 */
-    private Integer status;
 
     /** 忘记次数 */
     private Integer forgetTimes;

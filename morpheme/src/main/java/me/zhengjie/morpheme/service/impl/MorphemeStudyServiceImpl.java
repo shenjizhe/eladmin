@@ -47,6 +47,10 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final WordMeaningRepository wordMeaningRepository;
     private final StudyEventRepository studyEventRepository;
     private final StudyRecordDayRepository studyRecordDayRepository;
+    private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
+    private final StudyWordStaticsRepository studyWordStaticsRepository;
+
+    private final int[] DICT_LEVELS = new int[]{1,2,4,7,15,30,999};
 
     private List<Morpheme> all;
     private Map<Long, Morpheme> morphemeMap = new LinkedHashMap<>();
@@ -402,13 +406,88 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return morphemes;
     }
 
+    private int newLevel(int oldLevel,int eventType){
+        if(oldLevel == 0){
+            switch (eventType){
+                case 1:
+                    return 2;
+                case 2:
+                case 3:
+                    return 1;
+            }
+        }
+        int index = 0;
+        for (int i = 0; i < DICT_LEVELS.length; i++) {
+            if(oldLevel==DICT_LEVELS[i]){
+                index = i;
+                break;
+            }
+        }
+
+        if(eventType == 1){
+            index +=2;
+            if(index >DICT_LEVELS.length-1){
+                index = DICT_LEVELS.length-1;
+            }
+        }else if(eventType == 2){
+            if(index > 2){
+                index -= 1;
+            }
+        }else if(eventType == 3){
+            if(index <3){
+                return 1;
+            }else{
+                index -= 2;
+            }
+        }
+        return DICT_LEVELS[index];
+    }
+
     @Override
     public StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType) {
 //        TODO: 记录 study event
+        StudyMorphemeStatics search = new StudyMorphemeStatics();
+        search.setUid(uid);
+        search.setObjectId(morphemeId);
+        Example<StudyMorphemeStatics> of = Example.of(search);
+        Optional<StudyMorphemeStatics> one = studyMorphemeStaticsRepository.findOne(of);
+        StudyMorphemeStatics staticOne = null;
+        if(one.isPresent()){
+            staticOne = one.get();
+        }else{
+            staticOne = new StudyMorphemeStatics();
+            staticOne.setMemeryLevel(0);
+            staticOne.setUid(uid);
+            staticOne.setObjectId(morphemeId);
+            staticOne.setSimpleTimes(0);
+            staticOne.setConfuseTimes(0);
+            staticOne.setForgetTimes(0);
+        }
 
-//        计算等级和概率
-//        记录统计数据
-        return null;
+        int level = newLevel(staticOne.getMemeryLevel(),eventType);
+        staticOne.setMemeryLevel(level);
+        switch (eventType){
+            case 1:
+                Integer simpleTimes = staticOne.getSimpleTimes();
+                staticOne.setSimpleTimes(simpleTimes+1);
+                break;
+            case 2:
+                Integer confuseTimes = staticOne.getConfuseTimes();
+                staticOne.setConfuseTimes(confuseTimes+1);
+                break;
+            case 3:
+                Integer forgetTimes = staticOne.getForgetTimes();
+                staticOne.setSimpleTimes(forgetTimes+1);
+                break;
+            default:
+                break;
+        }
+        staticOne.setLastReviewTime(DateUtil.getTimestamp(today));
+        staticOne.setLastReviewResult(eventType);
+
+        studyMorphemeStaticsRepository.save(staticOne);
+
+        return staticOne;
     }
 
     @Override

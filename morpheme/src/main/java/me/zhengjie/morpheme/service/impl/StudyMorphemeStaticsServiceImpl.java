@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-08-28
+* @date 2023-08-29
 **/
 @Service
 @RequiredArgsConstructor
@@ -98,7 +98,6 @@ public class StudyMorphemeStaticsServiceImpl implements StudyMorphemeStaticsServ
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("用户ID", studyMorphemeStatics.getUid());
             map.put("学习知识ID", studyMorphemeStatics.getObjectId());
-            map.put("状态", studyMorphemeStatics.getStatus());
             map.put("忘记次数", studyMorphemeStatics.getForgetTimes());
             map.put("记忆等级", studyMorphemeStatics.getMemeryLevel());
             map.put("学习次数", studyMorphemeStatics.getStudyTimes());

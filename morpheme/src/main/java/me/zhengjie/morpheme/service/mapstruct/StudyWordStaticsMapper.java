@@ -24,7 +24,7 @@ import org.mapstruct.ReportingPolicy;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-08-28
+* @date 2023-08-29
 **/
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StudyWordStaticsMapper extends BaseMapper<StudyWordStaticsDto, StudyWordStatics> {
