@@ -27,7 +27,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -52,7 +51,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
     private final StudyWordStaticsRepository studyWordStaticsRepository;
 
-    private final int[] DICT_LEVELS = new int[]{1, 2, 4, 7, 15, 30, 999};
+    private final int[] DICT_LEVELS = new int[]{0, 1, 2, 4, 7, 15, 30, 999};
 
     private List<Morpheme> all;
     private Map<Long, Morpheme> morphemeMap = new LinkedHashMap<>();
@@ -194,13 +193,38 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return morphemeStudy;
     }
 
-    private void saveAll() {
+    private void saveAll(Long uid) {
         Morpheme morpheme = all.get(morphemeIndex);
         Word word = wordsMap.get(morpheme.getId()).get(wordIndex);
         LocalDate now = LocalDate.now();
         saveUserStatus(morpheme, word);
         saveStudyEvent(morpheme, word, now);
         saveStudyDay(morpheme, word, now);
+
+        saveStudyMorphemeStatics(uid, now, morpheme.getId());
+        saveStudyWordStatics(uid, now, word.getId());
+    }
+
+    private void saveStudyWordStatics(Long uid, LocalDate now, Long id) {
+        StudyMorphemeStatics statics = new StudyMorphemeStatics();
+        statics.setUid(uid);
+        statics.setObjectId(id);
+        long count = studyMorphemeStaticsRepository.count(Example.of(statics));
+        if (count == 0) {
+            initStatics(statics,now);
+            studyMorphemeStaticsRepository.save(statics);
+        }
+    }
+
+    private void saveStudyMorphemeStatics(Long uid, LocalDate now, Long id) {
+        StudyWordStatics statics = new StudyWordStatics();
+        statics.setUid(uid);
+        statics.setObjectId(id);
+        long count = studyWordStaticsRepository.count(Example.of(statics));
+        if (count == 0) {
+            initStatics(statics,now);
+            studyWordStaticsRepository.save(statics);
+        }
     }
 
     private void saveUserStatus(Morpheme morpheme, Word word) {
@@ -305,7 +329,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         MorphemeStudy morphemeStudy = currentMorpheme();
         WordDetail word = currentWord();
 
-        saveAll();
+        saveAll(uid);
         return new MorphemePair(morphemeStudy, word);
     }
 
@@ -323,7 +347,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             word = nextWord();
         }
 
-        saveAll();
+        saveAll(uid);
         return new MorphemePair(morpheme, word);
     }
 
@@ -342,7 +366,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             word = previousWord();
         }
 
-        saveAll();
+        saveAll(uid);
         return new MorphemePair(morpheme, word);
     }
 
@@ -467,13 +491,9 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            staticOne.setMemeryLevel(0);
             staticOne.setUid(uid);
             staticOne.setObjectId(objectId);
-            staticOne.setSimpleTimes(0);
-            staticOne.setConfuseTimes(0);
-            staticOne.setForgetTimes(0);
-            staticOne.setStudyTimes(0);
+            initStatics(staticOne, today);
         }
 
         int level = newLevel(staticOne.getMemeryLevel(), eventType);
@@ -502,6 +522,16 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         jpa.save(staticOne);
 
         return staticOne;
+    }
+
+    private static void initStatics(StudyStaticsBase staticOne, LocalDate today) {
+        staticOne.setMemeryLevel(0);
+        staticOne.setSimpleTimes(0);
+        staticOne.setConfuseTimes(0);
+        staticOne.setForgetTimes(0);
+        staticOne.setStudyTimes(0);
+        staticOne.setLastReviewTime(DateUtil.getTimestamp(today));
+        staticOne.setLastReviewResult(0);
     }
 
     @Override
