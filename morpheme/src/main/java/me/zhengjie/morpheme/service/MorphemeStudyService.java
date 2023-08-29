@@ -51,7 +51,7 @@ public interface MorphemeStudyService {
 
     List<Morpheme> getNewMorphemes(Long uid, LocalDate date);
 
-    List<Word> getNewWords(Long uid, LocalDate date);
+    List<WordDetail> getNewWords(Long uid, LocalDate date);
 
     StudyRecord getNewDatas(Long uid, LocalDate date);
 

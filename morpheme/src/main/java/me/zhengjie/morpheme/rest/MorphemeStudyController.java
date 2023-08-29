@@ -85,7 +85,7 @@ public class MorphemeStudyController {
     @ApiOperation("取得今天学习的单词")
     @GetMapping(value = "/word-today")
     @PreAuthorize("@el.check('morpheme:list')")
-    public List<Word> getNewWords(@RequestParam(value = "date",required = false)
+    public List<WordDetail> getNewWords(@RequestParam(value = "date",required = false)
                                       @DateTimeFormat(pattern = "yyyy-MM-dd")
                                       LocalDate date) {
         Long uid = SecurityUtils.getCurrentUserId();

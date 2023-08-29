@@ -390,13 +390,31 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public List<Morpheme> getNewMorphemes(Long uid, LocalDate date) {
-        List<Morpheme> all = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(date));
+        StudyMorphemeStatics example = new StudyMorphemeStatics();
+        example.setUid(uid);
+        example.setStudyTimes(0);
+
+        List<StudyMorphemeStatics> list = studyMorphemeStaticsRepository.findAll(Example.of(example));
+        List<Morpheme> all = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Morpheme morpheme = morphemeMap.get(list.get(i).getObjectId());
+            all.add(morpheme);
+        }
         return all;
     }
 
     @Override
-    public List<Word> getNewWords(Long uid, LocalDate date) {
-        List<Word> all = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(date));
+    public List<WordDetail> getNewWords(Long uid, LocalDate date) {
+        StudyWordStatics example = new StudyWordStatics();
+        example.setUid(uid);
+        example.setStudyTimes(0);
+
+        List<StudyWordStatics> list = studyWordStaticsRepository.findAll(Example.of(example));
+        List<WordDetail> all = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            WordDetail word = wordDetailMap.get(list.get(i).getObjectId());
+            all.add(word);
+        }
         return all;
     }
 
@@ -404,17 +422,10 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public StudyRecord getNewDatas(Long uid, LocalDate date) {
         StudyRecord studyRecord = new StudyRecord();
         studyRecord.setDate(date);
-
-        List<Morpheme> morphemes = studyRecordDayRepository.findMorphemes(uid, DateUtil.getTimestamp(date));
+        List<Morpheme> morphemes = getNewMorphemes(uid, date);
         studyRecord.setMorphemes(morphemes);
-
-        List<Word> words = studyRecordDayRepository.findAllWords(uid, DateUtil.getTimestamp(date));
-        List<WordDetail> details = new ArrayList<>();
-        for (int i = 0; i < words.size(); i++) {
-            WordDetail detail = wordDetailMap.get(words.get(i));
-            details.add(detail);
-        }
-        studyRecord.setWords(details);
+        List<WordDetail> words = getNewWords(uid, date);
+        studyRecord.setWords(words);
 
         return studyRecord;
     }
