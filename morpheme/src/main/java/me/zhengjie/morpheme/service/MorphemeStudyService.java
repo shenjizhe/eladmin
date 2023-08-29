@@ -61,5 +61,5 @@ public interface MorphemeStudyService {
 
     List<WordDetail> getReviewWords(Long uid, LocalDate today);
 
-    StudyWordStatics reviewWord(Long uid, LocalDate today, int eventType, int eventType1);
+    StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType);
 }

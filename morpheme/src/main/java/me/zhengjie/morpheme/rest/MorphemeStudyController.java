@@ -149,6 +149,6 @@ public class MorphemeStudyController {
             @PathVariable("event-type")int eventType                ) {
         Long uid = SecurityUtils.getCurrentUserId();
         LocalDate today =  LocalDate.now();
-        return morphemeStudyService.reviewWord(uid,today,eventType,eventType);
+        return morphemeStudyService.reviewWord(uid,today,wordId,eventType);
     }
 }

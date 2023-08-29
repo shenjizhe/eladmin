@@ -23,9 +23,11 @@ import me.zhengjie.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -50,11 +52,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
     private final StudyWordStaticsRepository studyWordStaticsRepository;
 
-    private final int[] DICT_LEVELS = new int[]{1,2,4,7,15,30,999};
+    private final int[] DICT_LEVELS = new int[]{1, 2, 4, 7, 15, 30, 999};
 
     private List<Morpheme> all;
     private Map<Long, Morpheme> morphemeMap = new LinkedHashMap<>();
-    private Map<Long,WordDetail> wordDetailMap = new LinkedHashMap<>();
+    private Map<Long, WordDetail> wordDetailMap = new LinkedHashMap<>();
     private UserStatus currentUser;
     private Map<Long, List<DifferentMorpheme>> differsMap = new LinkedHashMap<>();
     private Map<Long, List<Word>> wordsMap = new LinkedHashMap<>();
@@ -396,19 +398,16 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today) {
         List<Morpheme> morphemes = new ArrayList<>();
-// 计算正常日期（今天 - 上次日期 >= level , level != 999）
-
         List<Long> list = studyRecordDayRepository.morphemeNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             morphemes.add(morphemeMap.get(list.get(i)));
         }
-// 概率计算
         return morphemes;
     }
 
-    private int newLevel(int oldLevel,int eventType){
-        if(oldLevel == 0){
-            switch (eventType){
+    private int newLevel(int oldLevel, int eventType) {
+        if (oldLevel == 0) {
+            switch (eventType) {
                 case 1:
                     return 2;
                 case 2:
@@ -418,25 +417,25 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         }
         int index = 0;
         for (int i = 0; i < DICT_LEVELS.length; i++) {
-            if(oldLevel==DICT_LEVELS[i]){
+            if (oldLevel == DICT_LEVELS[i]) {
                 index = i;
                 break;
             }
         }
 
-        if(eventType == 1){
-            index +=2;
-            if(index >DICT_LEVELS.length-1){
-                index = DICT_LEVELS.length-1;
+        if (eventType == 1) {
+            index += 2;
+            if (index > DICT_LEVELS.length - 1) {
+                index = DICT_LEVELS.length - 1;
             }
-        }else if(eventType == 2){
-            if(index > 2){
+        } else if (eventType == 2) {
+            if (index > 2) {
                 index -= 1;
             }
-        }else if(eventType == 3){
-            if(index <3){
+        } else if (eventType == 3) {
+            if (index < 3) {
                 return 1;
-            }else{
+            } else {
                 index -= 2;
             }
         }
@@ -445,47 +444,62 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType) {
-//        TODO: 记录 study event
-        StudyMorphemeStatics search = new StudyMorphemeStatics();
+        return (StudyMorphemeStatics) getStatics(studyMorphemeStaticsRepository, uid, today, morphemeId, eventType, StudyMorphemeStatics.class);
+    }
+
+    private StudyStaticsBase getStatics(JpaRepository jpa, Long uid, LocalDate today, Long objectId, int eventType, Class<? extends StudyStaticsBase> cls) {
+        StudyStaticsBase search = null;
+        try {
+            search = cls.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         search.setUid(uid);
-        search.setObjectId(morphemeId);
-        Example<StudyMorphemeStatics> of = Example.of(search);
-        Optional<StudyMorphemeStatics> one = studyMorphemeStaticsRepository.findOne(of);
-        StudyMorphemeStatics staticOne = null;
-        if(one.isPresent()){
+        search.setObjectId(objectId);
+        Example<StudyStaticsBase> of = Example.of(search);
+        Optional<StudyStaticsBase> one = jpa.findOne(of);
+        StudyStaticsBase staticOne = null;
+        if (one.isPresent()) {
             staticOne = one.get();
-        }else{
-            staticOne = new StudyMorphemeStatics();
+        } else {
+            try {
+                staticOne = cls.getConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             staticOne.setMemeryLevel(0);
             staticOne.setUid(uid);
-            staticOne.setObjectId(morphemeId);
+            staticOne.setObjectId(objectId);
             staticOne.setSimpleTimes(0);
             staticOne.setConfuseTimes(0);
             staticOne.setForgetTimes(0);
+            staticOne.setStudyTimes(0);
         }
 
-        int level = newLevel(staticOne.getMemeryLevel(),eventType);
+        int level = newLevel(staticOne.getMemeryLevel(), eventType);
         staticOne.setMemeryLevel(level);
-        switch (eventType){
+        switch (eventType) {
             case 1:
                 Integer simpleTimes = staticOne.getSimpleTimes();
-                staticOne.setSimpleTimes(simpleTimes+1);
+                staticOne.setSimpleTimes(simpleTimes + 1);
                 break;
             case 2:
                 Integer confuseTimes = staticOne.getConfuseTimes();
-                staticOne.setConfuseTimes(confuseTimes+1);
+                staticOne.setConfuseTimes(confuseTimes + 1);
                 break;
             case 3:
                 Integer forgetTimes = staticOne.getForgetTimes();
-                staticOne.setSimpleTimes(forgetTimes+1);
+                staticOne.setForgetTimes(forgetTimes + 1);
                 break;
             default:
                 break;
         }
+        Integer studyTimes = staticOne.getStudyTimes();
+        staticOne.setStudyTimes(studyTimes + 1);
         staticOne.setLastReviewTime(DateUtil.getTimestamp(today));
         staticOne.setLastReviewResult(eventType);
 
-        studyMorphemeStaticsRepository.save(staticOne);
+        jpa.save(staticOne);
 
         return staticOne;
     }
@@ -493,18 +507,15 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public List<WordDetail> getReviewWords(Long uid, LocalDate today) {
         List<WordDetail> words = new ArrayList<>();
-// 计算正常日期（今天 - 上次日期 >= level , level != 999）
-
         List<Long> list = studyRecordDayRepository.wordNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             words.add(wordDetailMap.get(list.get(i)));
         }
-// 概率计算
         return words;
     }
 
     @Override
-    public StudyWordStatics reviewWord(Long uid, LocalDate today, int eventType, int eventType1) {
-        return null;
+    public StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType) {
+        return (StudyWordStatics) getStatics(studyWordStaticsRepository, uid, today, wordId, eventType, StudyWordStatics.class);
     }
 }

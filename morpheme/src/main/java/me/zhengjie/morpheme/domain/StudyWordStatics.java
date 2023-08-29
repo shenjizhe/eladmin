@@ -33,7 +33,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name="study_word_statics")
-public class StudyWordStatics implements Serializable {
+public class StudyWordStatics extends StudyStaticsBase implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
