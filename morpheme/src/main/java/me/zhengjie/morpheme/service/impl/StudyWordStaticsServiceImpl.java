@@ -105,7 +105,6 @@ public class StudyWordStaticsServiceImpl implements StudyWordStaticsService {
             map.put("模糊次数", studyWordStatics.getConfuseTimes());
             map.put("最后学习日期", studyWordStatics.getLastReviewTime());
             map.put("最后一次学习结果", studyWordStatics.getLastReviewResult());
-            map.put("学习比例", studyWordStatics.getReviewRate());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

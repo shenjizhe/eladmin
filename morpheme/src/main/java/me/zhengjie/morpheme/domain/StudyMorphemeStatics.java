@@ -86,11 +86,6 @@ public class StudyMorphemeStatics implements Serializable {
     @ApiModelProperty(value = "最后一次复习结果")
     private Integer lastReviewResult;
 
-    @Column(name = "`review_rate`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "学习比例")
-    private Integer reviewRate;
-
     public void copy(StudyMorphemeStatics source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

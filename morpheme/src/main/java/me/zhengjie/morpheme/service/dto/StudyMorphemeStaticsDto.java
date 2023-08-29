@@ -57,7 +57,4 @@ public class StudyMorphemeStaticsDto implements Serializable {
 
     /** 最后一次复习结果 */
     private Integer lastReviewResult;
-
-    /** 学习比例 */
-    private Integer reviewRate;
 }

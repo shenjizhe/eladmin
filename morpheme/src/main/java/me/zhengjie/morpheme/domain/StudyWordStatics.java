@@ -86,11 +86,6 @@ public class StudyWordStatics implements Serializable {
     @ApiModelProperty(value = "最后一次学习结果")
     private Integer lastReviewResult;
 
-    @Column(name = "`review_rate`",nullable = false)
-    @NotNull
-    @ApiModelProperty(value = "学习比例")
-    private Integer reviewRate;
-
     public void copy(StudyWordStatics source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

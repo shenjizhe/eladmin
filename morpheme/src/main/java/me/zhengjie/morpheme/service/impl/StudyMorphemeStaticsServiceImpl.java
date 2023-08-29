@@ -105,7 +105,6 @@ public class StudyMorphemeStaticsServiceImpl implements StudyMorphemeStaticsServ
             map.put("模糊次数", studyMorphemeStatics.getConfuseTimes());
             map.put("最后学习日期", studyMorphemeStatics.getLastReviewTime());
             map.put("最后一次复习结果", studyMorphemeStatics.getLastReviewResult());
-            map.put("学习比例", studyMorphemeStatics.getReviewRate());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
