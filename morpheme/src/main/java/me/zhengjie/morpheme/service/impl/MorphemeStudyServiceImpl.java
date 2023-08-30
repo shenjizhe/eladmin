@@ -438,7 +438,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle) {
         List<Morpheme> morphemes = new ArrayList<>();
-        List<Long> list = studyRecordDayRepository.morphemeNeedToReview(uid, today);
+        List<Long> list = studyMorphemeStaticsRepository.morphemeNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             morphemes.add(morphemeMap.get(list.get(i)));
         }
@@ -557,7 +557,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
         List<WordDetail> words = new ArrayList<>();
-        List<Long> list = studyRecordDayRepository.wordNeedToReview(uid, today);
+        List<Long> list = studyWordStaticsRepository.wordNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             words.add(wordDetailMap.get(list.get(i)));
         }

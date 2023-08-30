@@ -18,6 +18,10 @@ package me.zhengjie.morpheme.repository;
 import me.zhengjie.morpheme.domain.StudyWordStatics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.List;
 
 /**
 * @website https://eladmin.vip
@@ -25,4 +29,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @date 2023-08-29
 **/
 public interface StudyWordStaticsRepository extends JpaRepository<StudyWordStatics, Long>, JpaSpecificationExecutor<StudyWordStatics> {
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "\tobject_id id\n" +
+                    "FROM\n" +
+                    "\tstudy_word_statics\n" +
+                    "WHERE\n" +
+                    "\tTIMESTAMPDIFF(DAY,last_review_time,:today) >= memery_level\n" +
+                    "\tAND uid = :uid")
+    List<Long> wordNeedToReview(Long uid, LocalDate today);
 }

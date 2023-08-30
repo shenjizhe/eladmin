@@ -38,23 +38,4 @@ public interface StudyRecordDayRepository extends JpaRepository<StudyRecordDay, 
 
     @Query("select w from Word w INNER JOIN StudyRecordDay d on w.id = d.objectId where d.uid=:userId and d.date=:date and d.objectType=1 and d.type=0")
     List<Word> findAllWords(@Param("userId") Long userId, @Param("date") Timestamp timestamp);
-
-    @Query(nativeQuery = true,
-            value = "SELECT\n" +
-                    "\tobject_id id\n" +
-                    "FROM\n" +
-                    "\tstudy_morpheme_statics\n" +
-                    "WHERE\n" +
-                    "\tTIMESTAMPDIFF(DAY,last_review_time,:today) >= memery_level\n" +
-                    "\tAND uid = :uid")
-    List<Long> morphemeNeedToReview(Long uid, LocalDate today);
-    @Query(nativeQuery = true,
-            value = "SELECT\n" +
-                    "\tobject_id id\n" +
-                    "FROM\n" +
-                    "\tstudy_word_statics\n" +
-                    "WHERE\n" +
-                    "\tTIMESTAMPDIFF(DAY,last_review_time,:today) >= memery_level\n" +
-                    "\tAND uid = :uid")
-    List<Long> wordNeedToReview(Long uid, LocalDate today);
 }
