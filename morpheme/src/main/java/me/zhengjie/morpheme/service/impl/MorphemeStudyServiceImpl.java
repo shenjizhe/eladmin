@@ -15,6 +15,7 @@
  */
 package me.zhengjie.morpheme.service.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
@@ -211,7 +212,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         statics.setObjectId(id);
         long count = studyMorphemeStaticsRepository.count(Example.of(statics));
         if (count == 0) {
-            initStatics(statics,now);
+            initStatics(statics, now);
             studyMorphemeStaticsRepository.save(statics);
         }
     }
@@ -222,7 +223,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         statics.setObjectId(id);
         long count = studyWordStaticsRepository.count(Example.of(statics));
         if (count == 0) {
-            initStatics(statics,now);
+            initStatics(statics, now);
             studyWordStaticsRepository.save(statics);
         }
     }
@@ -419,23 +420,31 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public StudyRecord getNewDatas(Long uid, LocalDate date) {
+    public StudyRecord getNewDatas(Long uid, LocalDate date, Boolean shuffle) {
         StudyRecord studyRecord = new StudyRecord();
         studyRecord.setDate(date);
         List<Morpheme> morphemes = getNewMorphemes(uid, date);
         studyRecord.setMorphemes(morphemes);
         List<WordDetail> words = getNewWords(uid, date);
+        if (shuffle) {
+            Collections.shuffle(words);
+        }
+
         studyRecord.setWords(words);
 
         return studyRecord;
     }
 
     @Override
-    public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today) {
+    public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle) {
         List<Morpheme> morphemes = new ArrayList<>();
         List<Long> list = studyRecordDayRepository.morphemeNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             morphemes.add(morphemeMap.get(list.get(i)));
+        }
+
+        if (shuffle) {
+            Collections.shuffle(morphemes);
         }
         return morphemes;
     }
@@ -546,11 +555,15 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public List<WordDetail> getReviewWords(Long uid, LocalDate today) {
+    public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
         List<WordDetail> words = new ArrayList<>();
         List<Long> list = studyRecordDayRepository.wordNeedToReview(uid, today);
         for (int i = 0; i < list.size(); i++) {
             words.add(wordDetailMap.get(list.get(i)));
+        }
+
+        if (shuffle) {
+            Collections.shuffle(words);
         }
         return words;
     }

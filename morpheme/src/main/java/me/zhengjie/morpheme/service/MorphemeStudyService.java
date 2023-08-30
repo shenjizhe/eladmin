@@ -53,13 +53,13 @@ public interface MorphemeStudyService {
 
     List<WordDetail> getNewWords(Long uid, LocalDate date);
 
-    StudyRecord getNewDatas(Long uid, LocalDate date);
+    StudyRecord getNewDatas(Long uid, LocalDate date,Boolean shuffle);
 
-    List<Morpheme> getReviewMorphemes(Long uid, LocalDate today);
+    List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle);
 
     StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType);
 
-    List<WordDetail> getReviewWords(Long uid, LocalDate today);
+    List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle);
 
     StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType);
 }
