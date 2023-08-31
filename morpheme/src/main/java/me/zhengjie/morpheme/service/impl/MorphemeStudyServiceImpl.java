@@ -452,26 +452,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return morphemes;
     }
 
-    private List<Long> morerpheme999ToReview(Long uid, LocalDate today) {
-        List<Long> morphemes = new ArrayList<>();
-        List<Long> list = studyMorphemeStaticsRepository.morerpheme999ToReview(uid, today);
-        if(list.size() > 0){
-            long count = list.size() / 10;
-            if (count < 1) {
-                count = 1;
-            }
-            for (long l = 0; l < count; ) {
-                int index = (int) (Math.random() * list.size());
-                Long v = list.get(index);
-                if(!morphemes.contains(v)){
-                    morphemes.add(v);
-                    l++;
-                }
-            }
-        }
-        return morphemes;
-    }
-
     @Override
     public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
         List<WordDetail> words = new ArrayList<>();
@@ -488,24 +468,38 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return words;
     }
 
+    private List<Long> morerpheme999ToReview(Long uid, LocalDate today) {
+        List<Long> list = studyMorphemeStaticsRepository.morerpheme999ToReview(uid, today);
+        List<Long> morphemes = object999ToReview(list, 10);
+        list.addAll(morphemes);
+        return list;
+    }
+
     private List<Long> word999ToReview(Long uid, LocalDate today) {
-        List<Long> words = new ArrayList<>();
         List<Long> list = studyWordStaticsRepository.word999ToReview(uid, today);
+        List<Long> words = object999ToReview(list, 80);
+        list.addAll(words);
+        return list;
+    }
+
+    private List<Long> object999ToReview( List<Long> list,int rate) {
+        List<Long> objects = new ArrayList<>();
         if(list.size() > 0){
-            long count = list.size() / 80;
+            int count = list.size()/rate;
             if (count < 1) {
                 count = 1;
             }
             for (long l = 0; l < count; ) {
                 int index = (int) (Math.random() * list.size());
                 Long v = list.get(index);
-                if(!words.contains(v)){
-                    words.add(v);
+                if(!objects.contains(v)){
+                    objects.add(v);
                     l++;
                 }
             }
         }
-        return words;
+
+        return objects;
     }
 
     private int newLevel(int oldLevel, int eventType) {
