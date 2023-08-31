@@ -439,6 +439,9 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle) {
         List<Morpheme> morphemes = new ArrayList<>();
         List<Long> list = studyMorphemeStaticsRepository.morphemeNeedToReview(uid, today);
+        List<Long> list999 = morerpheme999ToReview(uid, today);
+        list.addAll(list999);
+
         for (int i = 0; i < list.size(); i++) {
             morphemes.add(morphemeMap.get(list.get(i)));
         }
@@ -447,6 +450,62 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             Collections.shuffle(morphemes);
         }
         return morphemes;
+    }
+
+    private List<Long> morerpheme999ToReview(Long uid, LocalDate today) {
+        List<Long> morphemes = new ArrayList<>();
+        List<Long> list = studyMorphemeStaticsRepository.morerpheme999ToReview(uid, today);
+        if(list.size() > 0){
+            long count = list.size() / 10;
+            if (count < 1) {
+                count = 1;
+            }
+            for (long l = 0; l < count; ) {
+                int index = (int) (Math.random() * list.size());
+                Long v = list.get(index);
+                if(!morphemes.contains(v)){
+                    morphemes.add(v);
+                    l++;
+                }
+            }
+        }
+        return morphemes;
+    }
+
+    @Override
+    public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
+        List<WordDetail> words = new ArrayList<>();
+        List<Long> list = studyWordStaticsRepository.wordNeedToReview(uid, today);
+        List<Long> list999 = word999ToReview(uid, today);
+        list.addAll(list999);
+        for (int i = 0; i < list.size(); i++) {
+            words.add(wordDetailMap.get(list.get(i)));
+        }
+
+        if (shuffle) {
+            Collections.shuffle(words);
+        }
+        return words;
+    }
+
+    private List<Long> word999ToReview(Long uid, LocalDate today) {
+        List<Long> words = new ArrayList<>();
+        List<Long> list = studyWordStaticsRepository.word999ToReview(uid, today);
+        if(list.size() > 0){
+            long count = list.size() / 80;
+            if (count < 1) {
+                count = 1;
+            }
+            for (long l = 0; l < count; ) {
+                int index = (int) (Math.random() * list.size());
+                Long v = list.get(index);
+                if(!words.contains(v)){
+                    words.add(v);
+                    l++;
+                }
+            }
+        }
+        return words;
     }
 
     private int newLevel(int oldLevel, int eventType) {
@@ -489,6 +548,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public StudyMorphemeStatics reviewMorpheme(Long uid, LocalDate today, Long morphemeId, int eventType) {
         return (StudyMorphemeStatics) getStatics(studyMorphemeStaticsRepository, uid, today, morphemeId, eventType, StudyMorphemeStatics.class);
+    }
+
+    @Override
+    public StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType) {
+        return (StudyWordStatics) getStatics(studyWordStaticsRepository, uid, today, wordId, eventType, StudyWordStatics.class);
     }
 
     private StudyStaticsBase getStatics(JpaRepository jpa, Long uid, LocalDate today, Long objectId, int eventType, Class<? extends StudyStaticsBase> cls) {
@@ -552,24 +616,5 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         staticOne.setStudyTimes(0);
         staticOne.setLastReviewTime(DateUtil.getTimestamp(today));
         staticOne.setLastReviewResult(0);
-    }
-
-    @Override
-    public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
-        List<WordDetail> words = new ArrayList<>();
-        List<Long> list = studyWordStaticsRepository.wordNeedToReview(uid, today);
-        for (int i = 0; i < list.size(); i++) {
-            words.add(wordDetailMap.get(list.get(i)));
-        }
-
-        if (shuffle) {
-            Collections.shuffle(words);
-        }
-        return words;
-    }
-
-    @Override
-    public StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType) {
-        return (StudyWordStatics) getStatics(studyWordStaticsRepository, uid, today, wordId, eventType, StudyWordStatics.class);
     }
 }

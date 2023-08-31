@@ -36,6 +36,17 @@ public interface StudyWordStaticsRepository extends JpaRepository<StudyWordStati
                     "\tstudy_word_statics\n" +
                     "WHERE\n" +
                     "\tTIMESTAMPDIFF(DAY,last_review_time,:today) >= memery_level\n" +
+                    "\tAND memery_level != 999" +
                     "\tAND uid = :uid")
     List<Long> wordNeedToReview(Long uid, LocalDate today);
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "\tobject_id\n" +
+                    "FROM\n" +
+                    "\tstudy_word_statics\n" +
+                    "WHERE\n" +
+                    "\tlast_review_time != :today\n" +
+                    "AND memery_level = 999\n" +
+                    "AND uid = :uid")
+    List<Long> word999ToReview(Long uid, LocalDate today);
 }
