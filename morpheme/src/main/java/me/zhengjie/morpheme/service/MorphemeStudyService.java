@@ -62,4 +62,8 @@ public interface MorphemeStudyService {
     List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle);
 
     StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType);
+
+    List<WordDetail> searchWord(String text);
+
+    List<Morpheme> searchMorpheme(String text);
 }

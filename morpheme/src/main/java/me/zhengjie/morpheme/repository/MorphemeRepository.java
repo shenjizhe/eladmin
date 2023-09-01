@@ -18,6 +18,9 @@ package me.zhengjie.morpheme.repository;
 import me.zhengjie.morpheme.domain.Morpheme;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
 * @website https://eladmin.vip
@@ -25,4 +28,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @date 2023-05-24
 **/
 public interface MorphemeRepository extends JpaRepository<Morpheme, Long>, JpaSpecificationExecutor<Morpheme> {
+    @Query(value = "SELECT * FROM morpheme WHERE text LIKE CONCAT(:text, '%')", nativeQuery = true)
+    List<Morpheme> searchMorpheme(String text);
 }

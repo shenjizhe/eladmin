@@ -1,21 +1,19 @@
 package me.zhengjie.morpheme.rest;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.morpheme.domain.*;
+import me.zhengjie.morpheme.repository.MorphemeRepository;
+import me.zhengjie.morpheme.repository.WordRepository;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,6 +22,8 @@ import java.util.List;
 @RequestMapping("/api/morpheme-study")
 public class MorphemeStudyController {
     private final MorphemeStudyService morphemeStudyService;
+    private final WordRepository wordRepository;
+    private final MorphemeRepository morphemeRepository;
 
     @Log("当前")
     @ApiOperation("当前")
@@ -160,5 +160,23 @@ public class MorphemeStudyController {
         Long uid = SecurityUtils.getCurrentUserId();
         LocalDate today = LocalDate.now();
         return morphemeStudyService.reviewWord(uid, today, wordId, eventType);
+    }
+
+    @Log("查询单词")
+    @ApiOperation("查询单词")
+    @GetMapping(value = "/search-words/")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<WordDetail> searchWord(
+            @RequestParam("text") String text) {
+        return morphemeStudyService.searchWord(text);
+    }
+
+    @Log("查询词根")
+    @ApiOperation("查询词根")
+    @GetMapping(value = "/search-morphemes/")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<Morpheme> searchMorphemes(
+            @RequestParam("text") String text) {
+        return morphemeStudyService.searchMorpheme(text);
     }
 }

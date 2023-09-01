@@ -15,7 +15,6 @@
  */
 package me.zhengjie.morpheme.service.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
@@ -482,17 +481,17 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return list;
     }
 
-    private List<Long> object999ToReview( List<Long> list,int rate) {
+    private List<Long> object999ToReview(List<Long> list, int rate) {
         List<Long> objects = new ArrayList<>();
-        if(list.size() > 0){
-            int count = list.size()/rate;
+        if (list.size() > 0) {
+            int count = list.size() / rate;
             if (count < 1) {
                 count = 1;
             }
             for (long l = 0; l < count; ) {
                 int index = (int) (Math.random() * list.size());
                 Long v = list.get(index);
-                if(!objects.contains(v)){
+                if (!objects.contains(v)) {
                     objects.add(v);
                     l++;
                 }
@@ -547,6 +546,29 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public StudyWordStatics reviewWord(Long uid, LocalDate today, Long wordId, int eventType) {
         return (StudyWordStatics) getStatics(studyWordStaticsRepository, uid, today, wordId, eventType, StudyWordStatics.class);
+    }
+
+    @Override
+    public List<WordDetail> searchWord(String text) {
+        List<WordDetail> list = new ArrayList<>();
+        if (!text.trim().isEmpty()) {
+            List<Word> words = wordRepository.searchWord(text);
+            for (int i = 0; i < words.size(); i++) {
+                WordDetail detail = wordDetailMap.get(words.get(i).getId());
+                list.add(detail);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<Morpheme> searchMorpheme(String text) {
+        if (!text.trim().isEmpty()) {
+            List<Morpheme> morphemes = morphemeRepository.searchMorpheme(text);
+            return morphemes;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     private StudyStaticsBase getStatics(JpaRepository jpa, Long uid, LocalDate today, Long objectId, int eventType, Class<? extends StudyStaticsBase> cls) {

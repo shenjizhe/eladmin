@@ -52,4 +52,7 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             nativeQuery = true
     )
     List<Word> getByMorphemeId(@Param("morphemeId") Long morphemeId);
+
+    @Query(value = "SELECT * FROM word WHERE text LIKE CONCAT(:text, '%')", nativeQuery = true)
+    List<Word> searchWord(String text);
 }
