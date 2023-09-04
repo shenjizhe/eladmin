@@ -202,9 +202,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         saveUserStatus(morpheme, word);
         saveStudyEvent(morpheme, word, now);
         saveStudyDay(uid, morpheme, word, now);
-
-        saveStudyMorphemeStatics(uid, now, morpheme.getId());
-        saveStudyWordStatics(uid, now, word.getId());
     }
 
     private void saveStudyMorphemeStatics(Long uid, LocalDate now, Long id) {
@@ -244,11 +241,15 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     private void saveStudyDay(Long uid, Morpheme morpheme, Word word, LocalDate date) {
-        saveDataDay(uid, date, 0, morpheme.getId());
-        saveDataDay(uid, date, 1, word.getId());
+        if (!saveDataDay(uid, date, 0, morpheme.getId())) {
+            saveStudyMorphemeStatics(uid, date, morpheme.getId());
+        }
+        if (!saveDataDay(uid, date, 1, word.getId())) {
+            saveStudyWordStatics(uid, date, word.getId());
+        }
     }
 
-    private void saveDataDay(Long uid, LocalDate today, int objectType, Long objectId) {
+    private Boolean saveDataDay(Long uid, LocalDate today, int objectType, Long objectId) {
         Boolean contains = containsStudyItemToday(uid, today, objectType, objectId);
         if (!contains) {
             StudyRecordDay example = new StudyRecordDay();
@@ -267,6 +268,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
                 studyRecordDayRepository.save(example);
             }
         }
+        return contains;
     }
 
     private Boolean containsStudyItemToday(Long uid, LocalDate today, int objectType, Long objectId) {
