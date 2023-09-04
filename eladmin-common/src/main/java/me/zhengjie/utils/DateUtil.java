@@ -181,4 +181,14 @@ public class DateUtil {
     public static LocalDateTime parseLocalDateTimeFormatyMdHms(String localDateTime) {
         return LocalDateTime.from(DFY_MD_HMS.parse(localDateTime));
     }
+
+    /**
+     * 到明天0晨的秒数
+     * @return 到明天0晨的秒数
+     */
+    public static Long seconds2Tomorrow(){
+        LocalDateTime now = LocalDateTime.now();
+        final long seconds = 24*60*60 - now.getHour()*60*60 -now.getMinute() *60 - now.getSecond();
+        return seconds;
+    }
 }

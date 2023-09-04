@@ -49,7 +49,7 @@ public class StudyRecordDay implements Serializable {
     @Column(name = "`date`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "日期")
-    private Timestamp date;
+    private Timestamp date = null;
 
     @Column(name = "`object_type`",nullable = false)
     @NotNull
@@ -64,7 +64,7 @@ public class StudyRecordDay implements Serializable {
     @Column(name = "`type`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "类型（0-初次看，1-再次看）")
-    private Integer type;
+    private Integer type = 0;
 
     public void copy(StudyRecordDay source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

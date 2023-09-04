@@ -20,6 +20,7 @@ import me.zhengjie.morpheme.domain.*;
 import me.zhengjie.morpheme.repository.*;
 import me.zhengjie.morpheme.service.MorphemeStudyService;
 import me.zhengjie.utils.DateUtil;
+import me.zhengjie.utils.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
@@ -50,6 +51,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyRecordDayRepository studyRecordDayRepository;
     private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
     private final StudyWordStaticsRepository studyWordStaticsRepository;
+    private final RedisUtils redisUtils;
 
     private final int[] DICT_LEVELS = new int[]{0, 1, 2, 4, 7, 15, 30, 999};
 
@@ -199,31 +201,39 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         LocalDate now = LocalDate.now();
         saveUserStatus(morpheme, word);
         saveStudyEvent(morpheme, word, now);
-        saveStudyDay(morpheme, word, now);
+        saveStudyDay(uid, morpheme, word, now);
 
         saveStudyMorphemeStatics(uid, now, morpheme.getId());
         saveStudyWordStatics(uid, now, word.getId());
     }
 
     private void saveStudyMorphemeStatics(Long uid, LocalDate now, Long id) {
+        String key = getUserStaticsKey(uid, now);
         StudyMorphemeStatics statics = new StudyMorphemeStatics();
         statics.setUid(uid);
         statics.setObjectId(id);
         long count = studyMorphemeStaticsRepository.count(Example.of(statics));
         if (count == 0) {
+            redisUtils.hincr(key, Const.MORPHEME_NEW, 1.0);
             initStatics(statics, now);
             studyMorphemeStaticsRepository.save(statics);
+        } else {
+            redisUtils.hincr(key, Const.MORPHEME_OLD, 1.0);
         }
     }
 
     private void saveStudyWordStatics(Long uid, LocalDate now, Long id) {
+        String key = getUserStaticsKey(uid, now);
         StudyWordStatics statics = new StudyWordStatics();
         statics.setUid(uid);
         statics.setObjectId(id);
         long count = studyWordStaticsRepository.count(Example.of(statics));
         if (count == 0) {
+            redisUtils.hincr(key, Const.WORD_NEW, 1.0);
             initStatics(statics, now);
             studyWordStaticsRepository.save(statics);
+        } else {
+            redisUtils.hincr(key, Const.WORD_OLD, 1.0);
         }
     }
 
@@ -233,26 +243,40 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         userStatusRepository.save(currentUser);
     }
 
-    private void saveStudyDay(Morpheme morpheme, Word word, LocalDate date) {
-        saveDataDay(date, 0, morpheme, word);
-        saveDataDay(date, 1, morpheme, word);
+    private void saveStudyDay(Long uid, Morpheme morpheme, Word word, LocalDate date) {
+        saveDataDay(uid, date, 0, morpheme.getId());
+        saveDataDay(uid, date, 1, word.getId());
     }
 
-    private void saveDataDay(LocalDate today, int objectType, Morpheme morpheme, Word word) {
-        StudyRecordDay example = new StudyRecordDay();
-        example.setUid(currentUser.getUserId());
-        example.setObjectType(objectType);
-        example.setDate(DateUtil.getTimestamp(today));
-        example.setObjectId(objectType == 0 ? morpheme.getId() : word.getId());
-        Optional<StudyRecordDay> one = studyRecordDayRepository.findOne(Example.of(example));
-        if (!one.isPresent()) {
-            StudyRecordDay search = new StudyRecordDay();
-            search.copy(example);
-            search.setDate(null);
-            long count = studyRecordDayRepository.count(Example.of(search));
-            example.setType(count > 0 ? 1 : 0);
-            studyRecordDayRepository.save(example);
+    private void saveDataDay(Long uid, LocalDate today, int objectType, Long objectId) {
+        Boolean contains = containsStudyItemToday(uid, today, objectType, objectId);
+        if (!contains) {
+            StudyRecordDay example = new StudyRecordDay();
+            example.setUid(uid);
+            example.setObjectType(objectType);
+            example.setDate(DateUtil.getTimestamp(today));
+            example.setObjectId(objectId);
+            example.setType(null);
+            Optional<StudyRecordDay> one = studyRecordDayRepository.findOne(Example.of(example));
+            if (!one.isPresent()) {
+                StudyRecordDay search = new StudyRecordDay();
+                search.copy(example);
+                search.setDate(null);
+                long count = studyRecordDayRepository.count(Example.of(search));
+                example.setType(count > 0 ? 1 : 0);
+                studyRecordDayRepository.save(example);
+            }
         }
+    }
+
+    private Boolean containsStudyItemToday(Long uid, LocalDate today, int objectType, Long objectId) {
+        String key = uid + "-" + today + "-" + objectType + "-" + objectId;
+        boolean contains = redisUtils.hasKey(key);
+        if (!contains) {
+            Long seconds = DateUtil.seconds2Tomorrow();
+            redisUtils.set(key, null, seconds);
+        }
+        return contains;
     }
 
     private void saveStudyEvent(Morpheme morpheme, Word word, LocalDate date) {
@@ -571,8 +595,33 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         }
     }
 
+
+    @Override
+    public UserStaticsByDay getTodayStatics(Long uid, LocalDate today) {
+        String key = getUserStaticsKey(uid, today);
+        if (redisUtils.hasKey(key)) {
+            long expire = redisUtils.getExpire(key);
+            if (expire < 0) {
+                redisUtils.expire(key, Const.SECONDS_ONE_DAY);
+            }
+            Map<Object, Object> map = redisUtils.hmget(key);
+            return new UserStaticsByDay(uid, today, map);
+
+        } else {
+            UserStaticsByDay statics = new UserStaticsByDay(uid, today);
+            Map<String, Object> map = statics.getMap();
+            redisUtils.hmset(key, map, Const.SECONDS_ONE_DAY);
+            return statics;
+        }
+    }
+
+    private String getUserStaticsKey(Long uid, LocalDate today) {
+        return uid + "-" + today.toString();
+    }
+
     private StudyStaticsBase getStatics(JpaRepository jpa, Long uid, LocalDate today, Long objectId, int eventType, Class<? extends StudyStaticsBase> cls) {
         StudyStaticsBase search = null;
+        boolean isMorpheme = cls == StudyMorphemeStatics.class;
         try {
             search = cls.getConstructor().newInstance();
         } catch (Exception e) {
@@ -598,16 +647,21 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
         int level = newLevel(staticOne.getMemeryLevel(), eventType);
         staticOne.setMemeryLevel(level);
+        String key = getUserStaticsKey(uid, today);
+
         switch (eventType) {
             case 1:
+                redisUtils.hincr(key, isMorpheme ? Const.MORPHEME_SIMPLE : Const.WORD_SIMPLE, 1.0);
                 Integer simpleTimes = staticOne.getSimpleTimes();
                 staticOne.setSimpleTimes(simpleTimes + 1);
                 break;
             case 2:
+                redisUtils.hincr(key, isMorpheme ? Const.MORPHEME_CONFUSE : Const.WORD_CONFUSE, 1.0);
                 Integer confuseTimes = staticOne.getConfuseTimes();
                 staticOne.setConfuseTimes(confuseTimes + 1);
                 break;
             case 3:
+                redisUtils.hincr(key, isMorpheme ? Const.MORPHEME_FORGET : Const.WORD_FORGET, 1.0);
                 Integer forgetTimes = staticOne.getForgetTimes();
                 staticOne.setForgetTimes(forgetTimes + 1);
                 break;

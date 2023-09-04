@@ -179,4 +179,14 @@ public class MorphemeStudyController {
             @RequestParam("text") String text) {
         return morphemeStudyService.searchMorpheme(text);
     }
+
+    @Log("查询今天用户的统计")
+    @ApiOperation("查询今天用户的统计")
+    @GetMapping(value = "/user-statics-today/")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public UserStaticsByDay getTodayStatics() {
+        Long uid = SecurityUtils.getCurrentUserId();
+        LocalDate today = LocalDate.now();
+        return morphemeStudyService.getTodayStatics(uid,today);
+    }
 }

@@ -66,4 +66,6 @@ public interface MorphemeStudyService {
     List<WordDetail> searchWord(String text);
 
     List<Morpheme> searchMorpheme(String text);
+
+    UserStaticsByDay getTodayStatics(Long uid, LocalDate today);
 }
