@@ -28,6 +28,6 @@ import java.util.List;
 * @date 2023-05-24
 **/
 public interface MorphemeRepository extends JpaRepository<Morpheme, Long>, JpaSpecificationExecutor<Morpheme> {
-    @Query(value = "SELECT * FROM morpheme WHERE text LIKE CONCAT(:text, '%')", nativeQuery = true)
+    @Query(value = "SELECT * FROM morpheme WHERE text LIKE CONCAT('%', :text, '%')", nativeQuery = true)
     List<Morpheme> searchMorpheme(String text);
 }
