@@ -272,13 +272,17 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     private Boolean containsStudyItemToday(Long uid, LocalDate today, int objectType, Long objectId) {
-        String key = uid + "-" + today + "-" + objectType + "-" + objectId;
+        String key = getStudyTodayKey(uid, today, objectType, objectId);
         boolean contains = redisUtils.hasKey(key);
         if (!contains) {
             Long seconds = DateUtil.seconds2Tomorrow();
             redisUtils.set(key, null, seconds);
         }
         return contains;
+    }
+
+    private static String getStudyTodayKey(Long uid, LocalDate today, int objectType, Long objectId) {
+        return  "study-today::" + uid + "-" + today + "-" + objectType + "-" + objectId;
     }
 
     private void saveStudyEvent(Morpheme morpheme, Word word, LocalDate date) {
@@ -618,7 +622,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     private String getUserStaticsKey(Long uid, LocalDate today) {
-        return uid + "-" + today.toString();
+        return "user-statics::" + uid + "-" + today.toString();
     }
 
     private StudyStaticsBase getStatics(JpaRepository jpa, Long uid, LocalDate today, Long objectId, int eventType, Class<? extends StudyStaticsBase> cls) {
