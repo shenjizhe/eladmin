@@ -180,6 +180,15 @@ public class MorphemeStudyController {
         return morphemeStudyService.searchMorpheme(text);
     }
 
+    @Log("词根查单词")
+    @ApiOperation("词根查单词")
+    @GetMapping(value = "/search-word-by-morpheme/{morpheme-id}")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<WordDetail> searchWordsByMorpheme(
+            @PathVariable("morpheme-id") Long morphemeId) {
+        return morphemeStudyService.searchWordsByMorpheme(morphemeId);
+    }
+
     @Log("查询今天用户的统计")
     @ApiOperation("查询今天用户的统计")
     @GetMapping(value = "/user-statics-today/")

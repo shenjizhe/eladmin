@@ -282,7 +282,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     private static String getStudyTodayKey(Long uid, LocalDate today, int objectType, Long objectId) {
-        return  "study-today::" + uid + "-" + today + "-" + objectType + "-" + objectId;
+        return "study-today::" + uid + "-" + today + "-" + objectType + "-" + objectId;
     }
 
     private void saveStudyEvent(Morpheme morpheme, Word word, LocalDate date) {
@@ -599,6 +599,17 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<WordDetail> searchWordsByMorpheme(Long morphemeId) {
+        List<WordDetail> list = new ArrayList<>();
+        List<Word> words = wordRepository.searchWordByMorphemeId(morphemeId);
+        for (int i = 0; i < words.size(); i++) {
+            WordDetail detail = wordDetailMap.get(words.get(i).getId());
+            list.add(detail);
+        }
+        return list;
     }
 
 
