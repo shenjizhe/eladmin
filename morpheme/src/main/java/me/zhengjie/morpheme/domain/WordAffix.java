@@ -46,9 +46,9 @@ public class WordAffix implements Serializable {
     private String text;
 
     @Column(name = "`affix`",nullable = false)
-    @NotBlank
+    @NotNull
     @ApiModelProperty(value = "类型(1前缀,2后缀)")
-    private String affix;
+    private Integer affix;
 
     @Column(name = "`shape`",nullable = false)
     @NotNull

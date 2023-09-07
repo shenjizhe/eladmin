@@ -51,6 +51,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyRecordDayRepository studyRecordDayRepository;
     private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
     private final StudyWordStaticsRepository studyWordStaticsRepository;
+    private final WordAffixRepository wordAffixRepository;
+    private final AffixDeductionRelationRepository affixDeductionRelationRepository;
     private final RedisUtils redisUtils;
 
     private final int[] DICT_LEVELS = new int[]{0, 1, 2, 4, 7, 15, 30, 999};
@@ -612,7 +614,6 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         return list;
     }
 
-
     @Override
     public UserStaticsByDay getTodayStatics(Long uid, LocalDate today) {
         String key = getUserStaticsKey(uid, today);
@@ -703,5 +704,12 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         staticOne.setStudyTimes(0);
         staticOne.setLastReviewTime(DateUtil.getTimestamp(today));
         staticOne.setLastReviewResult(0);
+    }
+
+    @Override
+    public int buildAllAffix() {
+//        TODO: 取得所有分组去重后的原词缀，写入表格，后建立词缀和推导的映射关系
+//        wordAffixRepository.getAllAffixes();
+        return 0;
     }
 }

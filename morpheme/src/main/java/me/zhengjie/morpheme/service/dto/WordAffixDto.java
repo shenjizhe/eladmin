@@ -34,7 +34,7 @@ public class WordAffixDto implements Serializable {
     private String text;
 
     /** 类型(1前缀,2后缀) */
-    private String affix;
+    private Integer affix;
 
     /** 变形类型（0-原型，1-异形,2-省略） */
     private Integer shape;

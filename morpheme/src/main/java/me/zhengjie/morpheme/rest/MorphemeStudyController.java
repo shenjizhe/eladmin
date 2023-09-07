@@ -198,4 +198,12 @@ public class MorphemeStudyController {
         LocalDate today = LocalDate.now();
         return morphemeStudyService.getTodayStatics(uid,today);
     }
+
+    @PostMapping
+    @Log("创建词缀(一次性)")
+    @ApiOperation("创建词缀(一次性)")
+    @PreAuthorize("@el.check('wordAffix:add')")
+    public int builAlldWordAffix(){
+        return morphemeStudyService.buildAllAffix();
+    }
 }

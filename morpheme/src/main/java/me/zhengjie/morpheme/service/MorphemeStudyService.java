@@ -70,4 +70,6 @@ public interface MorphemeStudyService {
     UserStaticsByDay getTodayStatics(Long uid, LocalDate today);
 
     List<WordDetail> searchWordsByMorpheme(Long morphemeId);
+
+    int buildAllAffix();
 }
