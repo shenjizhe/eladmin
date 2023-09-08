@@ -708,7 +708,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public int buildAllAffix() {
-        List<WordDeduction> deductions = wordAffixRepository.getAffixDeductions();
+        List<WordDeduction> deductions = wordDeductionRepository.getAffixDeductions();
         Map<String, Long> map = new LinkedHashMap();
 
         for (int i = 0; i < deductions.size(); i++) {

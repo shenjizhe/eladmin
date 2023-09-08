@@ -32,4 +32,6 @@ import java.util.List;
 public interface WordDeductionRepository extends JpaRepository<WordDeduction, Long>, JpaSpecificationExecutor<WordDeduction> {
     @Query("SELECT d FROM WordDeduction d WHERE d.wordId = :wordId")
     List<WordDeduction> getByWordId(@Param("wordId")Long wrodId);
+    @Query(value = "select * from word_deduction where affix >0 and affix <3", nativeQuery = true)
+    List<WordDeduction> getAffixDeductions();
 }

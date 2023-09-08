@@ -30,6 +30,4 @@ import java.util.List;
  **/
 public interface WordAffixRepository extends JpaRepository<WordAffix, Long>, JpaSpecificationExecutor<WordAffix> {
 
-    @Query(value = "select * from word_deduction where affix >0 and affix <3", nativeQuery = true)
-    List<WordDeduction> getAffixDeductions();
 }
