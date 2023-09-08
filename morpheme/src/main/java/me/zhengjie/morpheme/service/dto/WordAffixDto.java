@@ -22,7 +22,7 @@ import java.io.Serializable;
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-09-07
+* @date 2023-09-08
 **/
 @Data
 public class WordAffixDto implements Serializable {
@@ -35,15 +35,6 @@ public class WordAffixDto implements Serializable {
 
     /** 类型(1前缀,2后缀) */
     private Integer affix;
-
-    /** 变形类型（0-原型，1-异形,2-省略） */
-    private Integer shape;
-
-    /** 词性 */
-    private String nature;
-
-    /** 是否是派生词素(0-不是派生词 1-是派生词) */
-    private Boolean isDerive;
 
     /** 中文含义 */
     private String meaningChinese;

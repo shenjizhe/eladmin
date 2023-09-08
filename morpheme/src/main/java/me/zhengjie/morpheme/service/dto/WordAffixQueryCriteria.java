@@ -22,7 +22,7 @@ import me.zhengjie.annotation.Query;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-09-07
+* @date 2023-09-08
 **/
 @Data
 public class WordAffixQueryCriteria{

@@ -1,5 +1,14 @@
 package me.zhengjie.morpheme.domain;
 
-public class WordAffixBase {
+import lombok.Data;
 
+import java.io.Serializable;
+
+/**
+ * @author DD2020002
+ */
+@Data
+public class WordAffixBase implements Serializable {
+    private String text;
+    private Integer affix;
 }

@@ -97,4 +97,9 @@ public class WordDeduction implements Serializable {
     public void copy(WordDeduction source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+
+    public String getKey(){
+        String s = sourceText + "-" + affix.toString();
+        return s;
+    }
 }

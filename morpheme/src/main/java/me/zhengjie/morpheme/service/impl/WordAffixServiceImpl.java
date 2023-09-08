@@ -41,7 +41,7 @@ import java.util.LinkedHashMap;
 * @website https://eladmin.vip
 * @description 服务实现
 * @author Jason Shen
-* @date 2023-09-07
+* @date 2023-09-08
 **/
 @Service
 @RequiredArgsConstructor
@@ -98,9 +98,6 @@ public class WordAffixServiceImpl implements WordAffixService {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("词缀文本", wordAffix.getText());
             map.put("类型(1前缀,2后缀)", wordAffix.getAffix());
-            map.put("变形类型（0-原型，1-异形,2-省略）", wordAffix.getShape());
-            map.put("词性", wordAffix.getNature());
-            map.put("是否是派生词素(0-不是派生词 1-是派生词)", wordAffix.getIsDerive());
             map.put("中文含义", wordAffix.getMeaningChinese());
             map.put("英文含义（to lean）", wordAffix.getMeaningEnglish());
             list.add(map);

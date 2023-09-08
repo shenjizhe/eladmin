@@ -708,8 +708,25 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public int buildAllAffix() {
-//        TODO: 取得所有分组去重后的原词缀，写入表格，后建立词缀和推导的映射关系
-//        wordAffixRepository.getAllAffixes();
-        return 0;
+        List<WordDeduction> deductions = wordAffixRepository.getAffixDeductions();
+        Map<String, Long> map = new LinkedHashMap();
+
+        for (int i = 0; i < deductions.size(); i++) {
+            WordDeduction deduction = deductions.get(i);
+            String key = deduction.getKey();
+            if (!map.containsKey(key)) {
+                WordAffix affix = new WordAffix(deduction);
+                WordAffix save = wordAffixRepository.save(affix);
+                map.put(key,save.getId());
+            }
+            Long id = map.get(key);
+            AffixDeductionRelation relation = new AffixDeductionRelation();
+            relation.setAffixId(id);
+            relation.setDeductionId(deduction.getId());
+
+            affixDeductionRelationRepository.save(relation);
+        }
+
+        return map.size();
     }
 }
