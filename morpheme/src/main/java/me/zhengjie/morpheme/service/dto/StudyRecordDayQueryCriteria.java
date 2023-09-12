@@ -17,6 +17,7 @@ package me.zhengjie.morpheme.service.dto;
 
 import lombok.Data;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import me.zhengjie.annotation.Query;
 
@@ -29,5 +30,5 @@ import me.zhengjie.annotation.Query;
 public class StudyRecordDayQueryCriteria{
     /** BETWEEN */
     @Query(type = Query.Type.BETWEEN)
-    private List<Timestamp> date;
+    private List<LocalDate> date;
 }

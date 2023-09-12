@@ -23,6 +23,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
 * @website https://eladmin.vip
@@ -49,7 +50,7 @@ public class StudyRecordDay implements Serializable {
     @Column(name = "`date`",nullable = false)
     @NotNull
     @ApiModelProperty(value = "日期")
-    private Timestamp date = null;
+    private LocalDate date = null;
 
     @Column(name = "`object_type`",nullable = false)
     @NotNull

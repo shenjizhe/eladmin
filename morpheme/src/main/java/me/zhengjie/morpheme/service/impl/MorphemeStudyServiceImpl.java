@@ -257,7 +257,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             StudyRecordDay example = new StudyRecordDay();
             example.setUid(uid);
             example.setObjectType(objectType);
-            example.setDate(DateUtil.getTimestamp(today));
+            example.setDate(today);
             example.setObjectId(objectId);
             example.setType(null);
             Optional<StudyRecordDay> one = studyRecordDayRepository.findOne(Example.of(example));
@@ -422,11 +422,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public List<Morpheme> getNewMorphemes(Long uid, LocalDate date) {
-        StudyMorphemeStatics example = new StudyMorphemeStatics();
-        example.setUid(uid);
-        example.setStudyTimes(0);
+        StudyRecordDay studyRecordDay = new StudyRecordDay();
+        studyRecordDay.setUid(uid);
+        studyRecordDay.setDate(date);
+        studyRecordDay.setObjectType(0);
+        studyRecordDay.setType(0);
 
-        List<StudyMorphemeStatics> list = studyMorphemeStaticsRepository.findAll(Example.of(example));
+        List<StudyRecordDay> list = studyRecordDayRepository.findAll(Example.of(studyRecordDay));
         List<Morpheme> all = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Morpheme morpheme = morphemeMap.get(list.get(i).getObjectId());
@@ -437,11 +439,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public List<WordDetail> getNewWords(Long uid, LocalDate date) {
-        StudyWordStatics example = new StudyWordStatics();
-        example.setUid(uid);
-        example.setStudyTimes(0);
+        StudyRecordDay studyRecordDay = new StudyRecordDay();
+        studyRecordDay.setUid(uid);
+        studyRecordDay.setDate(date);
+        studyRecordDay.setObjectType(1);
+        studyRecordDay.setType(0);
 
-        List<StudyWordStatics> list = studyWordStaticsRepository.findAll(Example.of(example));
+        List<StudyRecordDay> list = studyRecordDayRepository.findAll(Example.of(studyRecordDay));
         List<WordDetail> all = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             WordDetail word = wordDetailMap.get(list.get(i).getObjectId());

@@ -18,6 +18,7 @@ package me.zhengjie.morpheme.service.dto;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
 * @website https://eladmin.vip
@@ -35,7 +36,7 @@ public class StudyRecordDayDto implements Serializable {
     private Long uid;
 
     /** 日期 */
-    private Timestamp date;
+    private LocalDate date;
 
     /** 学习内容类型（0 - 词根 1- 单词） */
     private Integer objectType;
