@@ -30,7 +30,35 @@ import java.util.List;
 * @date 2023-05-24
 **/
 public interface WordDeductionRepository extends JpaRepository<WordDeduction, Long>, JpaSpecificationExecutor<WordDeduction> {
-    @Query("SELECT d FROM WordDeduction d WHERE d.wordId = :wordId")
+    @Query(value="SELECT\n" +
+            "\td.id,\n" +
+            "\td.morpheme_id,\n" +
+            "\td.word_id,\n" +
+            "\td.morpheme_text,\n" +
+            "\td.source_text,\n" +
+            "\td.full_text,\n" +
+            "\td.affix,\n" +
+            "\td.shape,\n" +
+            "\td.nature,\n" +
+            "\td.is_derive,\n" +
+            "IF (\n" +
+            "\tw.meaning_chinese <> '',\n" +
+            "\tw.meaning_chinese,\n" +
+            "\td.meaning_chinese\n" +
+            ") meaning_chinese,\n" +
+            "\n" +
+            "IF (\n" +
+            "\tw.meaning_english <> '',\n" +
+            "\tw.meaning_english,\n" +
+            "\td.meaning_english\n" +
+            ") meaning_english\n" +
+            "FROM\n" +
+            "\tword_deduction d\n" +
+            "INNER JOIN affix_deduction_relation r ON d.id = r.deduction_id\n" +
+            "INNER JOIN word_affix w ON r.affix_id = w.id\n" +
+            "WHERE\n" +
+            "\td.word_id = :wordId",
+            nativeQuery=true)
     List<WordDeduction> getByWordId(@Param("wordId")Long wrodId);
     @Query(value = "select * from word_deduction where affix >0 and affix <3", nativeQuery = true)
     List<WordDeduction> getAffixDeductions();
