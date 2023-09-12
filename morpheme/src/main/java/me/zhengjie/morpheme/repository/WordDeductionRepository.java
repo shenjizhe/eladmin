@@ -31,33 +31,47 @@ import java.util.List;
 **/
 public interface WordDeductionRepository extends JpaRepository<WordDeduction, Long>, JpaSpecificationExecutor<WordDeduction> {
     @Query(value="SELECT\n" +
-            "\td.id,\n" +
-            "\td.morpheme_id,\n" +
-            "\td.word_id,\n" +
-            "\td.morpheme_text,\n" +
-            "\td.source_text,\n" +
-            "\td.full_text,\n" +
-            "\td.affix,\n" +
-            "\td.shape,\n" +
-            "\td.nature,\n" +
-            "\td.is_derive,\n" +
-            "IF (\n" +
-            "\tw.meaning_chinese <> '',\n" +
-            "\tw.meaning_chinese,\n" +
-            "\td.meaning_chinese\n" +
-            ") meaning_chinese,\n" +
-            "\n" +
-            "IF (\n" +
-            "\tw.meaning_english <> '',\n" +
-            "\tw.meaning_english,\n" +
-            "\td.meaning_english\n" +
-            ") meaning_english\n" +
+            "d.id,\n" +
+            "d.morpheme_id,\n" +
+            "d.word_id,\n" +
+            "d.morpheme_text,\n" +
+            "d.source_text,\n" +
+            "d.full_text,\n" +
+            "d.affix,\n" +
+            "d.shape,\n" +
+            "d.nature,\n" +
+            "d.is_derive,\n" +
+            "IF(m.meaning_chinese<>'',m.meaning_chinese,d.meaning_chinese) meaning_chinese,\n" +
+            "IF(m.meaning_english<>'',m.meaning_english,d.meaning_english) meaning_english\n" +
             "FROM\n" +
-            "\tword_deduction d\n" +
-            "INNER JOIN affix_deduction_relation r ON d.id = r.deduction_id\n" +
-            "INNER JOIN word_affix w ON r.affix_id = w.id\n" +
+            "word_deduction d\n" +
+            "INNER JOIN morpheme m ON d.morpheme_id=m.id\n" +
             "WHERE\n" +
-            "\td.word_id = :wordId",
+            "d.word_id = :wordId AND d.affix=0\n" +
+            "UNION\n" +
+            "SELECT\n" +
+            "d.id,\n" +
+            "d.morpheme_id,\n" +
+            "d.word_id,\n" +
+            "d.morpheme_text,\n" +
+            "d.source_text,\n" +
+            "d.full_text,\n" +
+            "d.affix,\n" +
+            "d.shape,\n" +
+            "d.nature,\n" +
+            "d.is_derive,\n" +
+            "IF(a.meaning_chinese<>'',a.meaning_chinese,d.meaning_chinese) meaning_chinese,\n" +
+            "IF(a.meaning_english<>'',a.meaning_english,d.meaning_english) meaning_english\n" +
+            "FROM\n" +
+            "word_deduction d\n" +
+            "INNER JOIN affix_deduction_relation r ON d.id=r.deduction_id\n" +
+            "INNER JOIN word_affix a ON r.affix_id = a.id\n" +
+            "WHERE\n" +
+            "d.word_id = :wordId AND (d.affix=1 OR d.affix=2)\n" +
+            "UNION\n" +
+            "SELECT * FROM word_deduction d \n" +
+            "WHERE d.affix=3 AND word_id= :wordId\n" +
+            "ORDER BY id",
             nativeQuery=true)
     List<WordDeduction> getByWordId(@Param("wordId")Long wrodId);
     @Query(value = "select * from word_deduction where affix >0 and affix <3", nativeQuery = true)
