@@ -51,6 +51,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private final StudyRecordDayRepository studyRecordDayRepository;
     private final StudyMorphemeStaticsRepository studyMorphemeStaticsRepository;
     private final StudyWordStaticsRepository studyWordStaticsRepository;
+    private final StudyAffixStaticRepository studyAffixStaticRepository;
     private final WordAffixRepository wordAffixRepository;
     private final AffixDeductionRelationRepository affixDeductionRelationRepository;
     private final RedisUtils redisUtils;
@@ -484,35 +485,17 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle) {
-        List<Morpheme> morphemes = new ArrayList<>();
         List<Long> list = studyMorphemeStaticsRepository.morphemeNeedToReview(uid, today);
-        List<Long> list999 = morerpheme999ToReview(uid, today);
-        list.addAll(list999);
-
-        for (int i = 0; i < list.size(); i++) {
-            morphemes.add(morphemeMap.get(list.get(i)));
-        }
-
-        if (shuffle) {
-            Collections.shuffle(morphemes);
-        }
-        return morphemes;
+        list.addAll(morerpheme999ToReview(uid, today));
+        return (List<Morpheme>) shuffleList(shuffle, list);
     }
 
     @Override
     public List<WordDetail> getReviewWords(Long uid, LocalDate today, Boolean shuffle) {
         List<WordDetail> words = new ArrayList<>();
         List<Long> list = studyWordStaticsRepository.wordNeedToReview(uid, today);
-        List<Long> list999 = word999ToReview(uid, today);
-        list.addAll(list999);
-        for (int i = 0; i < list.size(); i++) {
-            words.add(wordDetailMap.get(list.get(i)));
-        }
-
-        if (shuffle) {
-            Collections.shuffle(words);
-        }
-        return words;
+        list.addAll(word999ToReview(uid, today));
+        return (List<WordDetail>) shuffleList(shuffle, list);
     }
 
     private List<Long> morerpheme999ToReview(Long uid, LocalDate today) {
@@ -526,6 +509,20 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<Long> list = studyWordStaticsRepository.word999ToReview(uid, today);
         List<Long> words = object999ToReview(list, 80);
         list.addAll(words);
+        return list;
+    }
+
+    private List<Long> affix999ToReview(Long uid, LocalDate today) {
+        List<Long> list = studyAffixStaticRepository.affix999ToReview(uid, today);
+        List<Long> affixes = object999ToReview(list, 10);
+        list.addAll(affixes);
+        return list;
+    }
+
+    private List<Long> affixFirstReview(Long uid) {
+        List<Long> list = studyAffixStaticRepository.affixFirstReview(uid);
+        List<Long> affixes = object999ToReview(list, 10);
+        list.addAll(affixes);
         return list;
     }
 
@@ -748,24 +745,26 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @Override
     public List<WordAffix> getReviewAffixes(Long uid, LocalDate today, Boolean shuffle) {
-//        List<WordAffix> affixes = new ArrayList<>();
-//        List<Long> list = study.affixesNeedToReview(uid, today);
-//        List<Long> list999 = morerpheme999ToReview(uid, today);
-//        list.addAll(list999);
-//
-//        for (int i = 0; i < list.size(); i++) {
-//            morphemes.add(morphemeMap.get(list.get(i)));
-//        }
-//
-//        if (shuffle) {
-//            Collections.shuffle(affixes);
-//        }
-//        return affixes;
-        return null;
+        List<Long> list = affixFirstReview(uid);
+        list.addAll(studyAffixStaticRepository.affixNeedToReview(uid, today));
+        list.addAll(affix999ToReview(uid, today));
+        return (List<WordAffix>) shuffleList(shuffle, list);
+    }
+
+    private List shuffleList(Boolean shuffle, List<Long> list) {
+        List results = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            results.add(affixMap.get(list.get(i)));
+        }
+
+        if (shuffle) {
+            Collections.shuffle(results);
+        }
+        return results;
     }
 
     @Override
-    public StudyMorphemeStatics reviewAffix(Long uid, LocalDate today, Long affixId, int eventType) {
-        return null;
+    public StudyAffixStatic reviewAffix(Long uid, LocalDate today, Long affixId, int eventType) {
+        return (StudyAffixStatic) getStatics(studyAffixStaticRepository, uid, today, affixId, eventType, StudyAffixStatic.class);
     }
 }

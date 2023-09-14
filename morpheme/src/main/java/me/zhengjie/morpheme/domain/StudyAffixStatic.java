@@ -33,7 +33,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name="study_affix_static")
-public class StudyAffixStatic implements Serializable {
+public class StudyAffixStatic extends StudyStaticsBase implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -223,7 +223,7 @@ public class MorphemeStudyController {
     @ApiOperation("复习词根")
     @PostMapping(value = "/review-affixes/{affix-id}/{event-type}")
     @PreAuthorize("@el.check('morpheme:list')")
-    public StudyMorphemeStatics reviewAffixe(
+    public StudyAffixStatic reviewAffix(
             @PathVariable("affix-id") Long affixId,
             @PathVariable("event-type") int eventType) {
         Long uid = SecurityUtils.getCurrentUserId();
