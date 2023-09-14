@@ -60,6 +60,8 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private List<Morpheme> all;
     private Map<Long, Morpheme> morphemeMap = new LinkedHashMap<>();
     private Map<Long, WordDetail> wordDetailMap = new LinkedHashMap<>();
+    private Map<Long, WordAffix> affixMap = new LinkedHashMap<>();
+
     private UserStatus currentUser;
     private Map<Long, List<DifferentMorpheme>> differsMap = new LinkedHashMap<>();
     private Map<Long, List<Word>> wordsMap = new LinkedHashMap<>();
@@ -73,6 +75,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @PostConstruct
     private void init() {
         loadMorpheme();
+        loadAffix();
     }
 
     private void getUserStatus(Long uid) {
@@ -143,6 +146,15 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             morphemeMap.put(morpheme.getId(), morpheme);
 
             printProgressBar(i + 1, all.size());
+        }
+    }
+
+    private void loadAffix() {
+        affixMap.clear();
+        List<WordAffix> affixes = wordAffixRepository.findAll();
+        for (int i = 0; i < affixes.size(); i++) {
+            WordAffix affix = affixes.get(i);
+            affixMap.put(affix.getId(), affix);
         }
     }
 
@@ -721,7 +733,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             if (!map.containsKey(key)) {
                 WordAffix affix = new WordAffix(deduction);
                 WordAffix save = wordAffixRepository.save(affix);
-                map.put(key,save.getId());
+                map.put(key, save.getId());
             }
             Long id = map.get(key);
             AffixDeductionRelation relation = new AffixDeductionRelation();
@@ -732,5 +744,28 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         }
 
         return map.size();
+    }
+
+    @Override
+    public List<WordAffix> getReviewAffixes(Long uid, LocalDate today, Boolean shuffle) {
+//        List<WordAffix> affixes = new ArrayList<>();
+//        List<Long> list = study.affixesNeedToReview(uid, today);
+//        List<Long> list999 = morerpheme999ToReview(uid, today);
+//        list.addAll(list999);
+//
+//        for (int i = 0; i < list.size(); i++) {
+//            morphemes.add(morphemeMap.get(list.get(i)));
+//        }
+//
+//        if (shuffle) {
+//            Collections.shuffle(affixes);
+//        }
+//        return affixes;
+        return null;
+    }
+
+    @Override
+    public StudyMorphemeStatics reviewAffix(Long uid, LocalDate today, Long affixId, int eventType) {
+        return null;
     }
 }

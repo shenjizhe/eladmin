@@ -206,4 +206,28 @@ public class MorphemeStudyController {
     public int builAlldWordAffix(){
         return morphemeStudyService.buildAllAffix();
     }
+
+    @Log("查询今天该复习的词缀")
+    @ApiOperation("查询今天该复习的词缀")
+    @GetMapping(value = "/review-affixes")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<WordAffix> getReviewAffixes(
+            @RequestParam(value = "shuffle", required = false, defaultValue = "true")
+            Boolean shuffle) {
+        Long uid = SecurityUtils.getCurrentUserId();
+        LocalDate today = LocalDate.now();
+        return morphemeStudyService.getReviewAffixes(uid, today, shuffle);
+    }
+
+    @Log("复习词根")
+    @ApiOperation("复习词根")
+    @PostMapping(value = "/review-affixes/{affix-id}/{event-type}")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public StudyMorphemeStatics reviewAffixe(
+            @PathVariable("affix-id") Long affixId,
+            @PathVariable("event-type") int eventType) {
+        Long uid = SecurityUtils.getCurrentUserId();
+        LocalDate today = LocalDate.now();
+        return morphemeStudyService.reviewAffix(uid, today, affixId, eventType);
+    }
 }

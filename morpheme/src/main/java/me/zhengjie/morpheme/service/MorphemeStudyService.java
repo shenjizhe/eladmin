@@ -72,4 +72,8 @@ public interface MorphemeStudyService {
     List<WordDetail> searchWordsByMorpheme(Long morphemeId);
 
     int buildAllAffix();
+
+    List<WordAffix> getReviewAffixes(Long uid, LocalDate today, Boolean shuffle);
+
+    StudyMorphemeStatics reviewAffix(Long uid, LocalDate today, Long affixId, int eventType);
 }
