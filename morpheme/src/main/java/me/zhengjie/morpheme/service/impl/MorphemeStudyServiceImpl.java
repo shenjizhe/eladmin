@@ -522,8 +522,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     private List<Long> affixFirstReview(Long uid) {
         List<Long> list = studyAffixStaticRepository.affixFirstReview(uid);
         List<Long> affixes = object999ToReview(list, 10);
-        list.addAll(affixes);
-        return list;
+        return affixes;
     }
 
     private List<Long> object999ToReview(List<Long> list, int rate) {
