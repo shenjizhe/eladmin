@@ -52,8 +52,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.previous(uid);
     }
 
-    @Log("是否是第一条")
-    @ApiOperation("是否是第一条")
+    @Log("是否-是第一条")
+    @ApiOperation("是否-是第一条")
     @GetMapping(value = "/is-first")
     @PreAuthorize("@el.check('morpheme:list')")
     public Boolean isFirst() {
@@ -61,8 +61,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.isFirst(uid);
     }
 
-    @Log("是否是最后一条")
-    @ApiOperation("是否是最后一条")
+    @Log("是否-是最后一条")
+    @ApiOperation("是否-是最后一条")
     @GetMapping(value = "/is-last")
     @PreAuthorize("@el.check('morpheme:list')")
     public Boolean isLast() {
@@ -70,8 +70,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.isLast(uid);
     }
 
-    @Log("取得今天学习的词根")
-    @ApiOperation("取得今天学习的词根")
+    @Log("词根-取得今天学习的词根")
+    @ApiOperation("词根-取得今天学习的词根")
     @GetMapping(value = "/morpheme-today")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<Morpheme> getNewMorphemes(@RequestParam(value = "date", required = false)
@@ -84,8 +84,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getNewMorphemes(uid, date);
     }
 
-    @Log("取得今天学习的单词")
-    @ApiOperation("取得今天学习的单词")
+    @Log("单词-取得今天学习的")
+    @ApiOperation("单词-取得今天学习的")
     @GetMapping(value = "/word-today")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<WordDetail> getNewWords(@RequestParam(value = "date", required = false)
@@ -98,8 +98,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getNewWords(uid, date);
     }
 
-    @Log("取得今天所学知识")
-    @ApiOperation("取得今天所学知识")
+    @Log("知识-取得今天所学知识")
+    @ApiOperation("知识-取得今天所学知识")
     @GetMapping(value = "/study-today")
     @PreAuthorize("@el.check('morpheme:list')")
     public StudyRecord getNewDatas(@RequestParam(value = "date", required = false)
@@ -114,8 +114,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getNewDatas(uid, date, shuffle);
     }
 
-    @Log("查询今天该复习的词根")
-    @ApiOperation("查询今天该复习的词根")
+    @Log("词根-查询今天该复习的")
+    @ApiOperation("词根-查询今天该复习的")
     @GetMapping(value = "/review-morphemes")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<Morpheme> getReviewMorphemes(
@@ -126,8 +126,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getReviewMorphemes(uid, today, shuffle);
     }
 
-    @Log("复习词根")
-    @ApiOperation("复习词根")
+    @Log("词根-复习")
+    @ApiOperation("词根-复习")
     @PostMapping(value = "/review-morphemes/{morpheme-id}/{event-type}")
     @PreAuthorize("@el.check('morpheme:list')")
     public StudyMorphemeStatics reviewMorpheme(
@@ -138,8 +138,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.reviewMorpheme(uid, today, morphemeId, eventType);
     }
 
-    @Log("查询今天该复习的单词")
-    @ApiOperation("查询今天该复习的单词")
+    @Log("单词--查询今天该复习的")
+    @ApiOperation("单词-查询今天该复习的")
     @GetMapping(value = "/review-words")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<WordDetail> getReviewWords(
@@ -150,8 +150,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getReviewWords(uid, today, shuffle);
     }
 
-    @Log("复习单词")
-    @ApiOperation("复习单词")
+    @Log("单词-复习")
+    @ApiOperation("单词-复习")
     @PostMapping(value = "/review-words/{word-id}/{event-type}")
     @PreAuthorize("@el.check('morpheme:list')")
     public StudyWordStatics reviewWord(
@@ -162,8 +162,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.reviewWord(uid, today, wordId, eventType);
     }
 
-    @Log("查询单词")
-    @ApiOperation("查询单词")
+    @Log("单词-查询")
+    @ApiOperation("单词-查询")
     @GetMapping(value = "/search-words/")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<WordDetail> searchWord(
@@ -171,8 +171,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.searchWord(text);
     }
 
-    @Log("查询词根")
-    @ApiOperation("查询词根")
+    @Log("词根-查询")
+    @ApiOperation("词根-查询")
     @GetMapping(value = "/search-morphemes/")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<Morpheme> searchMorphemes(
@@ -180,8 +180,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.searchMorpheme(text);
     }
 
-    @Log("词根查单词")
-    @ApiOperation("词根查单词")
+    @Log("词根-查单词")
+    @ApiOperation("词根-查单词")
     @GetMapping(value = "/search-word-by-morpheme/{morpheme-id}")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<WordDetail> searchWordsByMorpheme(
@@ -189,8 +189,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.searchWordsByMorpheme(morphemeId);
     }
 
-    @Log("查询今天用户的统计")
-    @ApiOperation("查询今天用户的统计")
+    @Log("用户统计-查询今天")
+    @ApiOperation("用户统计-查询今天")
     @GetMapping(value = "/user-statics-today/")
     @PreAuthorize("@el.check('morpheme:list')")
     public UserStaticsByDay getTodayStatics() {
@@ -200,15 +200,15 @@ public class MorphemeStudyController {
     }
 
     @PostMapping
-    @Log("创建词缀(一次性)")
-    @ApiOperation("创建词缀(一次性)")
+    @Log("词缀-创建(一次性)")
+    @ApiOperation("词缀-创建(一次性)")
     @PreAuthorize("@el.check('wordAffix:add')")
     public int builAlldWordAffix(){
         return morphemeStudyService.buildAllAffix();
     }
 
-    @Log("查询今天该复习的词缀")
-    @ApiOperation("查询今天该复习的词缀")
+    @Log("词缀-查询今天该复习的")
+    @ApiOperation("词缀-查询今天该复习的")
     @GetMapping(value = "/review-affixes")
     @PreAuthorize("@el.check('morpheme:list')")
     public List<WordAffix> getReviewAffixes(
@@ -219,8 +219,8 @@ public class MorphemeStudyController {
         return morphemeStudyService.getReviewAffixes(uid, today, shuffle);
     }
 
-    @Log("复习词根")
-    @ApiOperation("复习词根")
+    @Log("词缀-复习")
+    @ApiOperation("词缀-复习")
     @PostMapping(value = "/review-affixes/{affix-id}/{event-type}")
     @PreAuthorize("@el.check('morpheme:list')")
     public StudyAffixStatic reviewAffix(
