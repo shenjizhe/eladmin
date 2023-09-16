@@ -487,7 +487,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     public List<Morpheme> getReviewMorphemes(Long uid, LocalDate today, Boolean shuffle) {
         List<Long> list = studyMorphemeStaticsRepository.morphemeNeedToReview(uid, today);
         list.addAll(morerpheme999ToReview(uid, today));
-        return (List<Morpheme>) shuffleList(shuffle, list);
+        return (List<Morpheme>) shuffleList(morphemeMap, shuffle, list);
     }
 
     @Override
@@ -495,7 +495,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<WordDetail> words = new ArrayList<>();
         List<Long> list = studyWordStaticsRepository.wordNeedToReview(uid, today);
         list.addAll(word999ToReview(uid, today));
-        return (List<WordDetail>) shuffleList(shuffle, list);
+        return (List<WordDetail>) shuffleList(wordDetailMap, shuffle, list);
     }
 
     private List<Long> morerpheme999ToReview(Long uid, LocalDate today) {
@@ -747,13 +747,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<Long> list = affixFirstReview(uid);
         list.addAll(studyAffixStaticRepository.affixNeedToReview(uid, today));
         list.addAll(affix999ToReview(uid, today));
-        return (List<WordAffix>) shuffleList(shuffle, list);
+        return (List<WordAffix>) shuffleList(affixMap, shuffle, list);
     }
 
-    private List shuffleList(Boolean shuffle, List<Long> list) {
+    private List shuffleList(Map map, Boolean shuffle, List<Long> list) {
         List results = new ArrayList();
         for (int i = 0; i < list.size(); i++) {
-            results.add(affixMap.get(list.get(i)));
+            results.add(map.get(list.get(i)));
         }
 
         if (shuffle) {
