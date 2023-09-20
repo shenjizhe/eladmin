@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Jason Shen
@@ -765,5 +766,13 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @Override
     public StudyAffixStatic reviewAffix(Long uid, LocalDate today, Long affixId, int eventType) {
         return (StudyAffixStatic) getStatics(studyAffixStaticRepository, uid, today, affixId, eventType, StudyAffixStatic.class);
+    }
+
+    @Override
+    public List<WordDetail> findWordsByAffixId(Long affixId) {
+        List<Long> words = wordRepository.findWordsByAffixId(affixId);
+
+        List<WordDetail> collect = words.stream().map(id -> wordDetailMap.get(id)).collect(Collectors.toList());
+        return collect;
     }
 }

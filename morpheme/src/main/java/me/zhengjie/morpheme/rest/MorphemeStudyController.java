@@ -230,4 +230,13 @@ public class MorphemeStudyController {
         LocalDate today = LocalDate.now();
         return morphemeStudyService.reviewAffix(uid, today, affixId, eventType);
     }
+
+    @Log("词缀-查单词")
+    @ApiOperation("词缀-查单词")
+    @GetMapping(value = "/affixes/{affix-id}/words")
+    @PreAuthorize("@el.check('morpheme:list')")
+    public List<WordDetail> findWordsByAffixId(
+            @PathVariable("affix-id") Long affixId) {
+        return morphemeStudyService.findWordsByAffixId(affixId);
+    }
 }
