@@ -789,7 +789,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
                 Word word =wordRepository.findRootWord(d.getSourceText(),d.getWordId());
                 meaning.setWordId(word.getId());
             }catch (Exception ex){
-                logger.error("取得失败",ex);
+                logger.error("取得单词 {} 失败：{}",+d.getWordId() + d.getSourceText() );
             }
 
             List<WordMeaning> items = wordMeaningRepository.findAll(Example.of(meaning));
