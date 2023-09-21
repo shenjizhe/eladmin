@@ -59,9 +59,13 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
     @Query(value = "SELECT w.* FROM word w INNER JOIN word_morpheme_relation wmr on w.id=wmr.word_id where wmr.morpheme_id=:morphemeId", nativeQuery = true)
     List<Word> searchWordByMorphemeId(Long morphemeId);
 
-@Query(value = "SELECT word_id FROM word_deduction d\n" +
+    @Query(value = "SELECT word_id FROM word_deduction d\n" +
         "INNER JOIN affix_deduction_relation r ON d.id = r.deduction_id\n" +
         "WHERE r.affix_id = :affixId",
         nativeQuery = true)
     List<Long> findWordsByAffixId(Long affixId);
+
+    @Query(value="SELECT * from word WHERE text = :sourceText AND id < :wordId ORDER BY id DESC limit 1",
+            nativeQuery = true)
+    Word findRootWord(String sourceText, Long wordId);
 }

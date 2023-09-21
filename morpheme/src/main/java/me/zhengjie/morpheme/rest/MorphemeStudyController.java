@@ -239,4 +239,12 @@ public class MorphemeStudyController {
             @PathVariable("affix-id") Long affixId) {
         return morphemeStudyService.findWordsByAffixId(affixId);
     }
+
+    @PostMapping(value="word-deductions/rebuild")
+    @Log("单词推导-修正(一次性)")
+    @ApiOperation("单词推导-修正(一次性)")
+    @PreAuthorize("@el.check('wordAffix:add')")
+    public int rebuildDeduction(){
+        return morphemeStudyService.rebuildDeduction();
+    }
 }

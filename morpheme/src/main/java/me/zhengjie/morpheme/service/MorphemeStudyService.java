@@ -78,4 +78,6 @@ public interface MorphemeStudyService {
     StudyAffixStatic reviewAffix(Long uid, LocalDate today, Long affixId, int eventType);
 
     List<WordDetail> findWordsByAffixId(Long affixId);
+
+    int rebuildDeduction();
 }

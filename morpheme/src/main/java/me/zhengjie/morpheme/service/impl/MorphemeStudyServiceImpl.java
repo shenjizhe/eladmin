@@ -775,4 +775,31 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         List<WordDetail> collect = words.stream().map(id -> wordDetailMap.get(id)).collect(Collectors.toList());
         return collect;
     }
+
+    @Override
+    public int rebuildDeduction() {
+        WordDeduction deduction = new WordDeduction();
+        deduction.setIsDerive(true);
+        List<WordDeduction> list = wordDeductionRepository.findAll(Example.of(deduction));
+
+        for (int i = 0; i < list.size(); i++) {
+            WordDeduction d = list.get(i);
+            WordMeaning meaning = new WordMeaning();
+            try{
+                Word word =wordRepository.findRootWord(d.getSourceText(),d.getWordId());
+                meaning.setWordId(word.getId());
+            }catch (Exception ex){
+                logger.error("取得失败",ex);
+            }
+
+            List<WordMeaning> items = wordMeaningRepository.findAll(Example.of(meaning));
+            if(items.size()>0){
+                WordMeaning one = items.get(0);
+                d.setMeaningChinese(one.getMeaningChinese());
+                d.setMeaningEnglish(one.getMeaningEnglish());
+                wordDeductionRepository.save(d);
+            }
+        }
+        return 0;
+    }
 }
