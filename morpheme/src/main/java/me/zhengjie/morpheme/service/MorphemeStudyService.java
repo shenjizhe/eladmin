@@ -80,4 +80,6 @@ public interface MorphemeStudyService {
     List<WordDetail> findWordsByAffixId(Long affixId);
 
     int rebuildDeduction();
+
+    int rebuildDeductionAffix();
 }

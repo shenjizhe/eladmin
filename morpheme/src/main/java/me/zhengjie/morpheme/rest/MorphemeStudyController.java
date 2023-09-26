@@ -240,11 +240,19 @@ public class MorphemeStudyController {
         return morphemeStudyService.findWordsByAffixId(affixId);
     }
 
-    @PostMapping(value="word-deductions/rebuild")
-    @Log("单词推导-修正(一次性)")
-    @ApiOperation("单词推导-修正(一次性)")
+    @PostMapping(value="word-deductions/rebuild-derive")
+    @Log("单词推导-修正派生词(一次性)")
+    @ApiOperation("单词推导-修正派生词(一次性)")
     @PreAuthorize("@el.check('wordAffix:add')")
     public int rebuildDeduction(){
         return morphemeStudyService.rebuildDeduction();
+    }
+
+    @PostMapping(value="word-deductions/rebuild-affix")
+    @Log("单词推导-修正词缀(一次性)")
+    @ApiOperation("单词推导-修正词缀(一次性)")
+    @PreAuthorize("@el.check('wordAffix:add')")
+    public int rebuildDeductionAffix(){
+        return morphemeStudyService.rebuildDeductionAffix();
     }
 }

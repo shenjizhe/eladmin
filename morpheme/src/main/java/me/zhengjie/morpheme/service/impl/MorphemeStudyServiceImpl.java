@@ -76,8 +76,12 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
 
     @PostConstruct
     private void init() {
-        loadMorpheme();
-        loadAffix();
+        //TODO: 只有调试接口时为true，必须是 false才可以
+        boolean quickStart = false;
+        if (!quickStart) {
+            loadMorpheme();
+            loadAffix();
+        }
     }
 
     private void getUserStatus(Long uid) {
@@ -785,19 +789,49 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
         for (int i = 0; i < list.size(); i++) {
             WordDeduction d = list.get(i);
             WordMeaning meaning = new WordMeaning();
-            try{
-                Word word =wordRepository.findRootWord(d.getSourceText(),d.getWordId());
-                meaning.setWordId(word.getId());
-            }catch (Exception ex){
-                logger.error("取得单词 {} 失败：{}",+d.getWordId() + d.getSourceText() );
+            try {
+                Word word = wordRepository.findRootWord(d.getSourceText(), d.getWordId());
+                if(word== null){
+                    d.setMeaningChinese("");
+                    d.setMeaningEnglish("");
+                    wordDeductionRepository.save(d);
+                }else{
+                    meaning.setWordId(word.getId());
+                    List<WordMeaning> items = wordMeaningRepository.findAll(Example.of(meaning));
+                    if (items.size() > 0) {
+                        WordMeaning one = items.get(0);
+                        d.setMeaningChinese(one.getMeaningChinese());
+                        d.setMeaningEnglish(one.getMeaningEnglish());
+                        wordDeductionRepository.save(d);
+                    }
+                }
+            } catch (Exception ex) {
+                logger.error("取得推导: {} ,单词 {} 单词失败：{}", d.getId(), d.getWordId(), d.getSourceText());
             }
+        }
+        return 0;
+    }
 
-            List<WordMeaning> items = wordMeaningRepository.findAll(Example.of(meaning));
-            if(items.size()>0){
-                WordMeaning one = items.get(0);
+    @Override
+    public int rebuildDeductionAffix() {
+        WordDeduction deduction = new WordDeduction();
+        deduction.setAffix(1);
+        deduction.setIsDerive(false);
+        List<WordDeduction> list = wordDeductionRepository.findAll(Example.of(deduction));
+
+        for (int i = 0; i < list.size(); i++) {
+            WordDeduction d = list.get(i);
+            WordAffix affix = new WordAffix();
+            affix.setText(d.getSourceText());
+            affix.setAffix(d.getAffix());
+            List<WordAffix> affixes = wordAffixRepository.findAll(Example.of(affix));
+            if (affixes.size() > 0) {
+                WordAffix one = affixes.get(0);
                 d.setMeaningChinese(one.getMeaningChinese());
                 d.setMeaningEnglish(one.getMeaningEnglish());
                 wordDeductionRepository.save(d);
+            } else {
+                logger.error("取得推导: {} ,单词 {} 词缀失败：{}", d.getId(), d.getWordId(), d.getSourceText());
             }
         }
         return 0;
