@@ -791,11 +791,11 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             WordMeaning meaning = new WordMeaning();
             try {
                 Word word = wordRepository.findRootWord(d.getSourceText(), d.getWordId());
-                if(word== null){
+                if (word == null) {
                     d.setMeaningChinese("");
                     d.setMeaningEnglish("");
                     wordDeductionRepository.save(d);
-                }else{
+                } else {
                     meaning.setWordId(word.getId());
                     List<WordMeaning> items = wordMeaningRepository.findAll(Example.of(meaning));
                     if (items.size() > 0) {
@@ -813,20 +813,37 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     }
 
     @Override
-    public int rebuildDeductionAffix() {
+    public int rebuildDeductionPrefix() {
+        return rebuildDeductionByType(1);
+    }
+
+    @Override
+    public int rebuildDeductionSuffix() {
+        return rebuildDeductionByType(2);
+    }
+
+    @Override
+    public int rebuildDeductionMorpheme() {
+        return rebuildDeductionByType(0);
+    }
+
+    private int rebuildDeductionByType(int type) {
         WordDeduction deduction = new WordDeduction();
-        deduction.setAffix(1);
+        deduction.setAffix(type);
         deduction.setIsDerive(false);
         List<WordDeduction> list = wordDeductionRepository.findAll(Example.of(deduction));
 
         for (int i = 0; i < list.size(); i++) {
             WordDeduction d = list.get(i);
-            WordAffix affix = new WordAffix();
-            affix.setText(d.getSourceText());
-            affix.setAffix(d.getAffix());
-            List<WordAffix> affixes = wordAffixRepository.findAll(Example.of(affix));
-            if (affixes.size() > 0) {
-                WordAffix one = affixes.get(0);
+            List<Meaning> l = null;
+            if (type == 1 || type == 2) {
+                l = getMeaningAffixes(d);
+            } else if (type == 0) {
+                l = getMeaningMorpheme(d);
+            }
+
+            if (l.size() > 0) {
+                Meaning one = l.get(0);
                 d.setMeaningChinese(one.getMeaningChinese());
                 d.setMeaningEnglish(one.getMeaningEnglish());
                 wordDeductionRepository.save(d);
@@ -835,5 +852,20 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
             }
         }
         return 0;
+    }
+
+    private List<Meaning> getMeaningMorpheme(WordDeduction d) {
+        Morpheme morpheme = new Morpheme();
+        morpheme.setId(d.getMorphemeId());
+        List<Meaning> morphemes = morphemeRepository.findAll(Example.of(morpheme)).stream().collect(Collectors.toList());
+        return morphemes;
+    }
+
+    private List<Meaning> getMeaningAffixes(WordDeduction d) {
+        WordAffix affix = new WordAffix();
+        affix.setText(d.getSourceText());
+        affix.setAffix(d.getAffix());
+        List<Meaning> affixes = wordAffixRepository.findAll(Example.of(affix)).stream().collect(Collectors.toList());
+        return affixes;
     }
 }

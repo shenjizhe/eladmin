@@ -248,11 +248,27 @@ public class MorphemeStudyController {
         return morphemeStudyService.rebuildDeduction();
     }
 
-    @PostMapping(value="word-deductions/rebuild-affix")
-    @Log("单词推导-修正词缀(一次性)")
-    @ApiOperation("单词推导-修正词缀(一次性)")
-    @PreAuthorize("@el.check('wordAffix:add')")
-    public int rebuildDeductionAffix(){
-        return morphemeStudyService.rebuildDeductionAffix();
+    @PostMapping(value="word-deductions/rebuild-prefix")
+    @Log("单词推导-修正前缀(一次性)")
+    @ApiOperation("单词推导-修正前缀(一次性)")
+    @PreAuthorize("@el.check('morpheme:add')")
+    public int rebuildDeductionPrefix(){
+        return morphemeStudyService.rebuildDeductionPrefix();
+    }
+
+    @PostMapping(value="word-deductions/rebuild-suffix")
+    @Log("单词推导-修正后缀(一次性)")
+    @ApiOperation("单词推导-修正后缀(一次性)")
+    @PreAuthorize("@el.check('morpheme:add')")
+    public int rebuildDeductionSuffix(){
+        return morphemeStudyService.rebuildDeductionSuffix();
+    }
+
+    @PostMapping(value="word-deductions/rebuild-morpheme")
+    @Log("单词推导-修正词根(一次性)")
+    @ApiOperation("单词推导-修正词根(一次性)")
+    @PreAuthorize("@el.check('morpheme:add')")
+    public int rebuildDeductionMorpheme(){
+        return morphemeStudyService.rebuildDeductionMorpheme();
     }
 }

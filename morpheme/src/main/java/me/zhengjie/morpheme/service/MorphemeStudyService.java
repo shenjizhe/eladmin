@@ -81,5 +81,9 @@ public interface MorphemeStudyService {
 
     int rebuildDeduction();
 
-    int rebuildDeductionAffix();
+    int rebuildDeductionPrefix();
+
+    int rebuildDeductionSuffix();
+
+    int rebuildDeductionMorpheme();
 }

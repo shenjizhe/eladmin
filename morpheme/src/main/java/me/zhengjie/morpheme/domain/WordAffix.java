@@ -35,7 +35,7 @@ import java.io.Serializable;
 @Data
 @Table(name = "word_affix")
 @NoArgsConstructor
-public class WordAffix implements Serializable {
+public class WordAffix implements Serializable,Meaning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

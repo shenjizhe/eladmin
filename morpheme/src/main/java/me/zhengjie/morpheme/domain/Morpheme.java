@@ -37,7 +37,7 @@ import java.io.Serializable;
 @Table(name="morpheme")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Morpheme implements Serializable {
+public class Morpheme implements Serializable,Meaning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
