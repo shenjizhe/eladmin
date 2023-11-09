@@ -26,4 +26,16 @@ import me.zhengjie.annotation.Query;
 **/
 @Data
 public class KnowledgeQueryCriteria{
+
+    /** 模糊 */
+    @Query(type = Query.Type.INNER_LIKE)
+    private String name;
+
+    /** 模糊 */
+    @Query(type = Query.Type.INNER_LIKE)
+    private String title;
+
+    /** 模糊 */
+    @Query(type = Query.Type.INNER_LIKE)
+    private String content;
 }
