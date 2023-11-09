@@ -18,6 +18,7 @@
         <module>code-factory</module>
         <module>financial-plan</module>
         <module>morpheme</module>
+        <module>study</module>
     </modules>
 
     <name>ELADMIN 后台管理</name>
