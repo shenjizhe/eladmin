@@ -22,13 +22,12 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.sql.Blob;
 
 /**
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-11-09
+* @date 2023-11-10
 **/
 @Entity
 @Data

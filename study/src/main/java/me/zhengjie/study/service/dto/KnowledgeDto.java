@@ -17,13 +17,12 @@ package me.zhengjie.study.service.dto;
 
 import lombok.Data;
 import java.io.Serializable;
-import java.sql.Blob;
 
 /**
 * @website https://eladmin.vip
 * @description /
 * @author Jason Shen
-* @date 2023-11-09
+* @date 2023-11-10
 **/
 @Data
 public class KnowledgeDto implements Serializable {

@@ -22,7 +22,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-11-09
+* @date 2023-11-10
 **/
 public interface KnowledgeRepository extends JpaRepository<Knowledge, Long>, JpaSpecificationExecutor<Knowledge> {
 }

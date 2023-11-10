@@ -16,15 +16,13 @@
 package me.zhengjie.study.service.dto;
 
 import lombok.Data;
-
-import java.sql.Blob;
 import java.util.List;
 import me.zhengjie.annotation.Query;
 
 /**
 * @website https://eladmin.vip
 * @author Jason Shen
-* @date 2023-11-09
+* @date 2023-11-10
 **/
 @Data
 public class KnowledgeQueryCriteria{
