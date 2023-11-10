@@ -45,6 +45,8 @@
             <el-button :loading="loading" type="success" style="align: right;" >测试连接</el-button>
             <#elseif column.formType = 'Textarea'>
             <el-input v-model="form.${column.changeColumnName}" :rows="3" type="textarea" style="width: 95%;;" />
+            <#elseif column.formType = 'Html'>
+            <quill-editor class="ql-editor" v-model="form.${column.changeColumnName}" ref="myQuillEditor"/>
             <#elseif column.formType = 'Radio'>
               <#if (column.dictName)?? && (column.dictName)!="">
             <el-radio v-model="form.${column.changeColumnName}" v-for="item in dict.${column.dictName}" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
