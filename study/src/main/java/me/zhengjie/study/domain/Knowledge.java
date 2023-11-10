@@ -22,6 +22,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.sql.Blob;
 
 /**
 * @website https://eladmin.vip

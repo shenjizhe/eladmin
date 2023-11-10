@@ -77,7 +77,7 @@ public class MorphemeStudyServiceImpl implements MorphemeStudyService {
     @PostConstruct
     private void init() {
         //TODO: 只有调试接口时为true，必须是 false才可以
-        boolean quickStart = false;
+        boolean quickStart = true;
         if (!quickStart) {
             loadMorpheme();
             loadAffix();

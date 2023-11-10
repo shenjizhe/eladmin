@@ -16,6 +16,8 @@
 package me.zhengjie.study.service.dto;
 
 import lombok.Data;
+
+import java.sql.Blob;
 import java.util.List;
 import me.zhengjie.annotation.Query;
 

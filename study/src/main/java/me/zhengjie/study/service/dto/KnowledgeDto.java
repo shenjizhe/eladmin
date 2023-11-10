@@ -17,6 +17,7 @@ package me.zhengjie.study.service.dto;
 
 import lombok.Data;
 import java.io.Serializable;
+import java.sql.Blob;
 
 /**
 * @website https://eladmin.vip

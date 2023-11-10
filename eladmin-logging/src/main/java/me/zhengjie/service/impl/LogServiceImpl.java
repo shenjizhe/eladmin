@@ -95,7 +95,17 @@ public class LogServiceImpl implements LogService {
         log.setAddress(StringUtils.getCityInfo(log.getRequestIp()));
         log.setMethod(methodName);
         log.setUsername(username);
-        log.setParams(getParameter(method, joinPoint.getArgs()));
+        // TODO: deal with long args ,ignore the param
+        Object[] args = joinPoint.getArgs();
+        if(args != null){
+            for (Object arg : args) {
+                String text = arg.toString();
+                if(text.length() < 512){
+                    log.setParams(getParameter(method, joinPoint.getArgs()));
+                }
+            }
+        }
+
         // 记录登录用户，隐藏密码信息
         if(signature.getName().equals("login") && StringUtils.isNotEmpty(log.getParams())){
             JSONObject obj = JSONUtil.parseObj(log.getParams());
