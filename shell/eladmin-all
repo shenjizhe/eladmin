@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# 定义目录和命令
+DOCKER_DIR="/usr/local/docker"
+REDIS_DIR="$DOCKER_DIR/redis"
+MYSQL_DIR="$DOCKER_DIR/mysql"
+SERVICES_DIR="/usr/local/services"
+CODEFACTORY_DIR="$SERVICES_DIR/codefactory"
+ELADMIN_DIR="$SERVICES_DIR/eladmin"
+
+# 函数：启动服务
+start_service() {
+    echo "启动服务：$1"
+    if [ -d "$2" ]; then
+        cd "$2"
+        if [ "$1" == "redis" ] || [ "$1" == "mysql" ]; then
+            docker-compose up -d
+        elif [ "$1" == "codefactory" ]; then
+            nohup ./codefactory start > /dev/null 2>&1 &
+        elif [ "$1" == "eladmin" ]; then
+            nohup ./eladmin start > /dev/null 2>&1 &
+        fi
+        echo "$1 服务启动完成。"
+    else
+        echo "目录不存在：$2"
+    fi
+}
+
+# 函数：停止服务
+stop_service() {
+    echo "停止服务：$1"
+    if [ -d "$2" ]; then
+        cd "$2"
+        if [ "$1" == "redis" ] || [ "$1" == "mysql" ]; then
+            docker-compose down
+        elif [ "$1" == "codefactory" ]; then
+            pkill -f codefactory
+        elif [ "$1" == "eladmin" ]; then
+            pkill -f eladmin
+        fi
+        echo "$1 服务停止完成。"
+    else
+        echo "目录不存在：$2"
+    fi
+}
+
+# 检查参数
+if [ "$#" -ne 1 ]; then
+    echo "错误：参数数量不正确。"
+    echo "使用方法：$0 <start|stop>"
+    exit 1
+fi
+
+ACTION=$1
+
+# 根据参数执行操作
+case $ACTION in
+    start)
+        start_service "redis" "$REDIS_DIR"
+        start_service "mysql" "$MYSQL_DIR"
+        start_service "codefactory" "$CODEFACTORY_DIR"
+        start_service "eladmin" "$ELADMIN_DIR"
+        ;;
+    stop)
+        stop_service "eladmin" "$ELADMIN_DIR"
+        stop_service "codefactory" "$CODEFACTORY_DIR"
+        stop_service "mysql" "$MYSQL_DIR"
+        stop_service "redis" "$REDIS_DIR"
+        ;;
+    *)
+        echo "错误：无效的参数 '$ACTION'"
+        echo "使用方法：$0 <start|stop>"
+        exit 1
+        ;;
+esac
