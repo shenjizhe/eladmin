@@ -62,10 +62,10 @@ case $ACTION in
         start_service "eladmin" "$ELADMIN_DIR"
         ;;
     stop)
+		stop_service "mysql" "$MYSQL_DIR"
+        stop_service "redis" "$REDIS_DIR"
         stop_service "eladmin" "$ELADMIN_DIR"
         stop_service "codefactory" "$CODEFACTORY_DIR"
-        stop_service "mysql" "$MYSQL_DIR"
-        stop_service "redis" "$REDIS_DIR"
         ;;
     *)
         echo "错误：无效的参数 '$ACTION'"
